@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql8
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=codo_cnmp
+      - MYSQL_USER=codo_cnmp
+      - MYSQL_PASSWORD=codo_cnmp
+    ports:
+      - "30306:30307"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /applications/data/mysql/data:/var/lib/mysql
+      - /applications/data/mysql/log:/var/log/mysql
+    networks:
+      cnmp_net:
+        ipv4_address: 172.20.0.5
+  cnmp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: codo_cnmp
+    environment:
+      TZ: Asia/Shanghai
+      GOPROXY: https://goproxy.cn,direct
+    env_file:
+      - .env
+    privileged: true
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9099:9099"
+    networks:
+      cnmp_net:
+        ipv4_address: 172.20.0.6
+    depends_on:
+      - mysql
+
+networks:
+  cnmp_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

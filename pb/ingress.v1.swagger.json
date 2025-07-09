@@ -1,0 +1,738 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/ingress.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Ingress"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/ingress/create": {
+      "post": {
+        "summary": "管理-云原生管理-Ingress-创建",
+        "operationId": "Ingress_CreateIngress",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateIngressResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateIngressRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Ingress"
+        ]
+      }
+    },
+    "/api/v1/ingress/delete": {
+      "post": {
+        "summary": "管理-云原生管理-Ingress-删除",
+        "operationId": "Ingress_DeleteIngress",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteIngressResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DeleteIngressRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Ingress"
+        ]
+      }
+    },
+    "/api/v1/ingress/detail": {
+      "get": {
+        "summary": "查看-云原生管理-Ingress-详情",
+        "operationId": "Ingress_GetIngressDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IngressDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Ingress"
+        ]
+      }
+    },
+    "/api/v1/ingress/host/list": {
+      "get": {
+        "summary": "查看-云原生管理-Ingress域名-列表",
+        "operationId": "Ingress_ListIngressHost",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListHostResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Ingress"
+        ]
+      }
+    },
+    "/api/v1/ingress/list": {
+      "get": {
+        "summary": "查看-云原生管理-Ingress-列表",
+        "operationId": "Ingress_ListIngress",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListIngressResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "host",
+            "description": "域名",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Ingress"
+        ]
+      }
+    },
+    "/api/v1/ingress/update": {
+      "post": {
+        "summary": "管理-云原生管理-Ingress-编辑",
+        "operationId": "Ingress_UpdateIngress",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateIngressResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateIngressRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Ingress"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "v1CreateIngressRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        },
+        "ingress_class_name": {
+          "type": "string",
+          "title": "类型"
+        },
+        "ingress_rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1IngressRule"
+          },
+          "title": "转发规则"
+        },
+        "tls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1IngressTLS"
+          },
+          "title": "TLS"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "labels"
+        },
+        "selector": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "selector"
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "注解"
+        },
+        "name": {
+          "type": "string",
+          "title": "名称"
+        }
+      },
+      "title": "创建Ingress请求",
+      "required": [
+        "cluster_name",
+        "namespace",
+        "ingress_class_name",
+        "ingress_rules",
+        "name"
+      ]
+    },
+    "v1CreateIngressResponse": {
+      "type": "object",
+      "title": "创建Ingress响应"
+    },
+    "v1DeleteIngressRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "name": {
+          "type": "string",
+          "title": "名称"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        }
+      },
+      "title": "删除Ingress请求",
+      "required": [
+        "cluster_name",
+        "name",
+        "namespace"
+      ]
+    },
+    "v1DeleteIngressResponse": {
+      "type": "object",
+      "title": "删除Ingress响应"
+    },
+    "v1HTTPIngressPath": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "pathType": {
+          "type": "string"
+        },
+        "backend": {
+          "$ref": "#/definitions/v1IngressBackend"
+        }
+      },
+      "required": [
+        "path",
+        "pathType",
+        "backend"
+      ]
+    },
+    "v1HTTPIngressRuleValue": {
+      "type": "object",
+      "properties": {
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1HTTPIngressPath"
+          }
+        }
+      },
+      "required": [
+        "paths"
+      ]
+    },
+    "v1IngressBackend": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/v1IngressServiceBackend"
+        },
+        "resource": {
+          "$ref": "#/definitions/v1TypedLocalObjectReference"
+        }
+      },
+      "required": [
+        "service",
+        "resource"
+      ]
+    },
+    "v1IngressDetailResponse": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "$ref": "#/definitions/v1IngressItem",
+          "title": "基础信息"
+        }
+      },
+      "title": "查看Ingress详情响应",
+      "required": [
+        "detail"
+      ]
+    },
+    "v1IngressItem": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "名称"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        },
+        "ingress_rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1IngressRule"
+          },
+          "title": "转发规则"
+        },
+        "ingress_class_name": {
+          "type": "string",
+          "title": "类型"
+        },
+        "vip": {
+          "type": "string",
+          "title": "vip"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "is_followed": {
+          "type": "boolean",
+          "title": "是否关注"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "yaml"
+        },
+        "ingress_rules_str": {
+          "type": "string",
+          "title": "转发规则str"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "标签"
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "注解"
+        },
+        "update_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "更新时间"
+        },
+        "default_backend": {
+          "$ref": "#/definitions/v1IngressBackend",
+          "title": "默认后端"
+        },
+        "tls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1IngressTLS"
+          },
+          "title": "tls"
+        }
+      },
+      "title": "Ingress列表项",
+      "required": [
+        "name",
+        "namespace",
+        "ingress_class_name",
+        "create_time",
+        "is_followed",
+        "yaml"
+      ]
+    },
+    "v1IngressRule": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "ingressRuleValue": {
+          "$ref": "#/definitions/v1IngressRuleValue"
+        }
+      },
+      "required": [
+        "host",
+        "ingressRuleValue"
+      ]
+    },
+    "v1IngressRuleValue": {
+      "type": "object",
+      "properties": {
+        "http": {
+          "$ref": "#/definitions/v1HTTPIngressRuleValue"
+        }
+      },
+      "required": [
+        "http"
+      ]
+    },
+    "v1IngressServiceBackend": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "port": {
+          "$ref": "#/definitions/v1ServiceBackendPort"
+        }
+      },
+      "required": [
+        "name",
+        "port"
+      ]
+    },
+    "v1IngressTLS": {
+      "type": "object",
+      "properties": {
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "secret_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "hosts"
+      ]
+    },
+    "v1ListHostResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "列表"
+        }
+      },
+      "title": "查看ingress域名列表响应",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "v1ListIngressResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1IngressItem"
+          },
+          "title": "列表"
+        }
+      },
+      "title": "Ingress列表响应",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "v1ServiceBackendPort": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "required": [
+        "name",
+        "number"
+      ]
+    },
+    "v1TypedLocalObjectReference": {
+      "type": "object",
+      "properties": {
+        "apiGroup": {
+          "type": "string",
+          "title": "APIGroup is the group for the resource being referenced.\nIf APIGroup is not specified, the specified Kind must be in the core API group.\nFor any other third-party types, APIGroup is required.\n+optional"
+        },
+        "kind": {
+          "type": "string",
+          "title": "Kind is the type of resource being referenced"
+        },
+        "name": {
+          "type": "string",
+          "title": "Name is the name of resource being referenced"
+        }
+      },
+      "title": "TypedLocalObjectReference contains enough information to let you locate the\ntyped referenced object inside the same namespace.\n+structType=atomic",
+      "required": [
+        "apiGroup",
+        "kind",
+        "name"
+      ]
+    }
+  }
+}

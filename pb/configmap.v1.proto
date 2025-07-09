@@ -1,0 +1,295 @@
+syntax = "proto3";
+
+
+package configmap.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import  "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service ConfigMap {
+  // 查看-云原生管理-ConfigMap-列表
+  rpc ListConfigMap (ListConfigMapsRequest) returns (ListConfigMapsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/configmap/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-ConfigMap-Yaml创建更新
+  rpc CreateOrUpdateConfigMapByYaml (CreateOrUpdateConfigMapByYamlRequest) returns (CreateOrUpdateConfigMapByYamlResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/configmap/create_or_update_by_yaml"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "configmap";
+      action: "Yaml创建更新";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "configmap"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-ConfigMap-删除
+  rpc DeleteConfigMap (DeleteConfigMapRequest) returns (DeleteConfigMapResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/configmap/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "configmap";
+      action: "删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "configmap"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-ConfigMap-详情
+  rpc GetConfigMapDetail (ConfigMapDetailRequest) returns (ConfigMapDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/configmap/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-ConfigMap-创建
+  rpc CreateConfigMap (CreateConfigMapRequest) returns (CreateConfigMapResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/configmap/create"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "configmap";
+      action: "创建";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "configmap"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-ConfigMap-更新
+  rpc UpdateConfigMap (UpdateConfigMapRequest) returns (UpdateConfigMapResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/configmap/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "configmap";
+      action: "编辑";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "configmap"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+}
+
+message ListConfigMapsRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 查询关键字
+  string keyword = 3;
+  // 页码
+  uint32 page = 4;
+  // 页大小
+  uint32 page_size = 5;
+  // 查询全部
+  uint32  list_all = 6 [json_name = "list_all"];
+}
+
+message ConfigMapReference {
+  // 资源类型
+  string kind = 1;
+  // 名称
+  string name = 2;
+}
+
+message ConfigMapItem {
+  // 名称
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 引用数量
+  uint32 ref_count = 2 [(google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 3;
+  // 注解
+  map<string, string> annotations = 4;
+  // 创建时间
+  uint64 create_time = 5 [(validate.rules).uint64.gte = 1, (google.api.field_behavior) = REQUIRED];
+  // 更新时间
+  uint64 update_time = 6 [(validate.rules).uint64.gte = 1, (google.api.field_behavior) = REQUIRED];
+  // 内容
+  map<string, string> data = 7 [(google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 8 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 引用资源
+  repeated ConfigMapReference refs = 9;
+  // 是否关注
+  bool is_followed = 10 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+
+}
+
+
+message ListConfigMapsResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated ConfigMapItem list = 2;
+}
+
+message CreateOrUpdateConfigMapByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // yaml内容
+  string yaml = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+message CreateOrUpdateConfigMapByYamlResponse {}
+
+
+// 删除ConfigMap请求
+message DeleteConfigMapRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 删除ConfigMap响应
+message DeleteConfigMapResponse {}
+
+
+// ConfigMap详情请求
+message ConfigMapDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// ConfigMap详情响应
+message ConfigMapDetailResponse {
+  ConfigMapItem detail = 9;
+}
+
+// 创建ConfigMap请求
+message CreateConfigMapRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 4;
+  // 注解
+  map<string, string> annotations = 5;
+  // 内容
+  map<string, string> data = 6;
+}
+
+// 创建ConfigMap响应
+message CreateConfigMapResponse {}
+
+
+// 更新ConfigMap请求
+message UpdateConfigMapRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 4;
+  // 注解
+  map<string, string> annotations = 5;
+  // 内容
+  map<string, string> data = 6;
+}
+
+// 更新ConfigMap响应
+message UpdateConfigMapResponse {}

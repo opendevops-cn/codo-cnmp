@@ -1,0 +1,165 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/ingressclass.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "IngressClass"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/ingressclass/list": {
+      "get": {
+        "summary": "查看-云原生管理-IngressClass-列表",
+        "operationId": "IngressClass_ListIngressClass",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListIngressClassResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "host",
+            "description": "域名",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "IngressClass"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "v1IngressClassItem": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "名称"
+        }
+      },
+      "title": "IngressClass列表项",
+      "required": [
+        "name"
+      ]
+    },
+    "v1ListIngressClassResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1IngressClassItem"
+          },
+          "title": "列表"
+        }
+      },
+      "title": "Ingress列表响应",
+      "required": [
+        "total",
+        "list"
+      ]
+    }
+  }
+}

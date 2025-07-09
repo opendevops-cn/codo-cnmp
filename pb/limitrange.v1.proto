@@ -1,0 +1,292 @@
+syntax = "proto3";
+
+package limitrange.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service LimitRange {
+  // 查看-云原生管理-LimitRange-列表
+  rpc ListLimitRange (ListLimitRangeRequest) returns (ListLimitRangeResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/limitrange/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-LimitRange-创建
+  rpc CreateLimitRange (CreateLimitRangeRequest) returns (CreateLimitRangeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/limitrange/create"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "LimitRange";
+      action: "创建";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "LimitRange"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-LimitRange-编辑
+  rpc UpdateLimitRange (CreateLimitRangeRequest) returns (CreateLimitRangeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/limitrange/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "LimitRange";
+      action: "编辑";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "LimitRange"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-LimitRange-创建或编辑
+  rpc CreateOrUpdateLimitRange (CreateLimitRangeRequest) returns (CreateLimitRangeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/limitrange/create_or_update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "LimitRange";
+      action: "创建或编辑";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "LimitRange"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-LimitRange-详情
+  rpc GetLimitRangeDetail (LimitRangeDetailRequest) returns (LimitRangeDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/limitrange/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-LimitRange-删除
+  rpc DeleteLimitRange (DeleteLimitRangeRequest) returns (DeleteLimitRangeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/limitrange/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "LimitRange";
+      action: "删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "LimitRange"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+}
+
+
+// LimitRange列表请求
+message ListLimitRangeRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2;
+  // 查询关键字
+  string keyword = 4;
+  // 页码
+  uint32 page = 5;
+  // 页大小
+  uint32 page_size = 6;
+  // 查询全部
+  uint32  list_all = 7 [json_name = "list_all"];
+}
+
+
+// 容器资源限制
+message ContainerLimitRange {
+  // 默认CPU上限
+  string default_cpu = 1 [json_name = "default_cpu"];
+  // 默认内存上限
+  string default_mem = 2 [json_name = "default_mem"];
+  // 默认CPU请求
+  string default_cpu_request = 3 [json_name = "default_cpu_request"];
+  // 默认内存请求
+  string default_mem_request = 4 [json_name = "default_mem_request"];
+  // 最小CPU
+  string min_cpu = 5 [json_name = "min_cpu"];
+  // 最小内存
+  string min_mem = 6 [json_name = "min_mem"];
+  // 最大CPU
+  string max_cpu = 7 [json_name = "max_cpu"];
+  // 最小内存请求
+  string max_mem = 8 [json_name = "max_mem"];
+};
+
+// pod资源限制
+message PodLimitRange {
+  string max_cpu = 1 [json_name = "max_cpu"];
+  string max_mem = 2 [json_name = "max_mem"];
+}
+
+// 存储资源限制
+message PersistentVolumeClaimLimitRange {
+  // 最小存储请求
+  string min_resource_storage_request = 1 [json_name = "min_resource_storage"];
+  // 最大存储请求
+  string max_resource_storage_request = 2 [json_name = "max_resource_storage"];
+}
+
+
+// CreateLimitRange请求
+message CreateLimitRangeRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 容器资源限制
+  ContainerLimitRange container_limit_range = 4;
+  // pod资源限制
+  PodLimitRange pod_limit_range = 5;
+  // 存储资源限制
+  PersistentVolumeClaimLimitRange persistent_volume_claim_limit_range = 6;
+}
+
+// LimitRange Item
+message LimitRangeItem {
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 容器资源限制
+  ContainerLimitRange container_limit_range = 3;
+  // pod资源限制
+  PodLimitRange pod_limit_range = 4;
+  // 存储资源限制
+  PersistentVolumeClaimLimitRange persistent_volume_claim_limit_range = 5;
+  // 创建时间
+  uint64 create_time = 6 [(google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 7 [(google.api.field_behavior) = REQUIRED];
+}
+
+// CreateLimitRange响应
+message CreateLimitRangeResponse {}
+
+
+// LimitRange列表响应
+message ListLimitRangeResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated LimitRangeItem list = 2;
+}
+
+
+// 查看LimitRange详情请求
+message LimitRangeDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+
+// 查看LimitRange详情响应
+message LimitRangeDetailResponse {
+  // 基础信息
+  LimitRangeItem detail = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 删除LimitRange请求
+message DeleteLimitRangeRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 删除LimitRange响应
+message DeleteLimitRangeResponse {}

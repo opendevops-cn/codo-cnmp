@@ -1,0 +1,412 @@
+syntax = "proto3";
+
+package node;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "khttp/audit.proto";
+import "k8s/core/v1/generated.proto";
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service Node {
+  // 查看-云原生管理-节点-列表
+  rpc ListNode (ListNodeRequest) returns (ListNodeResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/node/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-节点-详情
+  rpc GetNodeDetail (GetNodeDetailRequest) returns (GetNodeDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/node/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-节点-编辑
+  rpc UpdateNode (UpdateNodeRequest) returns (UpdateNodeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/node/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "节点管理";
+      action: "编辑节点";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "node"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+
+  // 管理-云原生管理-节点-Yaml创建更新
+  rpc CreateOrUpdateNodeByYaml (CreateOrUpdateNodeByYamlRequest) returns (CreateOrUpdateNodeByYamlResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/node/create_or_update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "节点管理";
+      action: "编辑YAML";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "node"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-节点-Pod驱逐检查
+  rpc CheckEviction (CheckEvictionRequest) returns (CheckEvictionResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/node/eviction/check"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+
+  // 管理-云原生管理-节点-操作
+  rpc HandleNode (HandleNodeRequest) returns (HandleNodeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/node/handle"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "节点管理";
+      action: "驱逐/封锁/解封";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "node"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+
+  }
+
+}
+
+// 节点状态
+enum NodeStatus {
+  // 运行中
+  NodeReady = 0;
+  // 异常
+  NodeError = 1;
+}
+
+enum NodeHealthState {
+  // 健康
+  Healthy = 0;
+  // 磁盘空间异常
+  DiskPressure = 1;
+  // 内存空间异常
+  MemoryPressure = 2;
+  // 进程异常
+  PIDPressure = 3;
+  // 网络异常
+  NetworkUnavailable = 4;
+  // 路由异常
+  RouteUnavailable = 5;
+  // Cpu使用过高
+  CpuUsageHigh = 6;
+  // 内存使用过高
+  MemoryUsageHigh = 7;
+}
+
+
+// 查询节点列表请求
+message ListNodeRequest {
+  // 集群名称
+  string cluster_name = 1 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 关键字
+  string keyword = 2 [json_name = "keyword"];
+  // 页码
+  uint32 page = 3;
+  // 页大小
+  uint32 page_size = 4;
+  // 查询全部
+  uint32  list_all = 5 [json_name = "list_all"];
+}
+
+message ResourceUsage {
+  // 内存总量
+  float node_memory_total = 1 [json_name = "node_memory_total", (google.api.field_behavior) = REQUIRED];
+  // 内存使用量
+  float node_memory_usage = 2 [json_name = "node_memory_used", (google.api.field_behavior) = REQUIRED];
+  // CPU总量
+  float node_cpu_total = 3 [json_name = "node_cpu_total", (google.api.field_behavior) = REQUIRED];
+  // CPU使用量
+  float node_cpu_usage = 4 [json_name = "node_cpu_used", (google.api.field_behavior) = REQUIRED];
+  // Pod总量
+  uint32 pod_total = 5 [json_name = "pod_total", (google.api.field_behavior) = REQUIRED];
+  // Pod使用量
+  uint32 pod_usage = 6 [json_name = "pod_used", (google.api.field_behavior) = REQUIRED];
+  // requestsCpu总量
+  float requests_cpu_total = 7 [json_name = "requests_cpu_total", (google.api.field_behavior) = REQUIRED];
+  // requestsCpu使用量
+  float requests_cpu_usage = 8 [json_name = "requests_cpu_used", (google.api.field_behavior) = REQUIRED];
+  // requestsMemory总量
+  float requests_memory_total = 9 [json_name = "requests_memory_total", (google.api.field_behavior) = REQUIRED];
+  // requestsMemory使用量
+  float requests_memory_usage = 10 [json_name = "requests_memory_used", (google.api.field_behavior) = REQUIRED];
+  // limitsCpu总量
+  float limits_cpu_total = 11 [json_name = "limits_cpu_total", (google.api.field_behavior) = REQUIRED];
+  // limitsCpu使用量
+  float limits_cpu_usage = 12 [json_name = "limits_cpu_used", (google.api.field_behavior) = REQUIRED];
+  // limitsMemory总量
+  float limits_memory_total = 13 [json_name = "limits_memory_total", (google.api.field_behavior) = REQUIRED];
+  // limitsMemory使用量
+  float limits_memory_usage = 14 [json_name = "limits_memory_used", (google.api.field_behavior) = REQUIRED];
+  // 节点内存可分配
+  float node_allocatable_memory = 15 [json_name = "allocatable_memory", (google.api.field_behavior) = REQUIRED];
+  // 节点CPU可分配
+  float node_allocatable_cpu = 16 [json_name = "allocatable_cpu", (google.api.field_behavior) = REQUIRED];
+}
+
+// 节点
+message NodeItem {
+  // 名称
+  string name = 1 [json_name = "name", (google.api.field_behavior) = REQUIRED];
+  // 节点状态
+  NodeStatus state = 2 [json_name = "state", (google.api.field_behavior) = REQUIRED, (validate.rules).enum = {defined_only: true}];
+  // 健康检查
+  repeated NodeHealthState health_state = 3 [json_name = "health_state", (google.api.field_behavior) = REQUIRED];
+  // 角色
+  repeated string roles = 4 [json_name = "roles", (google.api.field_behavior) = REQUIRED];
+  // IP地址
+  string internal_ip = 5 [json_name = "internal_ip", (google.api.field_behavior) = REQUIRED];
+  // 节点版本
+  string kubelet_version = 6 [json_name = "kubelet_version", (google.api.field_behavior) = REQUIRED];
+  //系统镜像
+  string os_image = 7 [json_name = "os_image", (google.api.field_behavior) = REQUIRED];
+  // 容器引擎
+  string container_runtime_version = 8 [json_name = "container_runtime_version", (google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 9 [json_name = "create_time", (google.api.field_behavior) = REQUIRED];
+  // UID
+  string uid = 10 [json_name = "uid", (google.api.field_behavior) = REQUIRED];
+  // 是否封锁
+  bool unschedulable = 11 [json_name = "unschedulable", (google.api.field_behavior) = REQUIRED];
+  // deprecated 使用 resource_usage 替代, pod总数
+  uint32 pod_total = 12 [json_name = "pod_total", (google.api.field_behavior) = REQUIRED];
+  // deprecated 使用 resource_usage 替代, pod已使用
+  uint32 pod_usage = 13 [json_name = "pod_used", (google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 14 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+  // 操作系统
+  string operating_system = 15 [json_name = "operating_system", (google.api.field_behavior) = REQUIRED];
+  // 资源使用情况
+  ResourceUsage resource_usage = 21 [json_name = "resource_usage", (google.api.field_behavior) = REQUIRED];
+}
+
+// 节点列表
+message ListNodeResponse {
+  repeated NodeItem list = 1 [json_name = "list", (google.api.field_behavior) = REQUIRED];
+  // 总数
+  uint32 total = 2 [json_name = "total", (google.api.field_behavior) = REQUIRED];
+}
+
+
+// 标签
+message Labels{
+  map<string, string> labels = 1 [json_name = "labels", (google.api.field_behavior) = REQUIRED];
+}
+
+// 注解
+message Annotations{
+  map<string, string> annotations = 1 [json_name = "annotations", (google.api.field_behavior) = REQUIRED];
+}
+
+// 查询节点列表请求
+message GetNodeDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 节点名称
+  string name = 2 [json_name = "name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+}
+message NodeCondition {
+  string type = 1 [json_name = "type", (google.api.field_behavior) = REQUIRED];
+  string status = 2 [json_name = "status", (google.api.field_behavior) = REQUIRED];
+  uint64 last_transition_time = 3 [json_name = "last_transition_time", (google.api.field_behavior) = REQUIRED];
+  uint64 last_heartbeat_time = 4 [json_name = "last_heartbeat_time", (google.api.field_behavior) = REQUIRED];
+  string reason = 5 [json_name = "reason", (google.api.field_behavior) = REQUIRED];
+  string message = 6 [json_name = "message", (google.api.field_behavior) = REQUIRED];
+}
+// 查询节点详情响应
+message GetNodeDetailResponse {
+  // 污点
+  repeated k8s.io.api.core.v1.Taint taints = 1 [json_name = "taints", (google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 2 [json_name = "labels", (google.api.field_behavior) = REQUIRED];
+  // 注解
+  map<string, string> annotations = 3 [json_name = "annotations", (google.api.field_behavior) = REQUIRED];
+  // Pods
+  repeated k8s.io.api.core.v1.Pod pods = 4 [json_name = "pods", (google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 5 [json_name = "yaml", (google.api.field_behavior) = REQUIRED];
+  // 节点信息
+  NodeItem node_item = 6 [json_name = "node_item", (google.api.field_behavior) = REQUIRED];
+  // 系统信息，包含节点的硬件和操作系统信息
+  k8s.io.api.core.v1.NodeSystemInfo system_info = 7 [json_name = "system_info", (google.api.field_behavior) = REQUIRED];
+  // 资源使用情况
+  ResourceUsage resource_usage = 8 [json_name = "resource_usage", (google.api.field_behavior) = REQUIRED];
+  // 健康检查
+  repeated NodeCondition node_condition = 9 [json_name = "node_condition", (google.api.field_behavior) = REQUIRED];
+  // 是否封锁
+  bool unschedulable = 10 [json_name = "unschedulable", (google.api.field_behavior) = REQUIRED];
+}
+
+// 更新节点请求
+message UpdateNodeRequest {
+  // 集群名称
+  string cluster_name = 1 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 节点名称
+  string name = 2 [json_name = "name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 标签
+  map<string, string> labels = 3 [json_name = "labels"];
+  // 注解
+  map<string, string> annotations = 4 [json_name = "annotations"];
+  // 污点
+  repeated k8s.io.api.core.v1.Taint taints = 5 [json_name = "taints"];
+}
+
+// 更新节点响应
+message UpdateNodeResponse {
+
+}
+
+// 创建或者更新节点请求
+message CreateOrUpdateNodeByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // Yaml
+  string yaml = 2 [json_name = "yaml", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100000
+  }];
+}
+
+// 根据Yaml创建或者更新节点响应
+message CreateOrUpdateNodeByYamlResponse {}
+
+
+enum NodeOperation {
+  // 未知操作
+  UnknownOperation = 0;
+  // 封锁节点
+  NodeCordon = 1;
+  // 取消封锁节点
+  NodeUncordon = 2;
+  // 驱逐节点
+  NodeDrain = 3;
+  // 取消驱逐节点
+  NodeUndrain = 4;
+}
+
+message HandleNodeRequest {
+  // 集群名称
+  string cluster_name = 1 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 节点名称
+  string name = 2 [json_name = "name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 操作类型
+  NodeOperation operation = 3 [json_name = "operation", (google.api.field_behavior) = REQUIRED, (validate.rules).enum = {defined_only: true}];
+}
+
+
+message HandleNodeResponse {
+  bool success = 1 [json_name = "success", (google.api.field_behavior) = REQUIRED];
+}
+
+message CheckEvictionItem {
+  // 准备驱逐的Pod数量
+  uint32 ready_to_evict_pods_count = 1 [json_name = "ready_to_evict_pods_count", (google.api.field_behavior) = REQUIRED];
+  // 忽略驱逐的Pod数量
+  uint32 ignore_evict_pods_count = 2 [json_name = "ignore_evict_pods_count", (google.api.field_behavior) = REQUIRED];
+}
+
+message CheckEvictionRequest {
+  // 集群名称
+  string cluster_name = 1 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 节点名称
+  string name = 2 [json_name = "name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+}
+
+message CheckEvictionResponse {
+  CheckEvictionItem detail = 1 [json_name = "detail", (google.api.field_behavior) = REQUIRED];
+}

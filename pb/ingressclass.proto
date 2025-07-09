@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package ingressclass.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service IngressClass {
+  // 查看-云原生管理-IngressClass-列表
+  rpc ListIngressClass (ListIngressClassRequest) returns (ListIngressClassResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/ingressclass/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+
+// Ingress列表请求
+message ListIngressClassRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 查询关键字
+  string keyword = 4 [(google.api.field_behavior) = OPTIONAL];
+  // 页码
+  uint32 page = 5 [(google.api.field_behavior) = OPTIONAL];
+  // 页大小
+  uint32 page_size = 6 [(google.api.field_behavior) = OPTIONAL];
+  // 查询全部
+  uint32  list_all = 7 [(google.api.field_behavior) = OPTIONAL];
+  // 域名
+  string host = 8[(google.api.field_behavior) = OPTIONAL];
+}
+
+
+// IngressClass列表项
+message IngressClassItem {
+  // 名称
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+
+// Ingress列表响应
+message ListIngressClassResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated IngressClassItem list = 2;
+}
+

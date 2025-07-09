@@ -1,0 +1,177 @@
+syntax = "proto3";
+
+package crr.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+service CRR {
+  // 查看-云原生管理-CRR-详情
+  rpc GetCRRDetail (GetCRRDetailRequest) returns (GetCRRDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/crr/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-CRR-批量创建
+  rpc BatchCreateCrr (BatchCreateCRRRequest) returns (BatchCreateCRRResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/crr/batch/create"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "容器";
+      action: "删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "CRR"
+        },
+        {
+          key: "name",
+          const: ""
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-CRR-批量查询重启状态
+  rpc BatchQueryCRR (GetBatchCRRDetailRequest) returns (GetBatchCRRDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/crr/batch/detail"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+
+  // 管理-云原生管理-CRR-创建
+  rpc CreateCrr (CreateCRRRequest) returns (CreateCRRResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/crr/create"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "容器";
+      action: "删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "CRR"
+        },
+        {
+          key: "name",
+          const: ""
+        }
+      ]
+    };
+  }
+
+}
+
+// 查询CRR详情请求
+message GetCRRDetailRequest {
+  string cluster_name = 1  [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string namespace = 2  [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 查询CRR详情响应
+message GetCRRDetailResponse {
+  // pod 名称
+  string pod_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 重启容器总数量
+  uint32 total_count = 2 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+  // 成功重启容器数量
+  uint32 success_count = 3 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+}
+
+message BatchCRRDetail {
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string pod_name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  uint32 total_count = 3 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+  uint32 success_count = 4 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+}
+
+message RequestContainerItem {
+  // pod 名称
+  string pod_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 容器列表
+  repeated string container_names = 2 [(validate.rules).repeated.min_items = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 批量创建CRR请求
+message BatchCreateCRRRequest {
+  string cluster_name = 1  [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string namespace = 2  [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  repeated RequestContainerItem container_items = 3 [(validate.rules).repeated.min_items = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 创建CRR请求
+message CreateCRRRequest {
+  string cluster_name = 1  [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string namespace = 2  [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string pod_name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  repeated string container_names = 4 [(validate.rules).repeated.min_items = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 创建CRR响应
+message CreateCRRResponse {
+  ResponseContainerItem item = 1;
+}
+
+message ResponseContainerItem {
+  // pod 名称
+  string pod_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // CRRName
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 批量创建CRR响应
+message BatchCreateCRRResponse {
+  repeated ResponseContainerItem list = 1;
+}
+
+// 批量查询CRR详情请求
+message GetBatchCRRDetailRequest {
+  string cluster_name = 1  [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string namespace = 2  [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  repeated string names = 3 [(validate.rules).repeated.min_items = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 批量查询CRR详情响应
+message GetBatchCRRDetailResponse {
+  repeated BatchCRRDetail list = 1;
+}
+

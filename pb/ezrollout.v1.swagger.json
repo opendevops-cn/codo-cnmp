@@ -1,0 +1,781 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/ezrollout.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "EzRollout"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/ezrollout/create": {
+      "post": {
+        "summary": "查看-云原生管理-版本伸缩-创建",
+        "operationId": "EzRollout_CreateEzRollout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateEzRolloutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateEzRolloutRequest"
+            }
+          }
+        ],
+        "tags": [
+          "EzRollout"
+        ]
+      }
+    },
+    "/api/v1/ezrollout/create_or_update_by_yaml": {
+      "post": {
+        "summary": "管理-云原生管理-版本伸缩-yaml创建/更新",
+        "operationId": "EzRollout_CreateOrUpdateEzRolloutByYaml",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateOrUpdateEzRolloutByYamlResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateOrUpdateEzRolloutByYamlRequest"
+            }
+          }
+        ],
+        "tags": [
+          "EzRollout"
+        ]
+      }
+    },
+    "/api/v1/ezrollout/delete": {
+      "post": {
+        "summary": "管理-云原生管理-版本伸缩-删除",
+        "operationId": "EzRollout_DeleteEzRollout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteEzRolloutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DeleteEzRolloutRequest"
+            }
+          }
+        ],
+        "tags": [
+          "EzRollout"
+        ]
+      }
+    },
+    "/api/v1/ezrollout/detail": {
+      "get": {
+        "summary": "查看-云原生管理-版本伸缩-详情",
+        "operationId": "EzRollout_GetEzRolloutDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1EzRolloutDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "EzRollout"
+        ]
+      }
+    },
+    "/api/v1/ezrollout/list": {
+      "get": {
+        "summary": "查看-云原生管理-版本伸缩-列表",
+        "operationId": "EzRollout_ListEzRollout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListEzRolloutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "EzRollout"
+        ]
+      }
+    },
+    "/api/v1/ezrollout/update": {
+      "post": {
+        "summary": "管理-云原生管理-版本伸缩-编辑",
+        "operationId": "EzRollout_UpdateEzRollout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateEzRolloutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateEzRolloutRequest"
+            }
+          }
+        ],
+        "tags": [
+          "EzRollout"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "v1CreateEzRolloutRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "cluster_name": {
+          "type": "string"
+        },
+        "online_version": {
+          "type": "string",
+          "title": "线上版本"
+        },
+        "min_replicas": {
+          "type": "integer",
+          "format": "int64",
+          "title": "最小实例数"
+        },
+        "max_replicas": {
+          "type": "integer",
+          "format": "int64",
+          "title": "最大实例数"
+        },
+        "offline_deadline": {
+          "type": "string",
+          "format": "uint64",
+          "title": "历史版本下线时间[毫秒级别时间戳]"
+        },
+        "selector": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "选择器"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "标签"
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "注释"
+        },
+        "scale_up_metrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1MetricSpecV2"
+          },
+          "title": "扩容指标"
+        },
+        "scale_down_metrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1MetricSpecV2"
+          },
+          "title": "缩容指标"
+        },
+        "scale_up": {
+          "$ref": "#/definitions/v1HPAScalingRules",
+          "title": "线上版本扩容策略"
+        },
+        "scale_down": {
+          "$ref": "#/definitions/v1HPAScalingRules",
+          "title": "线上版本缩容策略"
+        },
+        "enable_scale_up": {
+          "type": "boolean",
+          "title": "允许扩容"
+        }
+      },
+      "required": [
+        "name",
+        "namespace",
+        "cluster_name",
+        "online_version",
+        "min_replicas",
+        "max_replicas",
+        "offline_deadline",
+        "selector",
+        "labels",
+        "annotations",
+        "scale_up_metrics",
+        "scale_down_metrics",
+        "scale_up",
+        "scale_down",
+        "enable_scale_up"
+      ]
+    },
+    "v1CreateEzRolloutResponse": {
+      "type": "object"
+    },
+    "v1CreateOrUpdateEzRolloutByYamlRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string"
+        },
+        "yaml": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "cluster_name",
+        "yaml"
+      ]
+    },
+    "v1CreateOrUpdateEzRolloutByYamlResponse": {
+      "type": "object"
+    },
+    "v1DeleteEzRolloutRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "cluster_name",
+        "name",
+        "namespace"
+      ]
+    },
+    "v1DeleteEzRolloutResponse": {
+      "type": "object"
+    },
+    "v1EzRolloutDetailResponse": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "$ref": "#/definitions/v1EzRolloutInfo"
+        }
+      },
+      "required": [
+        "detail"
+      ]
+    },
+    "v1EzRolloutInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "online_version": {
+          "type": "string",
+          "title": "线上版本"
+        },
+        "min_replicas": {
+          "type": "integer",
+          "format": "int64",
+          "title": "最小实例数"
+        },
+        "max_replicas": {
+          "type": "integer",
+          "format": "int64",
+          "title": "最大实例数"
+        },
+        "current_replicas": {
+          "type": "integer",
+          "format": "int64",
+          "title": "当前实例数"
+        },
+        "offline_deadline": {
+          "type": "string",
+          "format": "uint64",
+          "title": "历史版本下线时间[毫秒级别时间戳]"
+        },
+        "selector": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "选择器"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "标签"
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "注释"
+        },
+        "scale_up_metrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1MetricSpecV2"
+          },
+          "title": "扩容指标"
+        },
+        "scale_down_metrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1MetricSpecV2"
+          },
+          "title": "缩容指标"
+        },
+        "scale_up": {
+          "$ref": "#/definitions/v1HPAScalingRules",
+          "title": "线上版本扩容策略"
+        },
+        "scale_down": {
+          "$ref": "#/definitions/v1HPAScalingRules",
+          "title": "线上版本缩容策略"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "Yaml"
+        },
+        "latest_error_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "最新错误时间 [毫秒级别时间戳]"
+        },
+        "latest_error_message": {
+          "type": "string",
+          "title": "最新错误信息"
+        },
+        "enable_scale_up": {
+          "type": "boolean",
+          "title": "允许扩容"
+        },
+        "is_followed": {
+          "type": "boolean",
+          "title": "是否关注"
+        }
+      },
+      "required": [
+        "name",
+        "namespace",
+        "ready",
+        "online_version",
+        "min_replicas",
+        "max_replicas",
+        "current_replicas",
+        "offline_deadline",
+        "selector",
+        "labels",
+        "annotations",
+        "scale_up_metrics",
+        "scale_down_metrics",
+        "scale_up",
+        "scale_down",
+        "create_time",
+        "yaml",
+        "latest_error_time",
+        "latest_error_message",
+        "enable_scale_up",
+        "is_followed"
+      ]
+    },
+    "v1HPAScalingPolicy": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "扩容策略类型，支持：\n- \"Pods\": 根据CPU使用率或内存使用率扩容\n- \"Percent\": 根据百分比扩容"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "title": "值"
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "format": "int64",
+          "description": "步长\nPeriodSeconds must be greater than zero and less than or equal to 1800 (30 min)."
+        }
+      },
+      "required": [
+        "type",
+        "value",
+        "periodSeconds"
+      ]
+    },
+    "v1HPAScalingRules": {
+      "type": "object",
+      "properties": {
+        "stabilizationWindowSeconds": {
+          "type": "integer",
+          "format": "int64",
+          "description": "窗口稳定时间\nIf not set, use the default values:\n- For scale up: 0 (i.e. no stabilization is done).\n- For scale down: 300 (i.e. the stabilization window is 300 seconds long)."
+        },
+        "selectPolicy": {
+          "type": "string",
+          "title": "selectPolicy, 默认为Max"
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1HPAScalingPolicy"
+          },
+          "title": "扩容策略列表"
+        }
+      },
+      "title": "伸缩规则",
+      "required": [
+        "stabilizationWindowSeconds",
+        "selectPolicy",
+        "policies"
+      ]
+    },
+    "v1ListEzRolloutResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1EzRolloutInfo"
+          }
+        }
+      },
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "v1MetricSpecV2": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "指标名称"
+        },
+        "value": {
+          "type": "integer",
+          "format": "int64",
+          "title": "期望值"
+        },
+        "current_value": {
+          "type": "integer",
+          "format": "int64",
+          "title": "当前值"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "current_value"
+      ]
+    },
+    "v1UpdateEzRolloutRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "cluster_name": {
+          "type": "string"
+        },
+        "online_version": {
+          "type": "string",
+          "title": "线上版本"
+        },
+        "min_replicas": {
+          "type": "integer",
+          "format": "int64",
+          "title": "最小实例数"
+        },
+        "max_replicas": {
+          "type": "integer",
+          "format": "int64",
+          "title": "最大实例数"
+        },
+        "offline_deadline": {
+          "type": "string",
+          "format": "uint64",
+          "title": "历史版本下线时间"
+        },
+        "selector": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "选择器"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "标签"
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "注释"
+        },
+        "scale_up_metrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1MetricSpecV2"
+          },
+          "title": "扩容指标"
+        },
+        "scale_down_metrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1MetricSpecV2"
+          },
+          "title": "缩容指标"
+        },
+        "scale_up": {
+          "$ref": "#/definitions/v1HPAScalingRules",
+          "title": "线上版本扩容策略"
+        },
+        "scale_down": {
+          "$ref": "#/definitions/v1HPAScalingRules",
+          "title": "线上版本缩容策略"
+        },
+        "enable_scale_up": {
+          "type": "boolean",
+          "title": "允许扩容"
+        }
+      },
+      "required": [
+        "name",
+        "namespace",
+        "cluster_name",
+        "online_version",
+        "min_replicas",
+        "max_replicas",
+        "offline_deadline",
+        "selector",
+        "labels",
+        "annotations",
+        "scale_up_metrics",
+        "scale_down_metrics",
+        "scale_up",
+        "scale_down",
+        "enable_scale_up"
+      ]
+    },
+    "v1UpdateEzRolloutResponse": {
+      "type": "object"
+    }
+  }
+}

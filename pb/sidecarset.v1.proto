@@ -1,0 +1,190 @@
+syntax = "proto3";
+
+
+package sidecarset.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "k8s/core/v1/generated.proto";
+import "khttp/audit.proto";
+import "k8s/io/apimachinery/pkg/apis/generated.proto";
+
+option go_package = "codo-cnmp/pb;pb";
+
+service SidecarSet {
+  // 查看-云原生管理-SideCarSet-列表
+  rpc ListSidecarSet(ListSidecarSetRequest) returns (ListSidecarSetResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/sidecarset/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-SideCarSet-详情
+  rpc GetSidecarSet(GetSidecarSetRequest) returns (GetSidecarSetResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/sidecarset/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-SideCarSet-更新策略
+  rpc UpdateSideCarSetStrategy (UpdateSideCarSetStrategyRequest) returns (UpdateSideCarSetStrategyResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/sidecarset/upgrade_strategy/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "sidecarSet";
+      action: "编辑升级策略";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "sidecarSet"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-SideCarSet-删除
+  rpc DeleteSidecarSet (DeleteSidecarSetRequest) returns (DeleteSidecarSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/sidecarset/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "sidecarSet";
+      action: "删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "sidecarSet"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+}
+
+message UpdateSideCarSetStrategyRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 更新方式
+  enum UpdateStrategyType {
+    // 滚动更新
+    RollingUpdate = 0;
+    // 不更新
+    NotUpdate = 1;
+  }
+  UpdateStrategyType update_strategy_type = 4 [(validate.rules).enum.defined_only = true, (google.api.field_behavior) = REQUIRED];
+  string partition = 6 ;
+  // 最大不可用副本数
+  string max_unavailable = 7;
+  // 暂停更新
+  bool pause = 8;
+}
+
+message UpdateSideCarSetStrategyResponse {
+   bool success = 1;
+}
+
+message ListSidecarSetRequest {
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string keyword = 2;
+  uint32 page = 3;
+  uint32 page_size = 4;
+  uint32 list_all = 5 [json_name = "list_all"]; // 0: 默认，1: 全部
+}
+
+message SideCarSetStatus {
+  uint32 matched_pods = 1 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+  uint32 ready_pods = 2 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+  uint32 updated_pods = 3 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+  uint32 updated_ready_pods = 4 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+}
+
+message SidecarSetItem {
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 已就绪
+  uint32 ready_pods = 7 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+  // 总数
+  uint32 matched_pods = 8 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+  // 已更新
+  uint32 updated_pods = 3 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+  // 已更新可用
+  uint32 updated_ready_pods = 4 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+  // 容器
+  repeated k8s.io.api.core.v1.Container containers = 11  [(google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 9 [(google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 10 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 6  [(google.api.field_behavior) = REQUIRED];
+  // 注解
+  map<string, string> annotations = 5  [(google.api.field_behavior) = REQUIRED];
+  // 选择器
+  k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 2 [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 14 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+  SideCarSetStatus status = 13 [(google.api.field_behavior) = REQUIRED];
+  // 更新策略
+  UpdateSideCarSetStrategyRequest update_strategy = 15  [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListSidecarSetResponse {
+  uint32 total = 1;
+  repeated SidecarSetItem list = 2;
+}
+
+message  GetSidecarSetRequest {
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+message GetSidecarSetResponse {
+  SidecarSetItem detail = 1;
+}
+
+message DeleteSidecarSetRequest {
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+message DeleteSidecarSetResponse {
+  bool success = 1;
+}

@@ -1,0 +1,328 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/agent.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Agent"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/agent/create": {
+      "post": {
+        "summary": "管理-云原生管理-Agent-创建",
+        "operationId": "Agent_CreateAgent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/agentCreateAgentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/agentCreateAgentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Agent"
+        ]
+      }
+    },
+    "/api/v1/agent/delete": {
+      "post": {
+        "summary": "管理-云原生管理-Agent-删除",
+        "operationId": "Agent_DeleteAgent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/agentDeleteAgentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/agentDeleteAgentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Agent"
+        ]
+      }
+    },
+    "/api/v1/agent/list": {
+      "get": {
+        "summary": "查看-云原生管理-Agent-列表",
+        "operationId": "Agent_ListAgent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/agentListAgentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "每页数量",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "keyword",
+            "description": "模糊查询",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Agent"
+        ]
+      }
+    },
+    "/api/v1/agent/update": {
+      "post": {
+        "summary": "管理-云原生管理-Agent-编辑",
+        "operationId": "Agent_UpdateAgent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/agentUpdateAgentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/agentUpdateAgentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Agent"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "agentAgentItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "ID"
+        },
+        "name": {
+          "type": "string",
+          "title": "Agent名称"
+        },
+        "agent_id": {
+          "type": "string",
+          "title": "agent ID"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "agent_id"
+      ]
+    },
+    "agentCreateAgentRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Agent名称"
+        },
+        "agent_id": {
+          "type": "string",
+          "title": "agent ID"
+        }
+      },
+      "required": [
+        "name",
+        "agent_id"
+      ]
+    },
+    "agentCreateAgentResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "agentDeleteAgentRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "agentDeleteAgentResponse": {
+      "type": "object"
+    },
+    "agentListAgentResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/agentAgentItem"
+          },
+          "title": "组网列表"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "required": [
+        "list",
+        "total"
+      ]
+    },
+    "agentUpdateAgentRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "ID"
+        },
+        "name": {
+          "type": "string",
+          "title": "Agent名称"
+        },
+        "agent_id": {
+          "type": "string",
+          "title": "agent ID"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "agent_id"
+      ]
+    },
+    "agentUpdateAgentResponse": {
+      "type": "object"
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    }
+  }
+}

@@ -1,0 +1,209 @@
+syntax = "proto3";
+
+package hpa.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service HPA {
+  // 查看-云原生管理-HPA-列表
+  rpc ListHpa (ListHpaRequest) returns (ListHpaResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/hpa/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-HPA-Yaml创建更新
+  rpc CreateOrUpdateHpaByYaml (CreateOrUpdateHpaByYamlRequest) returns (CreateOrUpdateHpaByYamlResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/hpa/create_or_update_by_yaml"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "弹性伸缩";
+      action: "YAML创建更新资源";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: ""
+        },
+        {
+          key: "name",
+          const: ""
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-HPA-删除
+  rpc DeleteHpa (DeleteHpaRequest) returns (DeleteHpaResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/hpa/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "弹性伸缩";
+      action: "删除弹性伸缩";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "弹性伸缩HPA"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+   // 查看-云原生管理-HPA-详情
+  rpc GetHpaDetail (HpaDetailRequest) returns (HpaDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/hpa/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+
+// Hpa列表请求
+
+message ListHpaRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2;
+  // 查询关键字
+  string keyword = 4;
+  // 页码
+  uint32 page = 5;
+  // 页大小
+  uint32 page_size = 6;
+  // 查询全部
+  uint32  list_all = 7 [json_name = "list_all"];
+}
+
+// Hpa列表项
+message HpaItem {
+  // 名称
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 工作负载类型
+  string workload_type = 3;
+  // 工作负载名称
+  string workload = 4;
+  // 最小副本数
+  uint32 min_replicas = 5 [(google.api.field_behavior) = REQUIRED];
+  // 最大副本数
+  uint32 max_replicas = 6 [(google.api.field_behavior) = REQUIRED];
+  // 目标CPU利用率
+  string target_cpu_utilization = 7 [(google.api.field_behavior) = REQUIRED];
+  // 当前CPU利用率
+  string current_cpu_utilization = 15 [(google.api.field_behavior) = REQUIRED];
+  // 目标内存利用率
+  string target_memory_utilization = 8 [(google.api.field_behavior) = REQUIRED];
+  // 当前内存利用率
+  string current_memory_utilization = 16 [(google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 9;
+  // 创建时间
+  uint64 create_time = 10 [(google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 11 [(google.api.field_behavior) = REQUIRED];
+  // 注解
+  map<string, string> annotations = 12;
+  // 更新时间
+  uint64 update_time = 13 [(google.api.field_behavior) = REQUIRED];
+  // 当前副本数
+  uint32 current_replicas = 14 [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 17 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+}
+
+
+// Hpa列表响应
+message ListHpaResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated HpaItem list = 2;
+}
+
+// 通过yaml创建或者更新HPA
+message CreateOrUpdateHpaByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 创建CloneSet响应
+message CreateOrUpdateHpaByYamlResponse {}
+
+
+
+// 删除Hpa请求
+message DeleteHpaRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 删除Hpa响应
+message DeleteHpaResponse {}
+
+
+// 查看Hpa详情请求
+message HpaDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+
+// 查看CloneSet详情响应
+message HpaDetailResponse {
+  // 基础信息
+  HpaItem detail = 1 [(google.api.field_behavior) = REQUIRED];
+}
+

@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package websocket;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service WebSocket {
+  // 查看-云原生管理-终端-Pod日志
+  rpc TailPodLogs(TailPodLogsRequest) returns (TailPodLogsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/ws/pod/log"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  };
+  // 执行-云原生管理-终端-Pod命令
+  rpc ExecPodCommand(ExecPodCommandRequest) returns (PodCommandResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/ws/pod/command"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  };
+
+}
+
+
+// Pod日志请求
+message TailPodLogsRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // pod名称
+  string pod_name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 容器名称
+  string container_name = 4 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 行数
+  uint32 tail_lines = 5 [(validate.rules).uint32.gt = 0, (google.api.field_behavior) = REQUIRED];
+}
+
+// Pod日志响应
+message TailPodLogsResponse {
+  string log = 1;
+}
+
+// Pod 命令请求
+message ExecPodCommandRequest {
+  // 操作类型
+  enum OperationType {
+    // None
+    None = 0;
+    // 建立连接
+    Connect = 1;
+    // 调整窗口大小
+    ResizeWindow = 2;
+    // 执行命令
+    Command = 3;
+    // Disconnect
+    Disconnect = 4;
+    // Ping
+    Ping = 5;
+  }
+  message ConnectInfo {
+    // 集群名称
+    string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+    // 命名空间
+    string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+    // pod名称
+    string pod_name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+    // 容器名称
+    string container_name = 4 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+    // 命令类型 [bash, sh, powershell, cmd]
+    string shell = 5 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  }
+  message CommandInfo {
+    // 命令
+    string command = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  }
+  message ResizeWindowInfo {
+    // 行数
+    uint32 rows = 1 [(validate.rules).uint32.gt = 0, (google.api.field_behavior) = REQUIRED];
+    // 列数
+    uint32 cols = 2 [(validate.rules).uint32.gt = 0, (google.api.field_behavior) = REQUIRED];
+  }
+
+  OperationType operation_type = 1 [(google.api.field_behavior) = REQUIRED];
+  ConnectInfo connect_info = 2;
+  CommandInfo command_info = 3;
+  ResizeWindowInfo resize_window_info = 4;
+}
+
+// Pod日志响应
+message PodCommandResponse {
+  string output = 1;
+}

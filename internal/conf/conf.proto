@@ -1,0 +1,213 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "codo-cnmp/internal/conf;conf";
+
+
+message Bootstrap {
+  // @gotags: env:"CODO_CNMP_APP"
+  AppConfig APP = 1;
+  // @gotags: env:"CODO_CNMP_DB"
+  DBConfig DB = 2;
+  // @gotags: env:"CODO_CNMP_REDIS"
+  RedisConfig REDIS = 3;
+  // @gotags: env:"DEFAULT_OTEL"
+  OTELConfig OTEL = 4;
+  // @gotags: env:"DEFAULT_PROMETHEUS"
+  PrometheusConfig PROMETHEUS = 5;
+  // @gotags: env:"DEFAULT_PPROF"
+  PprofConfig PPROF = 6;
+  // @gotags: env:"CODO_CNMP_WS"
+  WebSocketConfig WS = 7;
+  // @gotags: env:"CODO_API_GW"
+  TianMenConfig TIANMEN = 8;
+  // @gotags: env:"DEFAULT_GRAFANA"
+  GrafanaConfig GRAFANA = 9;
+  // @gotags: env:"DEFAULT_KAFKA"
+  KafkaConfig KAFKA = 10;
+  // @gotags: env:"CODO_AGENT_SERVER"
+  AgentServerConfig AGENT_SERVER = 11;
+  // @gotags: env:"CODO_CNMP_MESH"
+  MeshConfig MESH = 12;
+  // @gotags: env:"CODO_CNMP_PROXY"
+  ProxyConfig PROXY = 13;
+}
+
+
+message AppConfig {
+//  enum Environment {
+//    NONE = 0;
+//    DEV = 1;
+//    PRE = 2;
+//    PRD = 3;
+//  }
+  // @gotags: env:"CODO_CNMP_APP_NAME"
+  string NAME = 1;
+  // @gotags: env:"CODO_CNMP_APP_ENV"
+  string ENV = 2;
+  // @gotags: env:"CODO_CNMP_APP_TIMEOUT"
+  uint32 TIMEOUT = 3;
+  // @gotags: env:"CODO_CNMP_APP_PROTOCOL"
+  // string PROTOCOL = 4;
+  // @gotags: env:"CODO_CNMP_APP_ADDR"
+  string ADDR = 5;
+  // @gotags: env:"CODO_CNMP_APP_NETWORK"
+  string NETWORK = 6;
+  // @gotags: env:"CODO_CNMP_APP_VERSION"
+  string VERSION = 7;
+  // @gotags: env:"CODO_CNMP_APP_SECRET"
+  string SECRET = 8;
+}
+
+
+message PrometheusConfig {
+  // @gotags: env:"DEFAULT_PROMETHEUS_ENABLE"
+  bool ENABLED = 1;
+  // @gotags: env:"DEFAULT_PROMETHEUS_NETWORK"
+  string NETWORK = 2;
+  // @gotags: env:"DEFAULT_PROMETHEUS_ADDR"
+  string ADDR = 3;
+  // @gotags: env:"DEFAULT_PROMETHEUS_PATH"
+  string PATH = 4;
+}
+
+message PprofConfig {
+  // @gotags: env:"DEFAULT_PPROF_ENABLE"
+  bool ENABLE = 1;
+  // @gotags: env:"DEFAULT_PPROF_NETWORK"
+  string NETWORK = 2;
+  // @gotags: env:"DEFAULT_PPROF_ADDR"
+  string ADDR = 3;
+}
+
+message DBConfig {
+  // @gotags: env:"CODO_CNMP_DB_TYPE"
+  string DB_TYPE = 1;
+  // @gotags: env:"DEFAULT_DB_DBUSER"
+  string DB_USER = 2;
+  // @gotags: env:"DEFAULT_DB_DBPWD"
+  string DB_PASSWORD = 3;
+  // @gotags: env:"DEFAULT_DB_DBHOST"
+  string DB_HOST = 4;
+  // @gotags: env:"CODO_CNMP_DB_NAME"
+  string DB_NAME = 5;
+  // @gotags: env:"CODO_CNMP_DB_TABLE_PREFIX"
+  string DB_TABLE_PREFIX = 6;
+  // @gotags: env:"CODO_CNMP_DB_FILE"
+  string DB_FILE = 7;
+  // @gotags: env:"DEFAULT_DB_DBPORT"
+  string DB_PORT = 8;
+  // @gotags: env:"CODO_CNMP_DB_MAX_IDLE_CONNS"
+  uint32 DB_MaxIdleConns = 9;
+  // @gotags: env:"CODO_CNMP_DB_MAX_OPEN_CONNS"
+  uint32 DB_MaxOpenConns = 10;
+  // @gotags: env:"CODO_CNMP_DB_CONN_MAX_LIFETIME"
+  uint32 DB_ConnMaxLifetime = 11;
+  // @gotags: env:"CODO_CNMP_DB_DEBUG"
+  bool DEBUG = 12;
+}
+
+message OTELConfig {
+  message Trace {
+    // @gotags: env:"DEFAULT_OTEL_TRACE_ENDPOINT"
+    string ENDPOINT = 1;
+    // @gotags: env:"DEFAULT_OTEL_TRACE_INSECURE"
+    bool INSECURE = 2;
+  }
+  message Metric {
+    // @gotags: env:"DEFAULT_OTEL_METRIC_ENABLE_EXEMPLAR"
+    bool ENABLE_EXEMPLAR = 1;
+  }
+  message Log {
+    // @gotags: env:"DEFAULT_OTEL_LOG_LEVEL"
+    string LEVEL = 1;
+  }
+  // @gotags: env:"DEFAULT_OTEL_TRACE"
+  Trace TRACE = 1;
+  // @gotags: env:"DEFAULT_OTEL_METRIC"
+  Metric METRIC = 2;
+  // @gotags: env:"DEFAULT_OTEL_LOG"
+  Log LOG = 3;
+}
+
+message RedisConfig {
+  // @gotags: env:"DEFAULT_REDIS_HOST"
+  string R_HOST = 1;
+  // @gotags: env:"DEFAULT_REDIS_PORT"
+  uint32 R_PORT = 2;
+  // @gotags: env:"DEFAULT_REDIS_PASSWORD"
+  string R_PASSWORD = 3;
+  // @gotags: env:"CODO_CNMP_REDIS_DB"
+  uint32 R_DB = 4;
+  // @gotags: env:"CODO_CNMP_REDIS_READ_TIMEOUT"
+  uint32 READ_TIMEOUT = 5;
+  // @gotags: env:"CODO_CNMP_REDIS_WRITE_TIMEOUT"
+  uint32 WRITE_TIMEOUT = 6;
+  // @gotags: env:"CODO_CNMP_REDIS_DIAL_TIMEOUT"
+  uint32 DIAL_TIMEOUT = 7;
+  // @gotags: env:"CODO_CNMP_REDIS_NETWORK"
+  string NETWORK = 8;
+}
+
+message WebSocketConfig {
+  //@gotags: env:"CODO_CNMP_WS_ADDR"
+  string ADDR = 1;
+}
+
+message TianMenConfig {
+  // @gotags: env:"CODO_API_GW"
+  string ADDR = 1;
+  // @gotags: env:"CODO_AUTH_KEY"
+  string AUTH_KEY = 2;
+  // @gotags: env:"CODO_API_GW_TIMEOUT"
+  uint32 Timeout = 3;
+}
+
+message GrafanaConfig {
+  // @gotags: env:"DEFAULT_GRAFANA_ADDR"
+  string ADDR = 1;
+  // @gotags: env:"DEFAULT_GRAFANA_USER"
+  string USER = 2;
+  // @gotags: env:"DEFAULT_GRAFANA_PASSWORD"
+  string PASSWORD = 3;
+}
+
+message KafkaConfig {
+  // @gotags: env:"DEFAULT_KAFKA_ADDR"
+  string ADDR = 1;
+  // @gotags: env:"DEFAULT_KAFKA_TOPIC"
+  string TOPIC = 2;
+  // @gotags: env:"DEFAULT_KAFKA_DIAL_TIMEOUT"
+  uint32 DialTimeout = 3;
+}
+
+message AgentServerConfig {
+  // @gotags: env:"CODO_AGENT_SERVER_ADDR"
+  string SERVER_ADDR = 1;
+  // @gotags: env:"CODO_AGENT_SERVER_NODE_TYPE"
+  string NODE_TYPE = 2;
+  // @gotags: env:"CODO_AGENT_SERVER_MESH_ADDR"
+  string MESH_ADDR = 3;
+  // @gotags: env:"CODO_AGENT_SERVER_ENABLED"
+  bool ENABLED = 4;
+}
+
+message MeshConfig {
+  //@gotags: env:"CODO_CNMP_MESH_WHITE_IP_LIST"
+  repeated string WHITE_IP_LIST = 1;
+  //@gotags: env:"CODO_CNMP_MESH_SRC_AGENT_ID"
+  string SRC_AGENT_ID = 2;
+  //@gotags: env:"CODO_CNMP_MESH_SRC_AGENT_PORT"
+  uint32 SRC_AGENT_PORT = 3;
+}
+
+message ProxyConfig {
+  // @gotags: env:"CODO_CNMP_PROXY_ADDR"
+  string ADDR = 1;
+  // @gotags: env:"CODO_CNMP_PROXY_ENABLE"
+  bool ENABLE = 2;
+  // @gotags: env:"CODO_CNMP_PROXY_NETWORK"
+  string NETWORK = 3;
+  // @gotags: env:"CODO_CNMP_PROXY_API_SERVER"
+  string API_SERVER = 4;
+}

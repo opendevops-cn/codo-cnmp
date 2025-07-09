@@ -1,0 +1,442 @@
+syntax = "proto3";
+
+package daemonset;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "k8s/core/v1/generated.proto";
+import "k8s/io/apimachinery/pkg/apis/generated.proto";
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service DaemonSet {
+  // 查看-云原生管理-DaemonSet-列表
+  rpc ListDaemonSet (ListDaemonSetRequest) returns (ListDaemonSetResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/daemonset/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-DaemonSet-Yaml创建更新
+  rpc CreateOrUpdateDaemonSetByYaml (CreateOrUpdateDaemonSetByYamlRequest) returns (CreateOrUpdateDaemonSetByYamlResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/daemonset/create_or_update_by_yaml"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "daemonset";
+      action: "Yaml创建更新";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "daemonset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-DaemonSet-删除
+  rpc DeleteDaemonSet (DeleteDaemonSetRequest) returns (DeleteDaemonSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/daemonset/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "daemonset";
+      action: "删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "daemonset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-DaemonSet-重启
+  rpc RestartDaemonSet (RestartDaemonSetRequest) returns (RestartDaemonSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/daemonset/restart"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "daemonset";
+      action: "重启";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "daemonset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-DaemonSet-详情
+  rpc GetDaemonSetDetail (GetDaemonSetDetailRequest) returns (GetDaemonSetDetailResponse){
+    option (google.api.http) = {
+      get: "/api/v1/daemonset/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-DaemonSet-历史版本
+  rpc GetDaemonSetRevisions (GetDaemonSetHistoryRequest) returns (GetDaemonSetHistoryResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/daemonset/revisions"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-DaemonSet-回滚
+  rpc RollbackDaemonSet (RollbackDaemonSetRequest) returns (RollbackDaemonSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/daemonset/rollback"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "daemonset";
+      action: "回滚";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "daemonset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-DaemonSet-更新策略
+  rpc UpdateStatefulSetUpdateStrategy (UpdateDaemonSetUpdateStrategyRequest) returns (UpdateDaemonSetUpdateStrategyResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/daemonset/upgrade_strategy/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "daemonset";
+      action: "更新策略";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "daemonset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+}
+
+
+message DaemonSetCondition {
+  // Type of deployment condition.
+  string type = 1;
+
+  // Status of the condition, one of True, False, Unknown.
+  string status = 2;
+
+  // The last time this condition was updated.
+  // 豪秒级时间戳
+  uint64 lastUpdateTime = 6;
+
+  // Last time the condition transitioned from one status to another.
+  // 豪秒级时间戳
+  uint64 lastTransitionTime = 7;
+
+  // The reason for the condition's last transition.
+  string reason = 4;
+
+  // A human readable message indicating details about the transition.
+  string message = 5;
+}
+
+// DaemonSet 状态
+message DaemonSetStatus {
+  uint32 observedGeneration = 1;
+  // 副本数量
+  uint32 replicas = 2 [(google.api.field_behavior) = REQUIRED];
+  // 已更新副本数量
+  uint32 updatedReplicas = 3 [(google.api.field_behavior) = REQUIRED];
+  // 已就绪副本数量
+  uint32 readyReplicas = 7 [(google.api.field_behavior) = REQUIRED];
+  // 可用副本数量
+  uint32 availableReplicas = 4 [(google.api.field_behavior) = REQUIRED];
+  // 不可用副本数量
+  uint32 unavailableReplicas = 5;
+  uint32 collisionCount = 8;
+}
+
+message DaemonSetStrategy {
+  // 更新方式
+  enum UpdateStrategyType {
+    // 滚动更新
+    RollingUpdate = 0;
+    // 删除后更新
+    OnDelete = 1;
+  }
+  UpdateStrategyType update_strategy_type = 1 [(validate.rules).enum = {defined_only: true}, (google.api.field_behavior) = REQUIRED];
+  // 最大不可用副本数
+  string max_unavailable = 2;
+  // 最大可用副本数
+  string max_surge = 3;
+}
+
+// DaemonSetItem
+message DaemonSetItem {
+  // 名称
+  string name = 1  [(google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2  [(google.api.field_behavior) = REQUIRED];
+  // 容器
+  repeated k8s.io.api.core.v1.Container containers = 3  [(google.api.field_behavior) = REQUIRED];
+  // 状态
+  DaemonSetStatus status = 4  [(google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 5 [json_name = "create_time", (google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 6  [(google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 7  [(google.api.field_behavior) = REQUIRED];
+  // 注解
+  map<string, string> annotations = 8  [(google.api.field_behavior) = REQUIRED];
+  // 副本数量
+  uint32 replicas = 9  [(google.api.field_behavior) = REQUIRED];
+  // 更新策略
+  DaemonSetStrategy update_strategy = 10  [(google.api.field_behavior) = REQUIRED];
+  // 选择器
+  k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 11  [(google.api.field_behavior) = REQUIRED];
+  // 健康检查
+  repeated DaemonSetCondition conditions = 12  [(google.api.field_behavior) = REQUIRED];
+  // 期望副本数量
+  uint32 spec_replicas = 13  [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 14 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+
+}
+// DaemonSet列表请求
+message ListDaemonSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2;
+  // 查询关键字
+  string keyword = 4;
+  // 页码
+  uint32 page = 5;
+  // 页大小
+  uint32 page_size = 6;
+  // 查询全部
+  uint32  list_all = 7 [json_name = "list_all"];
+}
+
+// DaemonSet列表响应
+message ListDaemonSetResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated DaemonSetItem list = 2;
+}
+
+// 从YAML创建或者更新DaemonSet请求
+message CreateOrUpdateDaemonSetByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 从YAML创建或者更新DaemonSet响应
+message CreateOrUpdateDaemonSetByYamlResponse {}
+
+
+
+message DeleteDaemonSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+message DeleteDaemonSetResponse {}
+
+// RestartDaemonSet请求
+message RestartDaemonSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+
+message RestartDaemonSetResponse {}
+
+
+// 查看DaemonSet详情请求
+message GetDaemonSetDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 查看DaemonSet详情响应
+message GetDaemonSetDetailResponse {
+  // 详情
+  DaemonSetItem detail = 1;
+}
+
+// 回滚DaemonSet请求
+message RollbackDaemonSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 版本号
+  string version = 4 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 回滚DaemonSet响应
+message RollbackDaemonSetResponse {}
+
+// 查看DaemonSet历史版本请求
+message GetDaemonSetHistoryRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+message DaemonSetControllerReversionItem {
+  // 名称
+  string name = 1  [(google.api.field_behavior) = REQUIRED];
+  // 镜像
+  repeated string images = 2  [(google.api.field_behavior) = REQUIRED];
+  // 版本
+  string version = 3  [(google.api.field_behavior) = REQUIRED];
+  // 版本详情
+  string yaml = 4  [(google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 5 [json_name = "create_time", (google.api.field_behavior) = REQUIRED];
+  // 是否当前版本
+  bool is_current = 6  [(google.api.field_behavior) = REQUIRED];
+}
+
+// 查看DaemonSet历史版本响应
+message GetDaemonSetHistoryResponse {
+  // 列表
+  repeated DaemonSetControllerReversionItem list = 1;
+  // 总数
+  uint32 total = 2;
+}
+
+
+// 修改DaemonSet更新策略请求
+message UpdateDaemonSetUpdateStrategyRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 更新方式
+  enum UpdateStrategyType {
+    // 滚动更新
+    RollingUpdate = 0;
+    // 删除后更新
+    OnDelete = 1;
+  }
+  UpdateStrategyType update_strategy_type = 4 [(validate.rules).enum = {defined_only: true}, (google.api.field_behavior) = REQUIRED];
+  // 最大不可用副本数
+  string max_unavailable = 5;
+  // 最大可用副本数
+  string max_surge = 6;
+}
+
+// 修改DaemonSet更新策略响应
+message UpdateDaemonSetUpdateStrategyResponse {}

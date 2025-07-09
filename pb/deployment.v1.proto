@@ -1,0 +1,478 @@
+syntax = "proto3";
+
+package deployment;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "k8s/core/v1/generated.proto";
+//import "google/protobuf/timestamp.proto";
+import "k8s/io/apimachinery/pkg/apis/generated.proto";
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service Deployment {
+  // 查看-云原生管理-Deployment-列表
+  rpc ListDeployment (ListDeploymentRequest) returns (ListDeploymentResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/deployment/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-Deployment-Yaml创建更新
+  rpc CreateOrUpdateDeploymentByYaml (CreateOrUpdateDeploymentByYamlRequest) returns (CreateOrUpdateDeploymentByYamlResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/deployment/create_or_update_by_yaml"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "deployment";
+      action: "Yaml创建更新";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "namespace"
+        },
+        {
+          key: "name",
+          const: ""
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-Deployment-删除
+  rpc DeleteDeployment (DeleteDeploymentRequest) returns (DeleteDeploymentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/deployment/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "deployment";
+      action: "删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "deployment"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-Deployment-重启
+  rpc RestartDeployment (RestartDeploymentRequest) returns (RestartDeploymentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/deployment/restart"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "deployment";
+      action: "重启";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "deployment"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-Deployment-扩缩容
+  rpc ScaleDeployment (ScaleDeploymentRequest) returns (ScaleDeploymentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/deployment/scale"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "deployment";
+      action: "伸缩";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "deployment"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-Deployment-详情
+  rpc GetDeploymentDetail (DeploymentDetailRequest) returns (DeploymentDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/deployment/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-Deployment-回滚
+  rpc RollbackDeployment (RollbackDeploymentRequest) returns (RollbackDeploymentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/deployment/rollback"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "deployment";
+      action: "回滚";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "deployment"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-Deployment-历史版本
+  rpc ListReplicaSet (DeploymentDetailRequest) returns (ListReplicaSetResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/deployment/replicaset/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-Deployment-更新策略
+  rpc UpdateDeploymentStrategy (UpdateDeploymentStrategyRequest) returns (UpdateDeploymentStrategyResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/deployment/upgrade_strategy/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+
+}
+
+
+// Deployment列表请求
+message ListDeploymentRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2;
+  // 查询关键字
+  string keyword = 4;
+  // 页码
+  uint32 page = 5;
+  // 页大小
+  uint32 page_size = 6;
+  // 查询全部
+  uint32  list_all = 7 [json_name = "list_all"];
+}
+
+
+message DeploymentCondition {
+  // Type of deployment condition.
+  string type = 1;
+
+  // Status of the condition, one of True, False, Unknown.
+  string status = 2;
+
+  // The last time this condition was updated.
+  // 豪秒级时间戳
+  uint64 lastUpdateTime = 6;
+
+  // Last time the condition transitioned from one status to another.
+  // 豪秒级时间戳
+  uint64 lastTransitionTime = 7;
+
+  // The reason for the condition's last transition.
+  string reason = 4;
+
+  // A human readable message indicating details about the transition.
+  string message = 5;
+}
+
+// DeploymentStatus is the most recently observed status of the Deployment.
+message DeploymentStatus {
+  uint32 observedGeneration = 1;
+  // 副本数量
+  uint32 replicas = 2 [(google.api.field_behavior) = REQUIRED];
+  // 已更新副本数量
+  uint32 updatedReplicas = 3 [(google.api.field_behavior) = REQUIRED];
+  // 已就绪副本数量
+  uint32 readyReplicas = 7 [(google.api.field_behavior) = REQUIRED];
+  // 可用副本数量
+  uint32 availableReplicas = 4 [(google.api.field_behavior) = REQUIRED];
+  // 不可用副本数量
+  uint32 unavailableReplicas = 5;
+  uint32 collisionCount = 8;
+}
+
+message DeploymentStrategy {
+  // 更新策略
+  enum UpdateStrategyType {
+    // 滚动更新
+    RollingUpdate = 0;
+    // Recreate
+    Recreate = 1;
+  }
+  // 更新策略
+  UpdateStrategyType update_strategy_type = 4 [(google.api.field_behavior) = REQUIRED, (validate.rules).enum = {defined_only: true}];
+  // 最大不可用副本数
+  string max_unavailable = 5;
+  // 最大可用副本数
+  string max_surge = 6;
+}
+
+// Deployment列表项
+message DeploymentItem {
+  // 名称
+  string name = 1  [(google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2  [(google.api.field_behavior) = REQUIRED];
+  // 容器
+  repeated k8s.io.api.core.v1.Container containers = 3  [(google.api.field_behavior) = REQUIRED];
+  // 状态
+  DeploymentStatus status = 4  [(google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 5 [json_name = "create_time", (google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 6  [(google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 7  [(google.api.field_behavior) = REQUIRED];
+  // 注解
+  map<string, string> annotations = 8  [(google.api.field_behavior) = REQUIRED];
+  // 副本数量
+  uint32 replicas = 9  [(google.api.field_behavior) = REQUIRED];
+  // 更新策略
+  DeploymentStrategy update_strategy = 10  [(google.api.field_behavior) = REQUIRED];
+  // 选择器
+  k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 11  [(google.api.field_behavior) = REQUIRED];
+  // 健康检查
+  repeated DeploymentCondition conditions = 12  [(google.api.field_behavior) = REQUIRED];
+  // 期望副本数量
+  uint32 spec_replicas = 13  [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 14 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+
+}
+
+// Deployment列表响应
+message ListDeploymentResponse {
+  // 总数
+  int32 total = 1;
+  // 列表
+  repeated DeploymentItem list = 2;
+}
+
+// 创建Deployment请求
+message CreateOrUpdateDeploymentByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 创建Deployment响应
+message CreateOrUpdateDeploymentByYamlResponse {}
+
+// 更新Deployment请求
+message UpdateDeploymentByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 更新Deployment响应
+message UpdateDeploymentByYamlResponse {}
+
+// 删除Deployment请求
+message DeleteDeploymentRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 删除Deployment响应
+message DeleteDeploymentResponse {}
+
+// 重启Deployment请求
+message RestartDeploymentRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 重启Deployment响应
+message RestartDeploymentResponse {}
+
+// 伸缩Deployment请求
+message ScaleDeploymentRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 副本数量
+  uint32 replicas = 4 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+}
+
+
+// 伸缩Deployment响应
+message ScaleDeploymentResponse {}
+
+
+message ReplicaSetItem {
+  // 名称
+  string name = 1  [(google.api.field_behavior) = REQUIRED];
+  // 镜像
+  repeated string images = 2  [(google.api.field_behavior) = REQUIRED];
+  // 版本
+  string version = 3  [(google.api.field_behavior) = REQUIRED];
+  // 版本详情
+  string yaml = 4  [(google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 5 [json_name = "create_time", (google.api.field_behavior) = REQUIRED];
+  // 是否当前版本
+  bool is_current = 6  [(google.api.field_behavior) = REQUIRED];
+}
+
+// 查看Deployment详情请求
+message DeploymentDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+
+// 查看Deployment详情响应
+message DeploymentDetailResponse {
+  // 基础信息
+  DeploymentItem detail = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 回滚Deployment请求
+message RollbackDeploymentRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 版本号
+  string version = 4 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 回滚Deployment响应
+message RollbackDeploymentResponse {}
+
+// Deployment历史版本响应
+message ListReplicaSetResponse {
+  // 列表
+  repeated ReplicaSetItem list = 1;
+  // 总数
+  uint32 total = 2;
+}
+
+// 修改Deployment更新策略请求
+message UpdateDeploymentStrategyRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 更新策略
+  enum UpdateStrategyType {
+    // 滚动更新
+    RollingUpdate = 0;
+    // Recreate
+    Recreate = 1;
+  }
+  // 更新策略
+  UpdateStrategyType update_strategy_type = 4 [(google.api.field_behavior) = REQUIRED, (validate.rules).enum = {defined_only: true}];
+  // 最大不可用副本数
+  string max_unavailable = 5;
+  // 最大可用副本数
+  string max_surge = 6;
+}
+
+// 修改Deployment更新策略响应
+message UpdateDeploymentStrategyResponse {
+  bool success = 1;
+}

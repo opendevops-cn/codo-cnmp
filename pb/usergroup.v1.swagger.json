@@ -1,0 +1,797 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/usergroup.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "UserGroupService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/user/list": {
+      "get": {
+        "summary": "查看-云原生管理-用户列表",
+        "operationId": "UserGroupService_ListUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/usergroupListUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserGroupService"
+        ]
+      }
+    },
+    "/api/v1/usergroup/grant": {
+      "post": {
+        "summary": "管理-云原生管理-用户组-授权",
+        "operationId": "UserGroupService_GrantUserGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/usergroupGrantUserGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/usergroupGrantUserGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserGroupService"
+        ]
+      }
+    },
+    "/api/v1/usergroup/granted/delete": {
+      "post": {
+        "summary": "管理-云原生管理-用户组-删除授权",
+        "operationId": "UserGroupService_DeleteGrantedUserGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/usergroupDeleteGrantedUserGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/usergroupDeleteGrantedUserGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserGroupService"
+        ]
+      }
+    },
+    "/api/v1/usergroup/granted/detail": {
+      "get": {
+        "summary": "查看-云原生管理-用户组-授权详情",
+        "operationId": "UserGroupService_GetGrantedUserGroupDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/usergroupGetGrantedUserGroupDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user_group_id",
+            "description": "用户组ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "description": "分页",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "每页数量",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "是否全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "UserGroupService"
+        ]
+      }
+    },
+    "/api/v1/usergroup/granted/list": {
+      "get": {
+        "summary": "查看-云原生管理-用户组-授权列表",
+        "operationId": "UserGroupService_ListGrantedUserGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/usergroupListGrantedUserGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "keyword",
+            "description": "关键字",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "分页",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "每页数量",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "是否全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "UserGroupService"
+        ]
+      }
+    },
+    "/api/v1/usergroup/granted/update": {
+      "post": {
+        "summary": "管理-云原生管理-用户组-编辑授权",
+        "operationId": "UserGroupService_UpdateGrantedUserGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/usergroupUpdateGrantedUserGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/usergroupUpdateGrantedUserGroupRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserGroupService"
+        ]
+      }
+    },
+    "/api/v1/usergroup/list": {
+      "get": {
+        "summary": "查看-云原生管理-用户组-列表",
+        "operationId": "UserGroupService_ListUserGroup",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/usergroupListUserGroupResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "keyword",
+            "description": "关键字",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "分页",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "每页数量",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "是否全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "UserGroupService"
+        ]
+      }
+    },
+    "/api/v1/usergroup/users/list": {
+      "get": {
+        "summary": "查看-云原生管理-用户组-成员列表",
+        "operationId": "UserGroupService_ListUserGroupUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/usergroupListUserGroupUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "user_group_id",
+            "description": "用户组ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "UserGroupService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "usergroupDeleteGrantedUserGroupRequest": {
+      "type": "object",
+      "properties": {
+        "user_group_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "用户组ID"
+        }
+      },
+      "title": "删除用户组授权请求",
+      "required": [
+        "user_group_id"
+      ]
+    },
+    "usergroupDeleteGrantedUserGroupResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "title": "是否成功"
+        }
+      },
+      "title": "删除用户组授权响应",
+      "required": [
+        "success"
+      ]
+    },
+    "usergroupGetGrantedUserGroupDetailResponse": {
+      "type": "object",
+      "properties": {
+        "user_group": {
+          "$ref": "#/definitions/usergroupUserGroup",
+          "title": "用户组"
+        },
+        "role_detail": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/usergroupRoleDetail"
+          },
+          "title": "授权角色列表"
+        }
+      },
+      "title": "用户组授权详情响应",
+      "required": [
+        "user_group",
+        "role_detail"
+      ]
+    },
+    "usergroupGrantUserGroupRequest": {
+      "type": "object",
+      "properties": {
+        "user_group_ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": "用户组ID列表"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/usergroupRoleBinding"
+          },
+          "title": "roles 列表"
+        }
+      },
+      "required": [
+        "user_group_ids",
+        "roles"
+      ]
+    },
+    "usergroupGrantUserGroupResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "title": "是否成功"
+        }
+      },
+      "required": [
+        "success"
+      ]
+    },
+    "usergroupGrantedUserGroup": {
+      "type": "object",
+      "properties": {
+        "user_group_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "用户组ID"
+        },
+        "user_group_name": {
+          "type": "string",
+          "title": "用户组名称"
+        },
+        "granted_cluster_count": {
+          "type": "integer",
+          "format": "int64",
+          "title": "授权集群数"
+        },
+        "granted_role_count": {
+          "type": "integer",
+          "format": "int64",
+          "title": "授权角色数"
+        },
+        "update_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "更新时间"
+        }
+      },
+      "title": "message",
+      "required": [
+        "user_group_id",
+        "user_group_name",
+        "granted_cluster_count",
+        "granted_role_count",
+        "update_time"
+      ]
+    },
+    "usergroupListGrantedUserGroupResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/usergroupGrantedUserGroup"
+          },
+          "title": "用户组列表"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        }
+      },
+      "title": "用户组授权列表响应",
+      "required": [
+        "list",
+        "total"
+      ]
+    },
+    "usergroupListUserGroupResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/usergroupUserGroup"
+          },
+          "title": "用户组列表"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        }
+      },
+      "title": "用户组列表响应",
+      "required": [
+        "list",
+        "total"
+      ]
+    },
+    "usergroupListUserGroupUsersResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/usergroupUserGroupUser"
+          },
+          "title": "用户列表"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        }
+      },
+      "title": "用户列表响应",
+      "required": [
+        "list",
+        "total"
+      ]
+    },
+    "usergroupListUserResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/usergroupUser"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "required": [
+        "list",
+        "total"
+      ]
+    },
+    "usergroupRoleBinding": {
+      "type": "object",
+      "properties": {
+        "cluster_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "集群ID"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "Namespace 名称"
+        },
+        "role_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "Role 角色ID"
+        }
+      },
+      "title": "角色绑定",
+      "required": [
+        "cluster_id",
+        "namespace",
+        "role_id"
+      ]
+    },
+    "usergroupRoleDetail": {
+      "type": "object",
+      "properties": {
+        "cluster_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "集群ID"
+        },
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "Namespace 名称"
+        },
+        "role_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "Role 角色ID"
+        },
+        "role_name": {
+          "type": "string",
+          "title": "Role 角色名称"
+        }
+      },
+      "required": [
+        "cluster_id",
+        "cluster_name",
+        "namespace",
+        "role_id",
+        "role_name"
+      ]
+    },
+    "usergroupUpdateGrantedUserGroupRequest": {
+      "type": "object",
+      "properties": {
+        "user_group_ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": "用户组ID"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/usergroupRoleBinding"
+          },
+          "title": "roles 列表"
+        }
+      },
+      "title": "编辑用户组授权请求",
+      "required": [
+        "user_group_ids",
+        "roles"
+      ]
+    },
+    "usergroupUpdateGrantedUserGroupResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "title": "是否成功"
+        }
+      },
+      "title": "编辑用户组授权响应",
+      "required": [
+        "success"
+      ]
+    },
+    "usergroupUser": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "title": "用户名"
+        },
+        "nickname": {
+          "type": "string",
+          "title": "昵称"
+        },
+        "user_id": {
+          "type": "string",
+          "title": "用户ID"
+        }
+      },
+      "required": [
+        "username",
+        "nickname",
+        "user_id"
+      ]
+    },
+    "usergroupUserGroup": {
+      "type": "object",
+      "properties": {
+        "user_group_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "用户组ID"
+        },
+        "user_group_name": {
+          "type": "string",
+          "title": "用户组名称"
+        }
+      },
+      "title": "用户组",
+      "required": [
+        "user_group_id",
+        "user_group_name"
+      ]
+    },
+    "usergroupUserGroupUser": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "用户ID"
+        },
+        "user_name": {
+          "type": "string",
+          "title": "用户名称"
+        },
+        "email": {
+          "type": "string",
+          "title": "用户邮箱"
+        },
+        "nick_name": {
+          "type": "string",
+          "title": "昵称"
+        },
+        "source": {
+          "type": "string",
+          "title": "来源"
+        }
+      },
+      "title": "用户",
+      "required": [
+        "user_id",
+        "user_name",
+        "email",
+        "nick_name",
+        "source"
+      ]
+    }
+  }
+}

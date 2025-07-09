@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package pvc.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "khttp/audit.proto";
+
+option go_package = "codo-cnmp/pb;pb";
+
+service PersistentVolumeClaim {
+  // 查看-云原生管理-PersistentVolumeClaim-列表
+  rpc ListPersistentVolumeClaim (ListPersistentVolumeClaimRequest) returns (ListPersistentVolumeClaimResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/pvc/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-PersistentVolumeClaim-删除
+  rpc DeletePersistentVolumeClaim (DeletePersistentVolumeClaimRequest) returns (DeletePersistentVolumeClaimResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/pvc/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "pvc";
+      action: "删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "PersistentVolumeClaim"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+}
+
+message ListPersistentVolumeClaimRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 查询关键字
+  string keyword = 4;
+  // 页码
+  uint32 page = 5;
+  // 页大小
+  uint32 page_size = 6;
+  // 查询全部
+  uint32  list_all = 7[json_name = "list_all"];
+}
+
+message PersistentVolumeClaimItem {
+  // 名称
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 2 [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 3 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 4 [(google.api.field_behavior) = REQUIRED];
+  // 容量
+  string capacity = 5 [(google.api.field_behavior) = REQUIRED];
+  // 状态
+  string status = 6 [(google.api.field_behavior) = REQUIRED];
+  // 绑定的存储卷
+  string volume_name = 7 [(google.api.field_behavior) = REQUIRED];
+  // 访问模式
+  repeated string access_modes = 8 [(google.api.field_behavior) = REQUIRED];
+  // 存储类
+  string storage_class_name = 10 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListPersistentVolumeClaimResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated PersistentVolumeClaimItem list = 2;
+}
+
+// 删除PersistentVolumeClaim请求
+message DeletePersistentVolumeClaimRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 删除PersistentVolumeClaim响应
+message DeletePersistentVolumeClaimResponse {}

@@ -1,0 +1,364 @@
+syntax = "proto3";
+
+
+package usergroup;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "khttp/audit.proto";
+
+option go_package = "codo-cnmp/pb;pb";
+
+service UserGroupService {
+  // 管理-云原生管理-用户组-授权
+  rpc GrantUserGroup (GrantUserGroupRequest) returns (GrantUserGroupResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/usergroup/grant"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "用户组授权";
+      action: "授权管理";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "userGroup"
+        },
+        {
+          key: "name",
+          extract: "user_group_ids"
+        }
+      ]
+    };
+  };
+  // 查看-云原生管理-用户组-授权列表
+  rpc ListGrantedUserGroup (ListGrantedUserGroupRequest) returns (ListGrantedUserGroupResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/usergroup/granted/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-用户组-删除授权
+  rpc DeleteGrantedUserGroup (DeleteGrantedUserGroupRequest) returns (DeleteGrantedUserGroupResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/usergroup/granted/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "用户组授权";
+      action: "删除授权";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "userGroup"
+        },
+        {
+          key: "name",
+          extract: "user_group_id"
+        }
+      ]
+    };
+  };
+  // 管理-云原生管理-用户组-编辑授权
+  rpc UpdateGrantedUserGroup (UpdateGrantedUserGroupRequest) returns (UpdateGrantedUserGroupResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/usergroup/granted/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "用户组授权";
+      action: "授权管理";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "userGroup"
+        },
+        {
+          key: "name",
+          extract: "user_group_ids"
+        }
+      ]
+    };
+  };
+  // 查看-云原生管理-用户组-授权详情
+  rpc GetGrantedUserGroupDetail (GetGrantedUserGroupDetailRequest) returns (GetGrantedUserGroupDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/usergroup/granted/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  };
+  // 查看-云原生管理-用户组-列表
+  rpc ListUserGroup (ListUserGroupRequest) returns (ListUserGroupResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/usergroup/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-用户组-成员列表
+  rpc ListUserGroupUsers (ListUserGroupUsersRequest) returns (ListUserGroupUsersResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/usergroup/users/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-用户列表
+  rpc ListUser (ListUserRequest) returns (ListUserResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/user/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+// 角色绑定
+message RoleBinding {
+  // 集群ID
+  uint32 cluster_id = 1 [(google.api.field_behavior) = REQUIRED];
+  // Namespace 名称
+  string namespace = 2 [(google.api.field_behavior) = REQUIRED];
+  // Role 角色ID
+  uint32 role_id = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GrantUserGroupRequest {
+  // 用户组ID列表
+  repeated uint32 user_group_ids = 1 [(google.api.field_behavior) = REQUIRED, (validate.rules).repeated.min_items  = 1];
+  // roles 列表
+  repeated RoleBinding roles = 2 [(google.api.field_behavior) = REQUIRED, (validate.rules).repeated.min_items = 1];
+}
+
+message GrantUserGroupResponse {
+  // 是否成功
+  bool success = 1;
+}
+
+// 用户组授权列表请求
+message ListGrantedUserGroupRequest {
+  // 关键字
+  string keyword = 1 [(google.api.field_behavior) = REQUIRED];
+  // 分页
+  uint32 page = 2 [(google.api.field_behavior) = REQUIRED];
+  // 每页数量
+  uint32 page_size = 3 [(google.api.field_behavior) = REQUIRED];
+  // 是否全部
+  uint32 list_all = 4;
+}
+
+// message
+message GrantedUserGroup {
+  // 用户组ID
+  uint32 user_group_id = 1 [(google.api.field_behavior) = REQUIRED];
+  // 用户组名称
+  string user_group_name = 2 [(google.api.field_behavior) = REQUIRED];
+  // 授权集群数
+  uint32 granted_cluster_count = 3 [(google.api.field_behavior) = REQUIRED];
+  // 授权角色数
+  uint32 granted_role_count = 4 [(google.api.field_behavior) = REQUIRED];
+  // 更新时间
+  uint64 update_time = 5 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 用户组授权列表响应
+message ListGrantedUserGroupResponse {
+  // 用户组列表
+  repeated GrantedUserGroup list = 1 [(google.api.field_behavior) = REQUIRED];
+  // 总数
+  uint32 total = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 删除用户组授权请求
+message DeleteGrantedUserGroupRequest {
+  // 用户组ID
+  uint32 user_group_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 删除用户组授权响应
+message DeleteGrantedUserGroupResponse {
+  // 是否成功
+  bool success = 1;
+}
+
+// 编辑用户组授权请求
+message UpdateGrantedUserGroupRequest {
+  // 用户组ID
+  repeated uint32 user_group_ids = 1 [(google.api.field_behavior) = REQUIRED];
+  // roles 列表
+  repeated RoleBinding roles = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 编辑用户组授权响应
+message UpdateGrantedUserGroupResponse {
+  // 是否成功
+  bool success = 1;
+}
+
+// 用户组列表请求
+message ListUserGroupRequest {
+  // 关键字
+  string keyword = 1 [(google.api.field_behavior) = REQUIRED];
+  // 分页
+  uint32 page = 2 [(google.api.field_behavior) = REQUIRED];
+  // 每页数量
+  uint32 page_size = 3 [(google.api.field_behavior) = REQUIRED];
+  // 是否全部
+  uint32 list_all = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 用户组列表响应
+message ListUserGroupResponse {
+  // 用户组列表
+  repeated UserGroup list = 1 [(google.api.field_behavior) = REQUIRED];
+  // 总数
+  uint32 total = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+
+// 用户组
+message UserGroup {
+  // 用户组ID
+  uint32 user_group_id = 1 [(google.api.field_behavior) = REQUIRED];
+  // 用户组名称
+  string user_group_name = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 用户组响应
+message UserGroupResponse {
+  // 用户组
+  UserGroup list = 1 [(google.api.field_behavior) = REQUIRED];
+  // 总数
+  uint32 total = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 用户组授权详情请求
+message GetGrantedUserGroupDetailRequest {
+  // 用户组ID
+  uint32 user_group_id = 1 [(google.api.field_behavior) = REQUIRED];
+  // 分页
+  uint32 page = 2;
+  // 每页数量
+  uint32 page_size = 3;
+  // 是否全部
+  uint32 list_all = 4;
+}
+
+message RoleDetail {
+  // 集群ID
+  uint32 cluster_id = 1 [(google.api.field_behavior) = REQUIRED];
+  // 集群名称
+  string cluster_name = 2 [(google.api.field_behavior) = REQUIRED];
+  // Namespace 名称
+  string namespace = 3 [(google.api.field_behavior) = REQUIRED];
+  // Role 角色ID
+  uint32 role_id = 4 [(google.api.field_behavior) = REQUIRED];
+  // Role 角色名称
+  string role_name = 5 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 用户组授权详情
+//message GrantedUserGroupDetail {
+//  // 用户组
+//  UserGroup user_group = 1 [(google.api.field_behavior) = REQUIRED];
+//  // 授权角色列表
+//  repeated RoleDetail RoleDetail = 2 [(google.api.field_behavior) = REQUIRED];
+//}
+
+// 用户组授权详情响应
+message GetGrantedUserGroupDetailResponse {
+  // 用户组
+  UserGroup user_group = 1 [(google.api.field_behavior) = REQUIRED];
+  // 授权角色列表
+  repeated RoleDetail role_detail = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 用户列表请求
+message ListUserGroupUsersRequest {
+  // 用户组ID
+  uint32 user_group_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 用户
+message UserGroupUser {
+  // 用户ID
+  uint32 user_id = 1 [(google.api.field_behavior) = REQUIRED];
+  // 用户名称
+  string user_name = 2 [(google.api.field_behavior) = REQUIRED];
+  // 用户邮箱
+  string email = 3 [(google.api.field_behavior) = REQUIRED];
+  // 昵称
+  string nick_name = 4 [(google.api.field_behavior) = REQUIRED];
+  // 来源
+  string source = 5 [(google.api.field_behavior) = REQUIRED];
+}
+// 用户列表响应
+message ListUserGroupUsersResponse {
+  // 用户列表
+  repeated UserGroupUser list = 1 [(google.api.field_behavior) = REQUIRED];
+  // 总数
+  uint32 total = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListUserRequest {
+  uint32 page = 1;
+  uint32 page_size = 2;
+  uint32 list_all = 3;
+  string keyword = 4;
+}
+
+message ListUserResponse {
+  repeated User list = 1;
+  uint32 total = 2;
+}
+
+message User {
+  // 用户名
+  string username = 1 [(google.api.field_behavior) = REQUIRED];
+  // 昵称
+  string nickname = 2 [(google.api.field_behavior) = REQUIRED];
+  // 用户ID
+  string user_id = 3 [(google.api.field_behavior) = REQUIRED];
+}

@@ -1,0 +1,412 @@
+syntax = "proto3";
+package ezrollout.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "khttp/audit.proto";
+
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service EzRollout {
+  // 查看-云原生管理-版本伸缩-列表
+  rpc ListEzRollout (ListEzRolloutRequest) returns (ListEzRolloutResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/ezrollout/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-版本伸缩-创建
+  rpc CreateEzRollout (CreateEzRolloutRequest) returns (CreateEzRolloutResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/ezrollout/create"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "版本伸缩";
+      action: "创建";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "版本伸缩"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-版本伸缩-编辑
+  rpc UpdateEzRollout (UpdateEzRolloutRequest) returns (UpdateEzRolloutResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/ezrollout/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "版本伸缩";
+      action: "编辑";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "版本伸缩"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-版本伸缩-删除
+  rpc DeleteEzRollout (DeleteEzRolloutRequest) returns (DeleteEzRolloutResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/ezrollout/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "版本伸缩";
+      action: "删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "版本伸缩"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-版本伸缩-yaml创建/更新
+  rpc CreateOrUpdateEzRolloutByYaml (CreateOrUpdateEzRolloutByYamlRequest) returns (CreateOrUpdateEzRolloutByYamlResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/ezrollout/create_or_update_by_yaml"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "版本伸缩";
+      action: "Yaml创建更新";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "版本伸缩"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-版本伸缩-详情
+  rpc GetEzRolloutDetail (EzRolloutDetailRequest) returns (EzRolloutDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/ezrollout/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+
+}
+
+
+message HPAScalingPolicy {
+  // 扩容策略类型，支持：
+  // - "Pods": 根据CPU使用率或内存使用率扩容
+  // - "Percent": 根据百分比扩容
+  string type = 1 [(validate.rules).string = {in: ["Pods", "Percent"]}, (google.api.field_behavior) = REQUIRED];
+
+  // 值
+  uint32 value = 2;
+
+  // 步长
+  // PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min).
+  uint32 periodSeconds = 3 [(validate.rules).uint32 = {gte: 1, lte: 1800}, (google.api.field_behavior) = REQUIRED];
+}
+
+// 伸缩规则
+message HPAScalingRules {
+  // 窗口稳定时间
+  // If not set, use the default values:
+  // - For scale up: 0 (i.e. no stabilization is done).
+  // - For scale down: 300 (i.e. the stabilization window is 300 seconds long).
+  uint32 stabilizationWindowSeconds = 3;
+
+  // selectPolicy, 默认为Max
+  string selectPolicy = 1;
+
+  // 扩容策略列表
+  repeated HPAScalingPolicy policies = 2;
+}
+
+message HorizontalPodAutoscalerBehavior {
+  // 扩容策略
+  HPAScalingRules scaleUp = 1;
+  // 缩容策略
+  HPAScalingRules scaleDown = 2;
+}
+
+
+message MetricIdentifier {
+  // 指标名称
+  // cpu, memory, entity_count, online_number
+  string name = 1;
+}
+
+
+// MetricTarget defines the target value, average value, or average utilization of a specific metric
+message MetricTarget {
+  // 指标名称为cpu, memory type == Utilization, 对象填充 averageUtilization
+  // 指标名称为entity_count, online_number type == AverageValue, 对象填充 averageValue
+  string type = 1;
+
+  // 单个对象值（绝对值）.
+  uint32 value = 2;
+
+  // 绝对值的目标值, 表示所有pod的平均值
+  uint32 averageValue = 3;
+
+  // 基于百分比的目标值, 仅在type为Utilization时有效
+  uint32 averageUtilization = 4;
+}
+
+message PodsMetricSource {
+  // metrics标识符
+  MetricIdentifier metric = 1;
+
+  // target specifies the target value for the given metric
+  optional MetricTarget target = 2;
+}
+
+message ResourceMetricSource {
+  // 指标名称 "cpu" or "memory"
+  string name = 1;
+  // target specifies the target value for the given metric
+  optional MetricTarget target = 2;
+}
+
+message MetricSpec {
+  // 指标类型 "Pods" or "Resource"
+  string type = 1 [(validate.rules).string = {in: ["Pods", "Resource"]}, (google.api.field_behavior) = REQUIRED];
+  // Pods类型指标
+  PodsMetricSource pods = 3;
+  // Resource类型指标
+  ResourceMetricSource resource = 4;
+}
+
+message MetricSpecV2 {
+  // 指标名称
+  string name= 1[(validate.rules).string = {min_len: 1}, (google.api.field_behavior) = REQUIRED];
+  // 期望值
+  uint32 value = 2 [(validate.rules).uint32 = {gte: 0}, (google.api.field_behavior) = REQUIRED];
+  // 当前值
+  uint32 current_value = 3;
+}
+
+
+
+message EzRolloutInfo {
+  string name = 1 [(validate.rules).string = {min_len: 1, max_len: 63}, (google.api.field_behavior) = REQUIRED];
+  string namespace = 2 [(google.api.field_behavior) = REQUIRED];
+  bool ready = 3 [(google.api.field_behavior) = REQUIRED];
+  // 线上版本
+  string online_version = 4[(google.api.field_behavior) = REQUIRED];
+  // 最小实例数
+  uint32 min_replicas = 5[(google.api.field_behavior) = REQUIRED];
+  // 最大实例数
+  uint32 max_replicas = 6[(google.api.field_behavior) = REQUIRED];
+  // 当前实例数
+  uint32 current_replicas = 7;
+  // 历史版本下线时间[毫秒级别时间戳]
+  uint64 offline_deadline = 8[(google.api.field_behavior) = REQUIRED];
+  // 选择器
+  map<string, string> selector = 9;
+  // 标签
+  map<string, string> labels = 10;
+  // 注释
+  map<string, string> annotations = 11;
+  // 扩容指标
+  repeated MetricSpecV2 scale_up_metrics = 12;
+  // 缩容指标
+  repeated MetricSpecV2 scale_down_metrics = 13;
+  // 线上版本扩容策略
+  HPAScalingRules scale_up = 14;
+  // 线上版本缩容策略
+  HPAScalingRules scale_down = 15;
+  // 创建时间
+  uint64 create_time = 16;
+  // Yaml
+  string yaml = 17;
+  // 最新错误时间 [毫秒级别时间戳]
+  uint64 latest_error_time = 18;
+  // 最新错误信息
+  string latest_error_message = 19;
+  // 允许扩容
+  bool enable_scale_up = 20;
+  // 是否关注
+  bool is_followed = 21 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+}
+
+
+message ListEzRolloutRequest {
+  string cluster_name = 1 [(validate.rules).string = {min_len: 1}, (google.api.field_behavior) = REQUIRED];
+  string namespace = 2[(validate.rules).string = {min_len: 1}, (google.api.field_behavior) = REQUIRED];
+  string keyword = 3;
+  uint32 page = 4;
+  uint32 page_size = 5;
+  uint32 list_all = 6;
+}
+
+
+
+message ListEzRolloutResponse {
+  uint32 total = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated EzRolloutInfo list = 2;
+}
+
+message CreateEzRolloutRequest {
+  string name = 1 [(validate.rules).string = {min_len: 1, max_len: 63}, (google.api.field_behavior) = REQUIRED];
+  string namespace = 2 [(google.api.field_behavior) = REQUIRED, (validate.rules).string = {min_len: 1}];
+  string cluster_name = 3 [(google.api.field_behavior) = REQUIRED, (validate.rules).string = {min_len: 1}];
+  // 线上版本
+  string online_version = 4[(google.api.field_behavior) = REQUIRED, (validate.rules).string = {min_len: 1}];
+  // 最小实例数
+  uint32 min_replicas = 5[(google.api.field_behavior) = REQUIRED, (validate.rules).uint32 = {gte: 0}];
+  // 最大实例数
+  uint32 max_replicas = 6[(google.api.field_behavior) = REQUIRED, (validate.rules).uint32 = {gte: 0}];
+  // 历史版本下线时间[毫秒级别时间戳]
+  uint64 offline_deadline = 8[(google.api.field_behavior) = REQUIRED, (validate.rules).uint64 = {gte: 0}];
+  // 选择器
+  map<string, string> selector = 9;
+  // 标签
+  map<string, string> labels = 10;
+  // 注释
+  map<string, string> annotations = 11;
+  // 扩容指标
+  repeated MetricSpecV2 scale_up_metrics = 12;
+  // 缩容指标
+  repeated MetricSpecV2 scale_down_metrics = 13;
+  // 线上版本扩容策略
+  HPAScalingRules scale_up = 14;
+  // 线上版本缩容策略
+  HPAScalingRules scale_down = 15;
+  // 允许扩容
+  bool enable_scale_up = 16;
+}
+
+message CreateEzRolloutResponse {}
+
+
+message UpdateEzRolloutRequest {
+  string name = 1 [(validate.rules).string = {min_len: 1, max_len: 63}, (google.api.field_behavior) = REQUIRED];
+  string namespace = 2 [(google.api.field_behavior) = REQUIRED, (validate.rules).string = {min_len: 1}];
+  string cluster_name = 3 [(google.api.field_behavior) = REQUIRED, (validate.rules).string = {min_len: 1}];
+  // 线上版本
+  string online_version = 4[(google.api.field_behavior) = REQUIRED, (validate.rules).string = {min_len: 1}];
+  // 最小实例数
+  uint32 min_replicas = 5[(google.api.field_behavior) = REQUIRED, (validate.rules).uint32 = {gte: 0}];
+  // 最大实例数
+  uint32 max_replicas = 6[(google.api.field_behavior) = REQUIRED, (validate.rules).uint32 = {gte: 0}];
+  // 历史版本下线时间
+  uint64 offline_deadline = 8[(google.api.field_behavior) = REQUIRED, (validate.rules).uint64 = {gte: 1}];
+  // 选择器
+  map<string, string> selector = 9;
+  // 标签
+  map<string, string> labels = 10;
+  // 注释
+  map<string, string> annotations = 11;
+  // 扩容指标
+  repeated MetricSpecV2 scale_up_metrics = 12;
+  // 缩容指标
+  repeated MetricSpecV2 scale_down_metrics = 13;
+  // 线上版本扩容策略
+  HPAScalingRules scale_up = 14;
+  // 线上版本缩容策略
+  HPAScalingRules scale_down = 15;
+  // 允许扩容
+  bool enable_scale_up = 16;
+}
+
+message UpdateEzRolloutResponse {}
+
+
+message DeleteEzRolloutRequest {
+  string cluster_name = 1 [(validate.rules).string = {min_len: 1}, (google.api.field_behavior) = REQUIRED];
+  string name = 2 [(validate.rules).string = {min_len: 1}, (google.api.field_behavior) = REQUIRED];
+  string namespace = 3 [(google.api.field_behavior) = REQUIRED, (validate.rules).string = {min_len: 1}];
+}
+
+message DeleteEzRolloutResponse {}
+
+
+message CreateOrUpdateEzRolloutByYamlRequest {
+  string cluster_name = 1 [(validate.rules).string = {min_len: 1}, (google.api.field_behavior) = REQUIRED];
+  string yaml = 2 [(validate.rules).string = {min_len: 1}, (google.api.field_behavior) = REQUIRED];
+}
+
+
+message CreateOrUpdateEzRolloutByYamlResponse {}
+
+
+message EzRolloutDetailRequest {
+  string cluster_name = 1 [(validate.rules).string = {min_len: 1}, (google.api.field_behavior) = REQUIRED];
+  string name = 2 [(validate.rules).string = {min_len: 1}, (google.api.field_behavior) = REQUIRED];
+  string namespace = 3 [(google.api.field_behavior) = REQUIRED, (validate.rules).string = {min_len: 1}];
+}
+
+message EzRolloutDetailResponse {
+  EzRolloutInfo detail = 1;
+}

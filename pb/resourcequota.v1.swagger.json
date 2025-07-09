@@ -1,0 +1,506 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/resourcequota.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "ResourceQuota"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/resourcequota/create": {
+      "post": {
+        "summary": "管理-云原生管理-ResourceQuota-创建",
+        "operationId": "ResourceQuota_CreateResourceQuota",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateResourceQuotaResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateResourceQuotaRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ResourceQuota"
+        ]
+      }
+    },
+    "/api/v1/resourcequota/create_or_update": {
+      "post": {
+        "summary": "管理-云原生管理-ResourceQuota-创建或编辑",
+        "operationId": "ResourceQuota_CreateOrUpdateResourceQuota",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateResourceQuotaResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateResourceQuotaRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ResourceQuota"
+        ]
+      }
+    },
+    "/api/v1/resourcequota/delete": {
+      "post": {
+        "summary": "管理-云原生管理-ResourceQuota-删除",
+        "operationId": "ResourceQuota_DeleteResourceQuota",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteResourceQuotaResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DeleteResourceQuotaRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ResourceQuota"
+        ]
+      }
+    },
+    "/api/v1/resourcequota/detail": {
+      "get": {
+        "summary": "查看-云原生管理-ResourceQuota-详情",
+        "operationId": "ResourceQuota_GetResourceQuotaDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ResourceQuotaDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ResourceQuota"
+        ]
+      }
+    },
+    "/api/v1/resourcequota/list": {
+      "get": {
+        "summary": "查看-云原生管理-ResourceQuota-列表",
+        "operationId": "ResourceQuota_ListResourceQuota",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListResourceQuotaResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ResourceQuota"
+        ]
+      }
+    },
+    "/api/v1/resourcequota/update": {
+      "post": {
+        "summary": "管理-云原生管理-ResourceQuota-编辑",
+        "operationId": "ResourceQuota_UpdateResourceQuota",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateResourceQuotaResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateResourceQuotaRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ResourceQuota"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "v1CreateResourceQuotaRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        },
+        "name": {
+          "type": "string",
+          "title": "名称"
+        },
+        "hard_resource": {
+          "$ref": "#/definitions/v1HardResource",
+          "title": "资源配额"
+        }
+      },
+      "title": "CreateLimitRange请求",
+      "required": [
+        "cluster_name",
+        "namespace",
+        "name",
+        "hard_resource"
+      ]
+    },
+    "v1CreateResourceQuotaResponse": {
+      "type": "object",
+      "title": "CreateResourceQuota响应"
+    },
+    "v1DeleteResourceQuotaRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "name": {
+          "type": "string",
+          "title": "名称"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        }
+      },
+      "title": "删除ResourceQuota请求",
+      "required": [
+        "cluster_name",
+        "name",
+        "namespace"
+      ]
+    },
+    "v1DeleteResourceQuotaResponse": {
+      "type": "object",
+      "title": "删除ResourceQuota响应"
+    },
+    "v1HardResource": {
+      "type": "object",
+      "properties": {
+        "cpu_limit": {
+          "type": "string",
+          "title": "CPU上限"
+        },
+        "mem_limit": {
+          "type": "string",
+          "title": "内存上限"
+        },
+        "cpu_request": {
+          "type": "string",
+          "title": "CPU请求"
+        },
+        "mem_request": {
+          "type": "string",
+          "title": "默认内存请求"
+        },
+        "max_pod": {
+          "type": "string",
+          "title": "pod数量"
+        },
+        "max_configmap": {
+          "type": "string",
+          "title": "configmap数量"
+        },
+        "max_secret": {
+          "type": "string",
+          "title": "secret数量"
+        },
+        "max_service": {
+          "type": "string",
+          "title": "服务数量"
+        },
+        "max_resource_storage": {
+          "type": "string",
+          "title": "存储请求总量"
+        },
+        "max_persistent_volume_claim": {
+          "type": "string",
+          "title": "存储卷声明数量"
+        }
+      },
+      "title": "资源配额",
+      "required": [
+        "cpu_limit",
+        "mem_limit",
+        "cpu_request",
+        "mem_request",
+        "max_pod",
+        "max_configmap",
+        "max_secret",
+        "max_service",
+        "max_resource_storage",
+        "max_persistent_volume_claim"
+      ]
+    },
+    "v1ListResourceQuotaResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ResourceQuotaItem"
+          },
+          "title": "列表"
+        }
+      },
+      "title": "ResourceQuota列表响应",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "v1ResourceQuotaDetailResponse": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "$ref": "#/definitions/v1ResourceQuotaItem",
+          "title": "基础信息"
+        }
+      },
+      "title": "查看ResourceQuota详情响应",
+      "required": [
+        "detail"
+      ]
+    },
+    "v1ResourceQuotaItem": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        },
+        "hard_resource": {
+          "$ref": "#/definitions/v1HardResource",
+          "title": "容器配额"
+        },
+        "used_resource": {
+          "$ref": "#/definitions/v1HardResource",
+          "title": "配额用量"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Scopes"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "yaml"
+        }
+      },
+      "title": "ResourceQuota Item",
+      "required": [
+        "name",
+        "namespace",
+        "hard_resource",
+        "used_resource",
+        "create_time",
+        "scopes",
+        "yaml"
+      ]
+    }
+  }
+}

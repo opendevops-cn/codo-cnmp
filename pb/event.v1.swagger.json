@@ -1,0 +1,248 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/event.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Event"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/event/list": {
+      "get": {
+        "summary": "查看-云原生管理-Event-列表",
+        "operationId": "Event_ListEvent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/commonListEventResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "controller_name",
+            "description": "controller名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "controller_type",
+            "description": " - Deployment: Deployment\n - StatefulSet: StatefulSet\n - DaemonSet: DaemonSet\n - Job: Job\n - CloneSet: CloneSet\n - GameServerSet: GameServerSet\n - Hpa: Hpa\n - SideCarSet: SideCarSet\n - Pod: Pod\n - Service: Service\n - Ingress: Ingress",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "Deployment",
+              "StatefulSet",
+              "DaemonSet",
+              "Job",
+              "CloneSet",
+              "GameServerSet",
+              "Hpa",
+              "SideCarSet",
+              "Pod",
+              "Service",
+              "Ingress"
+            ],
+            "default": "Deployment"
+          }
+        ],
+        "tags": [
+          "Event"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "commonEventItem": {
+      "type": "object",
+      "properties": {
+        "first_time_stamp": {
+          "type": "string",
+          "format": "uint64",
+          "title": "首次出现时间"
+        },
+        "last_time_stamp": {
+          "type": "string",
+          "format": "uint64",
+          "title": "最后出现时间"
+        },
+        "involved_object_kind": {
+          "type": "string",
+          "title": "事件资源类型"
+        },
+        "type": {
+          "type": "string",
+          "title": "事件等级"
+        },
+        "reason": {
+          "type": "string",
+          "title": "事件内容"
+        },
+        "message": {
+          "type": "string",
+          "title": "事件消息"
+        },
+        "involved_object_name": {
+          "type": "string",
+          "title": "事件资源名称"
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64",
+          "title": "事件出现次数"
+        }
+      },
+      "title": "Event",
+      "required": [
+        "involved_object_kind",
+        "type",
+        "reason",
+        "message",
+        "involved_object_name",
+        "count"
+      ]
+    },
+    "commonListEventRequestControllerType": {
+      "type": "string",
+      "enum": [
+        "Deployment",
+        "StatefulSet",
+        "DaemonSet",
+        "Job",
+        "CloneSet",
+        "GameServerSet",
+        "Hpa",
+        "SideCarSet",
+        "Pod",
+        "Service",
+        "Ingress"
+      ],
+      "default": "Deployment",
+      "description": "- Deployment: Deployment\n - StatefulSet: StatefulSet\n - DaemonSet: DaemonSet\n - Job: Job\n - CloneSet: CloneSet\n - GameServerSet: GameServerSet\n - Hpa: Hpa\n - SideCarSet: SideCarSet\n - Pod: Pod\n - Service: Service\n - Ingress: Ingress",
+      "title": "控制器类型"
+    },
+    "commonListEventResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/commonEventItem"
+          },
+          "title": "Event列表"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        }
+      },
+      "title": "Event列表响应",
+      "required": [
+        "list",
+        "total"
+      ]
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    }
+  }
+}

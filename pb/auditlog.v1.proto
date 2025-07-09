@@ -1,0 +1,177 @@
+syntax = "proto3";
+
+
+package auditlog.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "google/api/field_behavior.proto";
+
+option go_package = "codo-cnmp/pb;pb";
+
+service AuditLog {
+  // 查看-云原生管理-审计日志
+  rpc ListAuditLog (ListAuditLogRequest) returns (ListAuditLogResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/audit_log/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-审计日志-查询条件
+  rpc ListAuditLogQueryCondition (AuditLogQueryConditionRequest) returns (AuditLogQueryConditionResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/audit_log/query_condition/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-审计日志详情
+  rpc GetAuditLog (GetAuditLogRequest) returns (GetAuditLogResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/audit_log/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+enum OperationStatus {
+  // 未知
+  OperationStatus_UNKNOWN = 0;
+  // 失败
+  Fail = 1;
+  // 成功
+  Success = 2;
+}
+
+message ListAuditLogRequest {
+  // 操作人
+  string username = 1;
+
+  // 操作IP
+  string client_ip = 2;
+
+  // 集群
+  string cluster = 3;
+
+  // 命名空间
+  string namespace = 4;
+
+  // 模块
+  string module = 5;
+
+  // 对象类型
+  string resource_type = 6;
+
+  // 对象名称
+  string resource_name = 7;
+
+  // 操作类型
+  string action = 8;
+
+  // 操作状态
+  OperationStatus status = 9;
+
+  // 开始时间
+  optional string start_time = 10;
+
+  // 结束时间
+  optional string end_time = 11;
+
+  // 分页参数
+  uint32 page = 12;
+  uint32 page_size = 13;
+  uint32  list_all= 14;
+}
+
+// 响应消息
+message ListAuditLogResponse {
+  // 总数
+  uint32 total = 1;
+  // 审计日志列表
+  repeated AuditLogItem list = 2;
+}
+
+// 审计日志详情
+message AuditLogItem {
+  // ID
+  uint32 id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // 操作人
+  string username = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // 操作IP
+  string client_ip = 3;
+
+  // 集群
+  string cluster = 4;
+
+  // 命名空间
+  string namespace = 5;
+
+  // 模块
+  string module = 6;
+
+  // 对象类型
+  string resource_type = 7;
+
+  // 对象名称
+  string resource_name = 8;
+
+  // 操作类型
+  string action = 9 [(google.api.field_behavior) = REQUIRED];
+
+  // 请求路径
+  string request_path = 10 [(google.api.field_behavior) = REQUIRED];
+
+  // 请求内容
+  string request_body = 11;
+
+  // 响应内容
+  string response_body = 12;
+
+  // 操作状态
+  OperationStatus status = 13 [(google.api.field_behavior) = REQUIRED];
+
+  // 操作耗时(ms)
+  string duration = 14 [(google.api.field_behavior) = REQUIRED];
+
+  // 操作时间
+  uint64 operation_time = 15 [(google.api.field_behavior) = REQUIRED];
+
+  // 创建时间
+  uint64 created_time = 16 [(google.api.field_behavior) = REQUIRED];
+
+}
+
+message GetAuditLogRequest {
+  // ID
+  uint64 id = 1;
+}
+
+message GetAuditLogResponse {
+  // 审计日志详情
+  AuditLogItem detail = 1;
+}
+
+message AuditLogQueryConditionRequest {}
+
+
+message AuditLogQueryConditionResponse {
+  // 集群
+  repeated string cluster = 1;
+  // 命名空间
+  repeated string namespace = 2;
+  // 模块
+  repeated string module = 3;
+  // 对象类型
+  repeated string resource_type = 4;
+  // 操作类型
+  repeated string action = 5;
+  // 操作状态
+  repeated OperationStatus status = 6;
+  }

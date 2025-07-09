@@ -1,0 +1,320 @@
+syntax = "proto3";
+
+package ingress.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "k8s/core/v1/generated.proto";
+
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service Ingress {
+  // 查看-云原生管理-Ingress-列表
+  rpc ListIngress (ListIngressRequest) returns (ListIngressResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/ingress/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-Ingress域名-列表
+  rpc ListIngressHost(ListHostRequest) returns (ListHostResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/ingress/host/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-Ingress-创建
+  rpc CreateIngress (CreateIngressRequest) returns (CreateIngressResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/ingress/create"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "Service";
+      action: "创建ingress";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "Service"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-Ingress-编辑
+  rpc UpdateIngress (CreateIngressRequest) returns (CreateIngressResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/ingress/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "Service";
+      action: "编辑ingress";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "Service"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-Ingress-删除
+  rpc DeleteIngress (DeleteIngressRequest) returns (DeleteIngressResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/ingress/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "Service";
+      action: "删除ingress";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "Service"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-Ingress-详情
+  rpc GetIngressDetail (IngressDetailRequest) returns (IngressDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/ingress/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+
+// Ingress列表请求
+message ListIngressRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2[(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 查询关键字
+  string keyword = 4 [(google.api.field_behavior) = OPTIONAL];
+  // 页码
+  uint32 page = 5 [(google.api.field_behavior) = OPTIONAL];
+  // 页大小
+  uint32 page_size = 6 [(google.api.field_behavior) = OPTIONAL];
+  // 查询全部
+  uint32  list_all = 7 [(google.api.field_behavior) = OPTIONAL];
+  // 域名
+  string host = 8[(google.api.field_behavior) = OPTIONAL];
+}
+
+message ServiceBackendPort {
+  string name = 1;
+  uint32 number = 2;
+}
+
+message IngressServiceBackend {
+  string name = 1;
+  ServiceBackendPort port = 2;
+}
+
+message IngressBackend {
+  IngressServiceBackend service = 4;
+  k8s.io.api.core.v1.TypedLocalObjectReference resource = 3;
+}
+
+message HTTPIngressPath {
+  string path = 1;
+  string pathType = 3;
+  IngressBackend backend = 2;
+}
+
+message HTTPIngressRuleValue {
+  repeated HTTPIngressPath paths = 1;
+}
+
+message IngressRuleValue {
+  HTTPIngressRuleValue http = 1;
+}
+
+message IngressRule {
+  string host = 1;
+  IngressRuleValue ingressRuleValue = 2;
+}
+
+// Ingress列表项
+message IngressItem {
+  // 名称
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 转发规则
+  repeated IngressRule ingress_rules = 3 [(google.api.field_behavior) = OPTIONAL];
+  // 类型
+  string ingress_class_name = 4 [(google.api.field_behavior) = REQUIRED];
+  // vip
+  string vip = 5 [(google.api.field_behavior) = OPTIONAL];
+  // 创建时间
+  uint64 create_time = 6 [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 7 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 8;
+  // 转发规则str
+  string ingress_rules_str = 9 [(google.api.field_behavior) = OPTIONAL];
+  // 标签
+  map<string, string> labels = 10 [(google.api.field_behavior) = OPTIONAL];
+  // 注解
+  map<string, string> annotations = 11 [(google.api.field_behavior) = OPTIONAL];
+  // 更新时间
+  uint64 update_time = 12 [(google.api.field_behavior) = OPTIONAL];
+  // 默认后端
+  IngressBackend default_backend = 13 [(google.api.field_behavior) = OPTIONAL];
+  // tls
+  repeated IngressTLS tls = 14 [(google.api.field_behavior) = OPTIONAL];
+}
+
+
+// Ingress列表响应
+message ListIngressResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated IngressItem list = 2;
+}
+
+
+// 删除Ingress请求
+message DeleteIngressRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 删除Ingress响应
+message DeleteIngressResponse {}
+
+
+// 查看Ingress详情请求
+message IngressDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+
+// 查看Ingress详情响应
+message IngressDetailResponse {
+  // 基础信息
+  IngressItem detail = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 查看ingress域名列表请求
+message ListHostRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 查询关键字
+  string keyword = 4 [(google.api.field_behavior) = OPTIONAL];
+  // 页码
+  uint32 page = 5 [(google.api.field_behavior) = OPTIONAL];
+  // 页大小
+  uint32 page_size = 6 [(google.api.field_behavior) = OPTIONAL];
+  // 查询全部
+  uint32  list_all = 7 [(google.api.field_behavior) = OPTIONAL];
+}
+
+//查看ingress域名列表响应
+message ListHostResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated string list = 2;
+}
+
+message IngressTLS {
+  repeated string hosts = 1 [(google.api.field_behavior) = REQUIRED];
+  string secret_name = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+// 创建Ingress请求
+message CreateIngressRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 类型
+  string ingress_class_name = 3 [(google.api.field_behavior) = REQUIRED];
+  // 转发规则
+  repeated IngressRule ingress_rules = 4 [(google.api.field_behavior) = REQUIRED];
+  // TLS
+  repeated IngressTLS tls = 5 [(google.api.field_behavior) = OPTIONAL];
+  // labels
+  map<string, string> labels = 6 [(google.api.field_behavior) = OPTIONAL];
+  // selector
+  map<string, string> selector = 7 [(google.api.field_behavior) = OPTIONAL];
+  // 注解
+  map<string, string> annotations = 8 [(google.api.field_behavior) = OPTIONAL];
+  // 名称
+  string name = 9 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 创建Ingress响应
+message CreateIngressResponse {}

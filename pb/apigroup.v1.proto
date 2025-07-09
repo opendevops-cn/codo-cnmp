@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package apigroup.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+service APIGroup {
+  // 查看-云原生管理-APIGroup-列表
+  rpc ListAPIGroup (ListAPIGroupRequest) returns (ListAPIGroupResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/apigroup/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+// APIGroup列表请求
+message ListAPIGroupRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 查询关键字
+  string keyword = 2;
+  // 页码
+  uint32 page = 3;
+  // 页大小
+  uint32 page_size = 4;
+  // 查询全部
+  uint32 list_all = 5 [json_name = "list_all"];
+}
+
+// APIGroup列表项
+message APIGroupItem {
+  // 名称
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // apiVersion
+  string api_version = 2[(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// APIGroup列表响应
+message ListAPIGroupResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated APIGroupItem list = 2;
+}

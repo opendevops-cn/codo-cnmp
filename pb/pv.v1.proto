@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package pv.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+option go_package = "codo-cnmp/pb;pb";
+
+service PersistentVolume {
+  // 查看-云原生管理-PersistentVolume-列表
+  rpc ListPersistentVolume (ListPersistentVolumeRequest) returns (ListPersistentVolumeResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/persistentvolume/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+message ListPersistentVolumeRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 查询关键字
+  string keyword = 4;
+  // 页码
+  uint32 page = 5;
+  // 页大小
+  uint32 page_size = 6;
+  // 查询全部
+  uint32  list_all = 7[json_name = "list_all"];
+}
+
+message ClaimRef {
+  // 名称
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 类型
+  string kind = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+
+message PersistentVolumeItem {
+  // 名称
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 2 [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 3 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 4 [(google.api.field_behavior) = REQUIRED];
+  // 容量
+  string capacity = 5 [(google.api.field_behavior) = REQUIRED];
+  // 状态
+  string status = 6 [(google.api.field_behavior) = REQUIRED];
+  // 绑定的存储卷声明
+  ClaimRef claim_ref = 7 [(google.api.field_behavior) = REQUIRED];
+  // 访问模式
+  repeated string access_modes = 8 [(google.api.field_behavior) = REQUIRED];
+  // 卷类型
+  string volume_mode = 9 [(google.api.field_behavior) = REQUIRED];
+  // 存储类
+  string storage_class_name = 10 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListPersistentVolumeResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated PersistentVolumeItem list = 2;
+}

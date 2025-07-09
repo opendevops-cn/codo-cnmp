@@ -1,0 +1,341 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/user.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "UserFollow"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/user/follow/create": {
+      "post": {
+        "summary": "管理-云原生管理-我的关注",
+        "operationId": "UserFollow_CreateUserFollow",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/userUserFollowResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userUserFollowRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserFollow"
+        ]
+      }
+    },
+    "/api/v1/user/follow/delete": {
+      "post": {
+        "summary": "管理-云原生管理-取消关注",
+        "operationId": "UserFollow_DeleteUserFollow",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/userDeleteUserFollowResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userDeleteUserFollowRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserFollow"
+        ]
+      }
+    },
+    "/api/v1/user/follow/list": {
+      "get": {
+        "summary": "查看-云原生管理-用户关注列表",
+        "operationId": "UserFollow_ListUserFollow",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/userListUserFollowResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "follow_type",
+            "description": "关注类型\n\n - Cluster: 集群\n - Deployment: Deployment\n - CloneSet: CloneSet\n - GameServerSet: GameServerSet\n - StatefulSet: statefulSet\n - DaemonSet: DaemonSet\n - Pod: Pod\n - Hpa: 弹性伸缩\n - EzRollout: 版本伸缩\n - ConfigMap: configMap\n - Secret: secret\n - Namespace: 命名空间\n - Node: 节点\n - Svc: Svc\n - Ingress: Ingress\n - SideCarSet: SideCarSet\n - StorageClass: StorageClass\n - PersistentVolume: PersistentVolume\n - PersistentVolumeClaim: PersistentVolumeClaim",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "Cluster",
+              "Deployment",
+              "CloneSet",
+              "GameServerSet",
+              "StatefulSet",
+              "DaemonSet",
+              "Pod",
+              "Hpa",
+              "EzRollout",
+              "ConfigMap",
+              "Secret",
+              "Namespace",
+              "Node",
+              "Svc",
+              "Ingress",
+              "SideCarSet",
+              "StorageClass",
+              "PersistentVolume",
+              "PersistentVolumeClaim"
+            ],
+            "default": "Cluster"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "follow_value",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserFollow"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "userDeleteUserFollowRequest": {
+      "type": "object",
+      "properties": {
+        "follow_type": {
+          "$ref": "#/definitions/userFollowType",
+          "title": "关注类型"
+        },
+        "follow_value": {
+          "type": "string",
+          "title": "关注值统一转string"
+        },
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        }
+      },
+      "required": [
+        "follow_type",
+        "follow_value",
+        "cluster_name"
+      ]
+    },
+    "userDeleteUserFollowResponse": {
+      "type": "object"
+    },
+    "userFollowItem": {
+      "type": "object",
+      "properties": {
+        "follow_type": {
+          "$ref": "#/definitions/userFollowType",
+          "title": "关注类型"
+        },
+        "follow_value": {
+          "type": "string",
+          "title": "关注值统一转string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "ID"
+        },
+        "create_time": {
+          "type": "string",
+          "title": "创建时间"
+        },
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        }
+      },
+      "required": [
+        "follow_type",
+        "follow_value",
+        "id",
+        "create_time",
+        "cluster_name"
+      ]
+    },
+    "userFollowType": {
+      "type": "string",
+      "enum": [
+        "Cluster",
+        "Deployment",
+        "CloneSet",
+        "GameServerSet",
+        "StatefulSet",
+        "DaemonSet",
+        "Pod",
+        "Hpa",
+        "EzRollout",
+        "ConfigMap",
+        "Secret",
+        "Namespace",
+        "Node",
+        "Svc",
+        "Ingress",
+        "SideCarSet",
+        "StorageClass",
+        "PersistentVolume",
+        "PersistentVolumeClaim"
+      ],
+      "default": "Cluster",
+      "title": "- Cluster: 集群\n - Deployment: Deployment\n - CloneSet: CloneSet\n - GameServerSet: GameServerSet\n - StatefulSet: statefulSet\n - DaemonSet: DaemonSet\n - Pod: Pod\n - Hpa: 弹性伸缩\n - EzRollout: 版本伸缩\n - ConfigMap: configMap\n - Secret: secret\n - Namespace: 命名空间\n - Node: 节点\n - Svc: Svc\n - Ingress: Ingress\n - SideCarSet: SideCarSet\n - StorageClass: StorageClass\n - PersistentVolume: PersistentVolume\n - PersistentVolumeClaim: PersistentVolumeClaim"
+    },
+    "userListUserFollowResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/userFollowItem"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "required": [
+        "list",
+        "total"
+      ]
+    },
+    "userUserFollowRequest": {
+      "type": "object",
+      "properties": {
+        "follow_type": {
+          "$ref": "#/definitions/userFollowType",
+          "title": "关注类型"
+        },
+        "follow_value": {
+          "type": "string",
+          "title": "关注值统一转string"
+        },
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        }
+      },
+      "required": [
+        "follow_type",
+        "follow_value",
+        "cluster_name"
+      ]
+    },
+    "userUserFollowResponse": {
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,328 @@
+syntax = "proto3";
+
+
+package role;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "khttp/audit.proto";
+
+option go_package = "codo-cnmp/pb;pb";
+
+service RoleService {
+  // 查看-云原生管理-角色-列表
+  rpc ListRoles (ListRoleRequest) returns (ListRoleResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/role/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-角色-详情
+  rpc GetRoleDetail (GetRoleDetailRequest) returns (GetRoleDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/role/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-角色-删除
+  rpc DeleteRole (DeleteRoleRequest) returns (DeleteRoleResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/role/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "角色管理";
+      action: "删除角色";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "角色"
+        },
+        {
+          key: "name",
+          extract: "id"
+        }
+      ]
+    };
+  };
+  // 管理-云原生管理-角色-编辑
+  rpc UpdateRole (UpdateRoleRequest) returns (UpdateRoleResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/role/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "角色管理";
+      action: "编辑角色";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "角色"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  };
+  // 管理-云原生管理-角色-新增
+  rpc CreateRole (CreateRoleRequest) returns (CreateRoleResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/role/create",
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "角色管理";
+      action: "新增角色";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "role"
+        },
+        {
+          key: "name",
+          extract: "id"
+        }
+      ]
+    };
+
+  };
+  // 查看-云原生管理-角色绑定-列表
+  rpc ListRoleBinding (ListRoleBindingRequest) returns (ListRoleBindingResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/role/binding/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  };
+  // 管理-云原生管理-角色绑定-编辑
+  rpc UpdateRoleBinding (UpdateRoleBindingRequest) returns (UpdateRoleBindingResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/role/binding/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "角色管理";
+      action: "编辑角色";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "role"
+        },
+        {
+          key: "name",
+          extract: "role_id"
+        }
+      ]
+    };
+  };
+}
+// 角色类型
+enum RoleType {
+  // 集群角色
+  CLUSTER = 0;
+  // 普通角色
+  NAMESPACE = 1;
+}
+
+message RoleItem{
+  // 角色ID
+  uint32 id = 1 [(google.api.field_behavior) = REQUIRED, (validate.rules).uint32.gt = 0];
+  // 角色名称
+  string name = 2 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1];
+  // 角色类型
+  RoleType role_type = 3 [(google.api.field_behavior) = REQUIRED];
+  // 角色描述
+  string description = 4 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = OPTIONAL];
+  // 创建时间
+  uint64 create_time = 5 [(google.api.field_behavior) = REQUIRED, (google.api.field_behavior) = OPTIONAL];
+  // 更新时间
+  uint64 update_time = 6 [(google.api.field_behavior) = REQUIRED,(google.api.field_behavior) = OPTIONAL];
+  // 是否默认
+  bool is_default = 7 [(google.api.field_behavior) = REQUIRED,(google.api.field_behavior) = OPTIONAL];
+  // 角色Yaml
+  string yaml = 8 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 更新人
+  string update_by = 9 [(google.api.field_behavior) = OPTIONAL];
+
+}
+
+// 角色列表请求
+message ListRoleRequest {
+  // 关键字
+  string keyword = 1 [(google.api.field_behavior) = REQUIRED];
+  // 分页
+  uint32 page = 2 [(google.api.field_behavior) = REQUIRED];
+  // 每页数量
+  uint32 page_size = 3 [(google.api.field_behavior) = REQUIRED];
+  // 是否全部
+  uint32 list_all = 4;
+}
+
+// 角色列表响应
+message ListRoleResponse {
+  // 角色列表
+  repeated RoleItem list = 1 [(google.api.field_behavior) = REQUIRED];
+  // 总数
+  uint32 total = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+
+// 删除角色请求
+message DeleteRoleRequest {
+  // 角色ID
+  uint32 id = 1 [(google.api.field_behavior) = REQUIRED, (validate.rules).uint32.gt = 0];
+}
+
+// 删除角色响应
+message DeleteRoleResponse {
+  // 是否成功
+  bool success = 1;
+}
+
+// 编辑角色请求
+message UpdateRoleRequest {
+  // 角色ID
+  uint32 id = 1 [(google.api.field_behavior) = REQUIRED, (validate.rules).uint32.gt = 0];
+  // 角色名称
+  string name = 2 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1, (validate.rules).string.max_len = 50];
+  // 角色类型
+  RoleType role_type = 3 [(google.api.field_behavior) = REQUIRED];
+  // 角色备注
+  string description = 4 [(validate.rules).string.min_len = 0, (validate.rules).string.max_len = 200];
+  // 角色Yaml
+  string yaml = 5 [(validate.rules).string.min_len = 1];
+}
+
+// 编辑角色响应
+message UpdateRoleResponse {
+  // 是否成功
+  bool success = 1;
+}
+
+// 角色详情请求
+message GetRoleDetailRequest {
+  // 角色ID
+  uint32 role_id = 1 [(google.api.field_behavior) = REQUIRED, (validate.rules).uint32.gt = 0];
+}
+
+// 角色详情响应
+message GetRoleDetailResponse {
+  RoleItem detail = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 新增角色请求
+message CreateRoleRequest {
+  // 角色名称
+  string name = 1 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1, (validate.rules).string.max_len = 50];
+  // 角色类型
+  RoleType role_type = 2 [(google.api.field_behavior) = REQUIRED];
+  // 角色备注
+  string description = 3 [(validate.rules).string.min_len = 0, (validate.rules).string.max_len = 200];
+  // 角色Yaml
+  string yaml = 4 [(validate.rules).string.min_len = 1];
+}
+
+// 新增角色响应
+message CreateRoleResponse {
+  // 是否成功
+  bool success = 1;
+}
+
+// 角色绑定列表请求
+message ListRoleBindingRequest {
+  // 关键字
+  uint32 role_id = 1 [(google.api.field_behavior) = REQUIRED, (validate.rules).uint32.gt = 0];
+  // 分页
+  uint32 page = 2 [(google.api.field_behavior) = REQUIRED];
+  // 每页数量
+  uint32 page_size = 3 [(google.api.field_behavior) = REQUIRED];
+  // 是否全部
+  uint32 list_all = 4;
+}
+
+// 角色绑定
+message RoleBindingItem {
+  // 角色ID
+  uint32 role_id = 1;
+  // 用户组ID
+  uint32 user_group_id = 2 [(google.api.field_behavior) = REQUIRED];
+  // cluster_id
+  uint32 cluster_id = 3 [(google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 4 [(validate.rules).string.min_len = 1];
+}
+
+// 角色绑定列表响应
+message ListRoleBindingResponse {
+  // 角色绑定列表
+  repeated RoleBindingItem list = 1 [(google.api.field_behavior) = REQUIRED];
+  // 总数
+  uint32 total = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 编辑角色绑定请求
+message UpdateRoleBindingRequest {
+  // 角色ID
+  uint32 role_id = 1 [(google.api.field_behavior) = REQUIRED, (validate.rules).uint32.gt = 0];
+  // bindings
+  repeated RoleBindingItem bindings = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 编辑角色绑定响应
+message UpdateRoleBindingResponse {
+  // 是否成功
+  bool success = 1;
+}

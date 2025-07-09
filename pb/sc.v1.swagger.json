@@ -1,0 +1,192 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/sc.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "StorageClass"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/storageclass/list": {
+      "get": {
+        "summary": "查看-云原生管理-StorageClass-列表",
+        "operationId": "StorageClass_ListStorageClass",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListStorageClassResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "StorageClass"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "v1ListStorageClassResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1StorageClassItem"
+          },
+          "title": "列表"
+        }
+      },
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "v1StorageClassItem": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "名称"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "is_followed": {
+          "type": "boolean",
+          "title": "是否关注"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "yaml"
+        },
+        "provisioner": {
+          "type": "string",
+          "title": "来源"
+        },
+        "reclaim_policy": {
+          "type": "string",
+          "title": "回收策略"
+        },
+        "volume_binding_mode": {
+          "type": "string",
+          "title": "绑定模式"
+        },
+        "is_default": {
+          "type": "boolean",
+          "title": "是否默认"
+        }
+      },
+      "required": [
+        "name",
+        "create_time",
+        "is_followed",
+        "yaml",
+        "provisioner",
+        "reclaim_policy",
+        "volume_binding_mode",
+        "is_default"
+      ]
+    }
+  }
+}

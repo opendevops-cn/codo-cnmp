@@ -1,0 +1,713 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/namespace.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "NameSpace"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/namespace/create": {
+      "post": {
+        "summary": "管理-云原生管理-命名空间-创建",
+        "operationId": "NameSpace_CreateNameSpace",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/namespaceCreateNameSpaceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/namespaceCreateNameSpaceRequest"
+            }
+          }
+        ],
+        "tags": [
+          "NameSpace"
+        ]
+      }
+    },
+    "/api/v1/namespace/create_by_yaml": {
+      "post": {
+        "summary": "管理-云原生管理-命名空间-YAML创建",
+        "operationId": "NameSpace_CreateNameSpaceByYaml",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/namespaceCreateNameSpaceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/namespaceCreateNameSpaceByYamlRequest"
+            }
+          }
+        ],
+        "tags": [
+          "NameSpace"
+        ]
+      }
+    },
+    "/api/v1/namespace/delete": {
+      "post": {
+        "summary": "管理-云原生管理-命名空间-删除",
+        "operationId": "NameSpace_DeleteNameSpace",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/namespaceDeleteNameSpaceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/namespaceDeleteNameSpaceRequest"
+            }
+          }
+        ],
+        "tags": [
+          "NameSpace"
+        ]
+      }
+    },
+    "/api/v1/namespace/detail": {
+      "get": {
+        "summary": "查看-云原生管理-命名空间-详情",
+        "operationId": "NameSpace_GetNameSpaceDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/namespaceGetNameSpaceDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "NameSpace"
+        ]
+      }
+    },
+    "/api/v1/namespace/list": {
+      "get": {
+        "summary": "查看-云原生管理-命名空间-列表",
+        "operationId": "NameSpace_ListNameSpace",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/namespaceListNameSpaceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "description": "关键字",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "auth_filter",
+            "description": "是否过滤无权限的命名空间",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "NameSpace"
+        ]
+      }
+    },
+    "/api/v1/namespace/update": {
+      "post": {
+        "summary": "管理-云原生管理-命名空间-编辑",
+        "operationId": "NameSpace_UpdateNameSpace",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/namespaceDeleteNameSpaceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/namespaceUpdateNameSpaceRequest"
+            }
+          }
+        ],
+        "tags": [
+          "NameSpace"
+        ]
+      }
+    },
+    "/api/v1/namespace/update_by_yaml": {
+      "post": {
+        "summary": "管理-云原生管理-命名空间-YAML更新",
+        "operationId": "NameSpace_UpdateNameSpaceByYaml",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/namespaceCreateNameSpaceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/namespaceCreateNameSpaceByYamlRequest"
+            }
+          }
+        ],
+        "tags": [
+          "NameSpace"
+        ]
+      }
+    },
+    "/api/v1/namespace/yaml": {
+      "get": {
+        "summary": "查看-云原生管理-命名空间-YAML",
+        "operationId": "NameSpace_RefreshNameSpaceYaml",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/namespaceGetNameSpaceYamlResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "NameSpace"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "namespaceCreateNameSpaceByYamlRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "Yaml"
+        }
+      },
+      "title": "通过YAML创建命名空间",
+      "required": [
+        "cluster_name",
+        "yaml"
+      ]
+    },
+    "namespaceCreateNameSpaceRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "命名空间名称"
+        },
+        "description": {
+          "type": "string",
+          "title": "备注"
+        },
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "标签"
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "注解"
+        }
+      },
+      "title": "创建命名空间",
+      "required": [
+        "name",
+        "description",
+        "cluster_name"
+      ]
+    },
+    "namespaceCreateNameSpaceResponse": {
+      "type": "object",
+      "title": "创建命名空间响应"
+    },
+    "namespaceDeleteNameSpaceRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "name": {
+          "type": "string",
+          "title": "命名空间"
+        }
+      },
+      "title": "删除命名空间请求",
+      "required": [
+        "cluster_name",
+        "name"
+      ]
+    },
+    "namespaceDeleteNameSpaceResponse": {
+      "type": "object",
+      "title": "删除命名空间响应"
+    },
+    "namespaceGetNameSpaceDetailResponse": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "命名空间名称"
+        },
+        "description": {
+          "type": "string",
+          "title": "备注"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "state": {
+          "type": "string",
+          "title": "状态"
+        },
+        "uid": {
+          "type": "string",
+          "title": "uid"
+        },
+        "is_default": {
+          "type": "boolean",
+          "title": "是否默认"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "Yaml"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "标签"
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "注解"
+        }
+      },
+      "title": "查询命名空间详情响应",
+      "required": [
+        "name",
+        "create_time",
+        "state",
+        "uid",
+        "is_default",
+        "yaml"
+      ]
+    },
+    "namespaceGetNameSpaceYamlResponse": {
+      "type": "object",
+      "properties": {
+        "yaml": {
+          "type": "string",
+          "title": "Yaml"
+        }
+      },
+      "title": "查询命名空间YAML响应",
+      "required": [
+        "yaml"
+      ]
+    },
+    "namespaceListNameSpaceResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/namespaceNameSpaceItem"
+          }
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        }
+      },
+      "title": "命名空间列表",
+      "required": [
+        "list",
+        "total"
+      ]
+    },
+    "namespaceNameSpaceItem": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "命名空间名称"
+        },
+        "description": {
+          "type": "string",
+          "title": "备注"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "state": {
+          "type": "string",
+          "title": "状态"
+        },
+        "uid": {
+          "type": "string",
+          "title": "UID"
+        },
+        "is_default": {
+          "type": "boolean",
+          "title": "是否是默认命名空间"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "标签"
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "注解"
+        },
+        "is_followed": {
+          "type": "boolean",
+          "title": "是否关注"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "Yaml"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/roleRoleItem"
+          },
+          "title": "角色"
+        }
+      },
+      "title": "命名空间",
+      "required": [
+        "name",
+        "description",
+        "create_time",
+        "state",
+        "uid",
+        "is_default",
+        "is_followed",
+        "yaml"
+      ]
+    },
+    "namespaceUpdateNameSpaceRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "命名空间"
+        },
+        "description": {
+          "type": "string",
+          "title": "备注"
+        },
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "标签"
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "注解"
+        }
+      },
+      "title": "更新命名空间",
+      "required": [
+        "name",
+        "cluster_name"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "roleRoleItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "角色ID"
+        },
+        "name": {
+          "type": "string",
+          "title": "角色名称"
+        },
+        "role_type": {
+          "$ref": "#/definitions/roleRoleType",
+          "title": "角色类型"
+        },
+        "description": {
+          "type": "string",
+          "title": "角色描述"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "update_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "更新时间"
+        },
+        "is_default": {
+          "type": "boolean",
+          "title": "是否默认"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "角色Yaml"
+        },
+        "update_by": {
+          "type": "string",
+          "title": "更新人"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "role_type",
+        "yaml"
+      ]
+    },
+    "roleRoleType": {
+      "type": "string",
+      "enum": [
+        "CLUSTER",
+        "NAMESPACE"
+      ],
+      "default": "CLUSTER",
+      "description": "- CLUSTER: 集群角色\n - NAMESPACE: 普通角色",
+      "title": "角色类型"
+    }
+  }
+}

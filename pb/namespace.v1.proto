@@ -1,0 +1,382 @@
+syntax = "proto3";
+
+package namespace;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "pb/role.v1.proto";
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service NameSpace {
+  // 管理-云原生管理-命名空间-创建
+  rpc CreateNameSpace (CreateNameSpaceRequest) returns (CreateNameSpaceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/namespace/create"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "命名空间";
+      action: "新建命名空间";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "namespace"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  };
+  // 查看-云原生管理-命名空间-列表
+  rpc ListNameSpace (ListNameSpaceRequest) returns (ListNameSpaceResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/namespace/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-命名空间-删除
+  rpc DeleteNameSpace (DeleteNameSpaceRequest) returns (DeleteNameSpaceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/namespace/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "命名空间";
+      action: "删除命名空间";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "namespace"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-命名空间-编辑
+  rpc UpdateNameSpace (UpdateNameSpaceRequest) returns (DeleteNameSpaceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/namespace/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "命名空间";
+      action: "编辑命名空间";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "namespace"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-命名空间-YAML创建
+  rpc CreateNameSpaceByYaml (CreateNameSpaceByYamlRequest) returns (CreateNameSpaceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/namespace/create_by_yaml"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "命名空间";
+      action: "YAML创建资源";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "namespace"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-命名空间-YAML更新
+  rpc UpdateNameSpaceByYaml (CreateNameSpaceByYamlRequest) returns (CreateNameSpaceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/namespace/update_by_yaml"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "命名空间";
+      action: "YAML更新资源";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "namespace"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-命名空间-YAML
+  rpc RefreshNameSpaceYaml (GetNameSpaceYamlRequest) returns (GetNameSpaceYamlResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/namespace/yaml"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-命名空间-详情
+  rpc GetNameSpaceDetail (GetNameSpaceDetailRequest) returns (GetNameSpaceDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/namespace/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+
+// 创建命名空间
+message CreateNameSpaceRequest {
+  // 命名空间名称
+  string name = 1 [json_name = "name",
+    (validate.rules).string = {
+      pattern: "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$"
+      max_len: 63,
+      min_len: 1
+    },
+    (google.api.field_behavior) = REQUIRED];
+  // 备注
+  string description = 2 [json_name = "description", (validate.rules).string.max_len = 1000];
+  // 集群名称
+  string cluster_name = 3 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 标签
+  map<string, string> labels = 4 [json_name = "labels", (google.api.field_behavior) = OPTIONAL];
+  // 注解
+  map<string, string> annotations = 5 [json_name = "annotations", (google.api.field_behavior) = OPTIONAL];
+}
+
+
+// 创建命名空间响应
+message CreateNameSpaceResponse {}
+
+// 查询命名空间
+message ListNameSpaceRequest {
+  // 集群名称
+  string cluster_name = 1 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 关键字
+  string keyword = 2 [json_name = "keyword",(google.api.field_behavior) = OPTIONAL];
+  // 页码
+  uint32 page = 3 [(google.api.field_behavior) = OPTIONAL];
+  // 页大小
+  uint32 page_size = 4 [(google.api.field_behavior) = OPTIONAL];
+  // 查询全部
+  uint32 list_all = 5 [(google.api.field_behavior) = OPTIONAL];
+  // 是否过滤无权限的命名空间
+  optional uint32 auth_filter = 6 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// 命名空间
+message NameSpaceItem {
+  // 命名空间名称
+  string name = 1 [json_name = "name", (google.api.field_behavior) = REQUIRED];
+  // 备注
+  string description = 2 [json_name = "description", (validate.rules).string.max_len = 1000];
+  // 创建时间
+  uint64 create_time = 3 [json_name = "create_time", (google.api.field_behavior) = REQUIRED];
+  // 状态
+  string state = 4 [json_name = "state", (google.api.field_behavior) = REQUIRED];
+  // UID
+  string uid = 5 [json_name = "uid", (google.api.field_behavior) = REQUIRED];
+  // 是否是默认命名空间
+  bool is_default = 6 [json_name = "is_default", (google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 7 [json_name = "labels", (google.api.field_behavior) = OPTIONAL];
+  // 注解
+  map<string, string> annotations = 8 [json_name = "annotations",(google.api.field_behavior) = OPTIONAL];
+  // 是否关注
+  bool is_followed = 9 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+  // Yaml
+  string yaml = 10 [json_name = "yaml", (google.api.field_behavior) = REQUIRED];
+  // 角色
+  repeated role.RoleItem roles = 11 [json_name = "roles", (google.api.field_behavior) = OPTIONAL];
+}
+
+// 命名空间列表
+message ListNameSpaceResponse {
+  repeated NameSpaceItem list = 1 [json_name = "list", (google.api.field_behavior) = REQUIRED];
+  // 总数
+  uint32 total = 2 [json_name = "total", (google.api.field_behavior) = REQUIRED];
+}
+
+// 删除命名空间请求
+message DeleteNameSpaceRequest {
+  // 集群名称
+  string cluster_name = 1 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 命名空间
+  string name = 2 [json_name = "name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    pattern: "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$", min_len: 1, max_len: 63,
+  }];
+}
+
+// 更新命名空间
+message UpdateNameSpaceRequest {
+  // 命名空间
+  string name = 1 [json_name = "name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    pattern: "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$", min_len: 1, max_len: 63,
+  }];
+  // 备注
+  string description = 2 [json_name = "description", (validate.rules).string.max_len = 1000, (google.api.field_behavior) = OPTIONAL];
+  // 集群名称
+  string cluster_name = 3 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 标签
+  map<string, string> labels = 4 [json_name = "labels", (google.api.field_behavior) = OPTIONAL];
+  // 注解
+  map<string, string> annotations = 5 [json_name = "annotations", (google.api.field_behavior) = OPTIONAL];
+}
+
+// 删除命名空间响应
+message DeleteNameSpaceResponse {}
+
+// 通过YAML创建命名空间
+message CreateNameSpaceByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // Yaml
+  string yaml = 2 [json_name = "yaml", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100000
+  }];
+}
+
+// 通过YAML创建命名空间响应
+message CreateNameSpaceByYamlResponse {}
+
+
+// 查询命名空间YAML请求
+message GetNameSpaceYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 命名空间
+  string name = 2 [json_name = "name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    pattern: "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$", min_len: 1, max_len: 63
+  }];
+}
+
+// 查询命名空间YAML响应
+message GetNameSpaceYamlResponse {
+  // Yaml
+  string yaml = 1 [json_name = "yaml", (google.api.field_behavior) = REQUIRED];
+}
+
+// 查询命名空间详情请求
+message GetNameSpaceDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [json_name = "cluster_name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    min_len: 1, max_len: 100
+  }];
+  // 命名空间
+  string name = 2 [json_name = "name", (google.api.field_behavior) = REQUIRED, (validate.rules).string = {
+    pattern: "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$", min_len: 1, max_len: 63
+  }];
+}
+
+// 查询命名空间详情响应
+message GetNameSpaceDetailResponse {
+  // 命名空间名称
+  string name = 1 [json_name = "name", (google.api.field_behavior) = REQUIRED];
+  // 备注
+  string description = 2 [json_name = "description", (validate.rules).string.max_len = 1000, (google.api.field_behavior) = OPTIONAL];
+  // 创建时间
+  uint64 create_time = 3 [json_name = "create_time", (google.api.field_behavior) = REQUIRED];
+  // 状态
+  string state = 4 [json_name = "state", (google.api.field_behavior) = REQUIRED];
+  // uid
+  string uid = 5 [json_name = "uid", (google.api.field_behavior) = REQUIRED];
+  // 是否默认
+  bool is_default = 6 [json_name = "is_default", (google.api.field_behavior) = REQUIRED];
+  // Yaml
+  string yaml = 7 [json_name = "yaml", (google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 8 [json_name = "labels", (google.api.field_behavior) = OPTIONAL];
+  // 注解
+  map<string, string> annotations = 9 [json_name = "annotations", (google.api.field_behavior) = OPTIONAL];
+}

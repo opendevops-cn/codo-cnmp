@@ -1,0 +1,319 @@
+syntax = "proto3";
+
+package svc.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service SVC {
+  // 查看-云原生管理-Service-列表
+  rpc ListSvc (ListSvcRequest) returns (ListSvcResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/svc/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-Service-创建
+  rpc CreateSvc (CreateSvcRequest) returns (CreateSvcResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/svc/create"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "Service";
+      action: "创建svc";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "service"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-Service-编辑
+  rpc UpdateSvc (CreateSvcRequest) returns (CreateSvcResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/svc/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "Service";
+      action: "编辑svc";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "service"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-Service-删除
+  rpc DeleteSvc (DeleteSvcRequest) returns (DeleteSvcResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/svc/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "Service";
+      action: "删除svc";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "service"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-Service-详情
+  rpc GetSvcDetail (SvcDetailRequest) returns (SvcDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/svc/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+
+// Svc列表请求
+message ListSvcRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(google.api.field_behavior) = REQUIRED];
+  // 查询关键字
+  string keyword = 4 [(google.api.field_behavior) = OPTIONAL];
+  // 页码
+  uint32 page = 5 [(google.api.field_behavior) = OPTIONAL];
+  // 页大小
+  uint32 page_size = 6 [(google.api.field_behavior) = OPTIONAL];
+  // 查询全部
+  uint32  list_all = 7 [(google.api.field_behavior) = OPTIONAL];
+  // svcType
+  SvcType svc_type = 8 [(google.api.field_behavior) = OPTIONAL];
+}
+
+enum SvcType {
+  // 未知
+  SVC_TYPE_UNSPECIFIED = 0;
+  // ClusterIP
+  ClusterIP = 1;
+  // NodePort
+  NodePort = 2;
+  // LoadBalancer
+  LoadBalancer = 3;
+  // ExternalName
+  ExternalName = 4;
+}
+
+message SvcReference {
+  // 资源类型
+  string kind = 1;
+  // 名称
+  string name = 2;
+}
+
+message ServicePort {
+  // 名称.
+  optional string name = 1;
+
+  // 协议. Supports "TCP", "UDP", and "SCTP".
+  optional string protocol = 2;
+
+  // application protocol for the port.
+  optional string appProtocol = 6;
+
+  // 端口
+  optional int32 port = 3;
+
+  // 目标端口
+  optional string targetPort = 4;
+
+  // 节点端口
+  optional int32 nodePort = 5;
+}
+
+// Svc列表项
+message SvcItem {
+  // 名称
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // svc 类型
+  SvcType svc_type = 3[(google.api.field_behavior) = REQUIRED, (validate.rules).enum.defined_only = true];
+  // cluster ip
+  string cluster_ip = 4 [(google.api.field_behavior) = OPTIONAL];
+  // 端口
+  repeated ServicePort ports = 5 [(google.api.field_behavior) = OPTIONAL];
+  // 创建时间
+  uint64 create_time = 6 [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 7 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 8 [(google.api.field_behavior) = REQUIRED];
+  // 关联pod数量
+  uint32 ref_count = 9 [(google.api.field_behavior) = REQUIRED];
+  // 引用资源
+  repeated SvcReference refs = 10 [(google.api.field_behavior) = OPTIONAL];
+  // vip
+  string vip = 11 [(google.api.field_behavior) = OPTIONAL];
+  // 标签
+  map<string, string> labels = 12 [(google.api.field_behavior) = OPTIONAL];
+  // 注解
+  map<string, string> annotations = 13 [(google.api.field_behavior) = OPTIONAL];
+  // 选择器
+  map<string, string> selector = 14 [(google.api.field_behavior)=OPTIONAL];
+  // 回话保持
+  SessionAffinity session_affinity = 15 [(google.api.field_behavior) = OPTIONAL];
+  // 更新时间
+  uint64 update_time = 16 [(google.api.field_behavior) =  REQUIRED];
+  // ExternalName
+  string external_name = 17 [(google.api.field_behavior) = OPTIONAL];
+  // Headless
+  bool headless = 18 [(google.api.field_behavior) = OPTIONAL];
+  // 回话保持时间
+  optional uint32 session_affinity_seconds = 19 [(google.api.field_behavior) = OPTIONAL];
+  // 是否发布未就绪地址
+  optional bool publish_not_ready_addresses = 20 [(google.api.field_behavior) = OPTIONAL];
+  // 外部ip
+  repeated string external_ips = 21 [(google.api.field_behavior) = OPTIONAL];
+}
+
+
+// Svc列表响应
+message ListSvcResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated SvcItem list = 2;
+}
+
+
+// 删除Svc请求
+message DeleteSvcRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 删除Svc响应
+message DeleteSvcResponse {}
+
+
+// 查看Svc详情请求
+message SvcDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+
+// 查看Svc详情响应
+message SvcDetailResponse {
+  // 基础信息
+  SvcItem detail = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+enum SessionAffinity {
+  // 未知
+  SESSION_AFFINITY_UNSPECIFIED = 0;
+  // None
+  None = 1;
+  // ClientIP
+  ClientIP = 2;
+}
+
+// 创建Svc请求
+message CreateSvcRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // svc 类型
+  SvcType svc_type = 4[(google.api.field_behavior) = REQUIRED, (validate.rules).enum.defined_only = true];
+  // 是否发布未就绪地址
+  optional bool publish_not_ready_addresses = 5 [(google.api.field_behavior) = OPTIONAL];
+  // 端口映射
+  repeated ServicePort ports = 6 [(google.api.field_behavior) = REQUIRED];
+  repeated string external_ips = 7 [(google.api.field_behavior) = OPTIONAL];
+  // 回话保持
+  optional SessionAffinity session_affinity = 8 [(google.api.field_behavior) = OPTIONAL];
+  // 回话保持时间
+  optional uint32 session_affinity_seconds = 9 [(google.api.field_behavior) = OPTIONAL];
+  // labels
+  map<string, string> labels = 10 [(google.api.field_behavior) = OPTIONAL];
+  // selector
+  map<string, string> selector = 11 [(google.api.field_behavior) = OPTIONAL];
+  // 注解
+  map<string, string> annotations = 12 [(google.api.field_behavior) = OPTIONAL];
+  // 设置为Headless
+  optional bool headless = 13 [(google.api.field_behavior) = OPTIONAL];
+  optional string external_name = 14 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// 创建Svc响应
+message CreateSvcResponse {}

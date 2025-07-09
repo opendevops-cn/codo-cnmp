@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+
+package user;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "google/api/field_behavior.proto";
+
+option go_package = "codo-cnmp/pb;pb";
+
+service UserFollow {
+  // 管理-云原生管理-我的关注
+  rpc CreateUserFollow (UserFollowRequest) returns (UserFollowResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/follow/create",
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-取消关注
+  rpc DeleteUserFollow (DeleteUserFollowRequest) returns (DeleteUserFollowResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/follow/delete",
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-用户关注列表
+  rpc ListUserFollow (ListUserFollowRequest) returns (ListUserFollowResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/user/follow/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+enum FollowType {
+  // 集群
+  Cluster = 0;
+  // Deployment
+  Deployment = 1;
+  // CloneSet
+  CloneSet = 2;
+  // GameServerSet
+  GameServerSet = 3;
+  // statefulSet
+  StatefulSet = 4;
+  // DaemonSet
+  DaemonSet = 5;
+  // Pod
+  Pod = 6;
+  // 弹性伸缩
+  Hpa = 7;
+  // 版本伸缩
+  EzRollout = 8;
+  // configMap
+  ConfigMap = 9;
+  // secret
+  Secret = 10;
+  // 命名空间
+  Namespace = 11;
+  // 节点
+  Node = 12;
+  // Svc
+  Svc = 13;
+  // Ingress
+  Ingress = 14;
+  // SideCarSet
+  SideCarSet = 15;
+  // StorageClass
+  StorageClass = 16;
+  // PersistentVolume
+  PersistentVolume = 17;
+  // PersistentVolumeClaim
+  PersistentVolumeClaim = 18;
+}
+
+message FollowItem {
+  // 关注类型
+  FollowType follow_type = 1;
+  // 关注值统一转string
+  string follow_value = 2;
+  // ID
+  uint32 id = 3;
+  // 创建时间
+  string create_time = 4;
+  // 集群名称
+  string cluster_name = 5;
+}
+
+message ListUserFollowRequest {
+  // 关注类型
+  FollowType follow_type = 1;
+  uint32 page = 2;
+  uint32 page_size = 3;
+  uint32 list_all = 4;
+  string keyword = 5;
+  string follow_value = 6;
+}
+
+message ListUserFollowResponse {
+  repeated FollowItem list = 1;
+  uint32 total = 2;
+}
+
+message UserFollowRequest {
+  // 关注类型
+  FollowType follow_type = 1 [(google.api.field_behavior) = REQUIRED];
+  // 关注值统一转string
+  string follow_value = 3 [(google.api.field_behavior) = REQUIRED];
+  // 集群名称
+  string cluster_name = 2;
+}
+
+message UserFollowResponse {}
+
+
+message DeleteUserFollowRequest {
+  // 关注类型
+  FollowType follow_type = 1 [(google.api.field_behavior) = REQUIRED];
+  // 关注值统一转string
+  string follow_value = 3 [(google.api.field_behavior) = REQUIRED];
+  // 集群名称
+  string cluster_name = 2;
+}
+
+message DeleteUserFollowResponse {}

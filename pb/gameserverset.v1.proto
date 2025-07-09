@@ -1,0 +1,616 @@
+syntax = "proto3";
+
+package gameserverset;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "k8s/core/v1/generated.proto";
+import "k8s/io/apimachinery/pkg/apis/generated.proto";
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service GameServerSet {
+  // 查看-云原生管理-GameServerSet-列表
+  rpc ListGameServerSet (ListGameServerSetRequest) returns (ListGameServerSetResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/gameserverset/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-GameServerSet-Yaml创建更新
+  rpc CreateOrUpdateGameServerSetByYaml (CreateOrUpdateGameServerSetByYamlRequest) returns (CreateOrUpdateGameServerSetByYamlResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserverset/create_or_update_by_yaml"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "gameserverset";
+      action: "Yaml创建更新";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "gameserverset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-GameServerSet-删除
+  rpc DeleteGameServerSet (DeleteGameServerSetRequest) returns (DeleteGameServerSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserverset/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "gameserverset";
+      action: "Yaml创建更新";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "gameserverset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+
+  }
+  // 管理-云原生管理-GameServerSet-重启
+  rpc RestartGameServerSet (RestartGameServerSetRequest) returns (RestartGameServerSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserverset/restart"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "gameserverset";
+      action: "重启";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "gameserverset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-GameServerSet-伸缩
+  rpc ScaleGameServerSet (ScaleGameServerSetRequest) returns (ScaleGameServerSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserverset/scale"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "gameserverset";
+      action: "伸缩";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "gameserverset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-GameServerSet-详情
+  rpc GetGameServerSetDetail (GameServerSetDetailRequest) returns (GameServerSetDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/gameserverset/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-GameServerSet-回滚
+  rpc RollbackGameServerSet (RollbackGameServerSetRequest) returns (RollbackGameServerSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserverset/rollback"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "gameserverset";
+      action: "回滚";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "gameserverset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-GameServerSet-删除Pod
+  rpc DeleteGameServerSetPods (DeleteGameServerSetPodRequest) returns (DeleteGameServerSetPodResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserverset/pod/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "gameserverset";
+      action: "删除pod";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "gameserverset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-GameServerSet-扩容策略
+  rpc UpdateScaleStrategy (UpdateGameServerSetScaleStrategyRequest) returns (UpdateGameServerSetScaleStrategyResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserverset/scale_stream"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-GameServerSet-升级策略
+  rpc UpdateUpgradeStrategy (UpdateGameServerSetUpgradeStrategyRequest) returns (UpdateGameServerSetUpgradeStrategyResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserverset/upgrade_strategy/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "gameserverset";
+      action: "编辑升级策略";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "gameserverset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-GameServerSet-历史版本
+  rpc ListGameServerSetControllerRevision (ListGameServerSetReversionRequest) returns (ListGameServerSetReversionResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/gameserverset/controller_reversion/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+
+// GameServerSet列表请求
+message ListGameServerSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2;
+  // 查询关键字
+  string keyword = 4;
+  // 页码
+  uint32 page = 5;
+  // 页大小
+  uint32 page_size = 6;
+  // 查询全部
+  uint32  list_all = 7 [json_name = "list_all"];
+}
+
+
+message GameServerSetCondition {
+  // Type of GameServerSet condition.
+  string type = 1;
+
+  // Status of the condition, one of True, False, Unknown.
+  string status = 2;
+
+  // The last time this condition was updated.
+  // 秒级时间戳
+  uint32 lastUpdateTime = 6;
+
+  // Last time the condition transitioned from one status to another.
+  // 秒级时间戳
+  uint32 lastTransitionTime = 7;
+
+  // The reason for the condition's last transition.
+  string reason = 4;
+
+  // A human readable message indicating details about the transition.
+  string message = 5;
+}
+
+// GameServerSetStatus is the most recently observed status of the GameServerSet.
+message GameServerSetStatus {
+  uint32 observedGeneration = 1;
+  // 副本数量
+  uint32 replicas = 2 [(google.api.field_behavior) = REQUIRED];
+  // 已更新副本数量
+  uint32 updatedReplicas = 3 [(google.api.field_behavior) = REQUIRED];
+  // 已就绪副本数量
+  uint32 readyReplicas = 7 [(google.api.field_behavior) = REQUIRED];
+  // 可用副本数量
+  uint32 availableReplicas = 4 [(google.api.field_behavior) = REQUIRED];
+  // 不可用副本数量
+  uint32 unavailableReplicas = 5;
+  uint32 collisionCount = 8;
+}
+
+// GameServerSet策略
+message GameServerSetStrategy {
+  // 更新方式类型
+  enum UpdateStrategyType {
+    // 滚动更新
+    RollingUpdate = 0;
+    // 删除后更新
+    OnDelete = 1;
+  }
+  // pod更新策略
+  enum PodUpdateStrategy {
+    // 优先原地升级
+    InPlaceIfPossible = 0;
+    // 仅原地升级
+    InPlaceOnly = 1;
+    // 重建升级
+    Recreate = 2;
+
+  }
+  // 更新方式
+  UpdateStrategyType update_strategy_type = 1 [(validate.rules).enum.defined_only = true, (google.api.field_behavior) = REQUIRED];
+  // pod更新策略
+  PodUpdateStrategy pod_update_strategy_type = 2 [(validate.rules).enum.defined_only = true, (google.api.field_behavior) = REQUIRED];
+  // 优雅升级等待时间
+  uint32 gracePeriodSeconds = 3 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+  // 最大超出副本数
+  string max_surge = 4 ;
+  // 最大不可用副本数
+  string max_unavailable = 5;
+  // 分片数
+  uint32 partition = 6;
+}
+
+// GameServerSet列表项
+message GameServerSetItem {
+  // 名称
+  string name = 1  [(google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2  [(google.api.field_behavior) = REQUIRED];
+  // 容器
+  repeated k8s.io.api.core.v1.Container containers = 3  [(google.api.field_behavior) = REQUIRED];
+  // 状态
+  GameServerSetStatus status = 4  [(google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 5 [json_name = "create_time", (google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 6  [(google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 7  [(google.api.field_behavior) = REQUIRED];
+  // 注解
+  map<string, string> annotations = 8  [(google.api.field_behavior) = REQUIRED];
+  // 副本数量
+  uint32 replicas = 9  [(google.api.field_behavior) = REQUIRED];
+  // 更新策略
+  GameServerSetStrategy update_strategy = 10  [(google.api.field_behavior) = REQUIRED];
+  // 选择器
+  k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 11  [(google.api.field_behavior) = REQUIRED];
+  // 健康检查
+  repeated GameServerSetCondition conditions = 12  [(google.api.field_behavior) = REQUIRED];
+  // 期望副本数量
+  uint32 spec_replicas = 13  [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 14 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+
+}
+
+// GameServerSet列表响应
+message ListGameServerSetResponse {
+  // 总数
+  int32 total = 1;
+  // 列表
+  repeated GameServerSetItem list = 2;
+}
+
+// 创建GameServerSet请求
+message CreateOrUpdateGameServerSetByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 创建GameServerSet响应
+message CreateOrUpdateGameServerSetByYamlResponse {}
+
+// 更新GameServerSet请求
+message UpdateGameServerSetByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 更新GameServerSet响应
+message UpdateGameServerSetByYamlResponse {}
+
+// 删除GameServerSet请求
+message DeleteGameServerSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 删除GameServerSet响应
+message DeleteGameServerSetResponse {}
+
+// 重启GameServerSet请求
+message RestartGameServerSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 重启GameServerSet响应
+message RestartGameServerSetResponse {}
+
+// 伸缩GameServerSet请求
+message ScaleGameServerSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 副本数量
+  uint32 replicas = 4 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+}
+
+
+// 伸缩GameServerSet响应
+message ScaleGameServerSetResponse {}
+
+
+
+
+// 查看GameServerSet详情请求
+message GameServerSetDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+
+// 查看GameServerSet详情响应
+message GameServerSetDetailResponse {
+  // 基础信息
+  GameServerSetItem detail = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 回滚GameServerSet请求
+message RollbackGameServerSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 版本号
+  string version = 4 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 回滚GameServerSet响应
+message RollbackGameServerSetResponse {}
+
+// 删除GameServerSet指定的pod请求
+message DeleteGameServerSetPodRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // pod名称
+  repeated string pod_names = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 删除GameServerSet指定的pod响应
+message DeleteGameServerSetPodResponse {}
+
+// 流式扩容GameServerSet请求
+message UpdateGameServerSetScaleStrategyRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 最小ready时间
+  uint32 minReadySeconds = 4 [(validate.rules).uint32.gte = 1, (google.api.field_behavior) = REQUIRED];
+  // 最大不可用副本数
+  string MaxUnavailable = 5 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+// 流式扩容GameServerSet响应
+message UpdateGameServerSetScaleStrategyResponse {}
+
+
+// 修改升级策略请求
+message UpdateGameServerSetUpgradeStrategyRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 更新方式类型
+  enum UpdateStrategyType {
+    // 滚动更新
+    RollingUpdate = 0;
+    // 删除后更新
+    OnDelete = 1;
+  }
+  // pod更新策略
+  enum PodUpdateStrategy {
+    // 优先原地升级
+    InPlaceIfPossible = 0;
+    // 仅原地升级
+    InPlaceOnly = 1;
+    // 重建升级
+    Recreate = 2;
+
+  }
+  // 更新方式
+  UpdateStrategyType update_strategy_type = 4 [(validate.rules).enum.defined_only = true, (google.api.field_behavior) = REQUIRED];
+  // pod更新策略
+  PodUpdateStrategy pod_update_strategy_type = 5 [(validate.rules).enum.defined_only = true, (google.api.field_behavior) = REQUIRED];
+  // 优雅升级等待时间
+  uint32 gracePeriodSeconds = 6 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+  // 最大超出副本数
+  string max_surge = 7 ;
+  // 最大不可用副本数
+  string max_unavailable = 8;
+  // 分片数
+  uint32 partition = 9;
+}
+
+// 修改升级策略响应
+message UpdateGameServerSetUpgradeStrategyResponse {}
+
+// 查看GameServerSet历史版本请求
+message ListGameServerSetReversionRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+message GameServerSetControllerReversionItem {
+  // 名称
+  string name = 1  [(google.api.field_behavior) = REQUIRED];
+  // 镜像
+  repeated string images = 2  [(google.api.field_behavior) = REQUIRED];
+  // 版本
+  string version = 3  [(google.api.field_behavior) = REQUIRED];
+  // 版本详情
+  string yaml = 4  [(google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 5 [json_name = "create_time", (google.api.field_behavior) = REQUIRED];
+  // 是否当前版本
+  bool is_current = 6  [(google.api.field_behavior) = REQUIRED];
+}
+
+// 查看GameServerSet历史版本响应
+message ListGameServerSetReversionResponse {
+  // 列表
+  repeated GameServerSetControllerReversionItem list = 1;
+  // 总数
+  uint32 total = 2;
+}

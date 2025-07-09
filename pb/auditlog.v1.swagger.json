@@ -1,0 +1,436 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/auditlog.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "AuditLog"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/audit_log/detail": {
+      "get": {
+        "summary": "查看-云原生管理-审计日志详情",
+        "operationId": "AuditLog_GetAuditLog",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAuditLogResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "AuditLog"
+        ]
+      }
+    },
+    "/api/v1/audit_log/list": {
+      "get": {
+        "summary": "查看-云原生管理-审计日志",
+        "operationId": "AuditLog_ListAuditLog",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListAuditLogResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "username",
+            "description": "操作人",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "client_ip",
+            "description": "操作IP",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cluster",
+            "description": "集群",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "module",
+            "description": "模块",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resource_type",
+            "description": "对象类型",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resource_name",
+            "description": "对象名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "action",
+            "description": "操作类型",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": "操作状态\n\n - OperationStatus_UNKNOWN: 未知\n - Fail: 失败\n - Success: 成功",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "OperationStatus_UNKNOWN",
+              "Fail",
+              "Success"
+            ],
+            "default": "OperationStatus_UNKNOWN"
+          },
+          {
+            "name": "start_time",
+            "description": "开始时间",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "end_time",
+            "description": "结束时间",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "分页参数",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "AuditLog"
+        ]
+      }
+    },
+    "/api/v1/audit_log/query_condition/list": {
+      "get": {
+        "summary": "查看-云原生管理-审计日志-查询条件",
+        "operationId": "AuditLog_ListAuditLogQueryCondition",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AuditLogQueryConditionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "AuditLog"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "v1AuditLogItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "ID"
+        },
+        "username": {
+          "type": "string",
+          "title": "操作人"
+        },
+        "client_ip": {
+          "type": "string",
+          "title": "操作IP"
+        },
+        "cluster": {
+          "type": "string",
+          "title": "集群"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        },
+        "module": {
+          "type": "string",
+          "title": "模块"
+        },
+        "resource_type": {
+          "type": "string",
+          "title": "对象类型"
+        },
+        "resource_name": {
+          "type": "string",
+          "title": "对象名称"
+        },
+        "action": {
+          "type": "string",
+          "title": "操作类型"
+        },
+        "request_path": {
+          "type": "string",
+          "title": "请求路径"
+        },
+        "request_body": {
+          "type": "string",
+          "title": "请求内容"
+        },
+        "response_body": {
+          "type": "string",
+          "title": "响应内容"
+        },
+        "status": {
+          "$ref": "#/definitions/v1OperationStatus",
+          "title": "操作状态"
+        },
+        "duration": {
+          "type": "string",
+          "title": "操作耗时(ms)"
+        },
+        "operation_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "操作时间"
+        },
+        "created_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        }
+      },
+      "title": "审计日志详情",
+      "required": [
+        "id",
+        "username",
+        "client_ip",
+        "cluster",
+        "namespace",
+        "module",
+        "resource_type",
+        "resource_name",
+        "action",
+        "request_path",
+        "request_body",
+        "response_body",
+        "status",
+        "duration",
+        "operation_time",
+        "created_time"
+      ]
+    },
+    "v1AuditLogQueryConditionResponse": {
+      "type": "object",
+      "properties": {
+        "cluster": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "集群"
+        },
+        "namespace": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "命名空间"
+        },
+        "module": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "模块"
+        },
+        "resource_type": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "对象类型"
+        },
+        "action": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "操作类型"
+        },
+        "status": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1OperationStatus"
+          },
+          "title": "操作状态"
+        }
+      },
+      "required": [
+        "cluster",
+        "namespace",
+        "module",
+        "resource_type",
+        "action",
+        "status"
+      ]
+    },
+    "v1GetAuditLogResponse": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "$ref": "#/definitions/v1AuditLogItem",
+          "title": "审计日志详情"
+        }
+      },
+      "required": [
+        "detail"
+      ]
+    },
+    "v1ListAuditLogResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1AuditLogItem"
+          },
+          "title": "审计日志列表"
+        }
+      },
+      "title": "响应消息",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "v1OperationStatus": {
+      "type": "string",
+      "enum": [
+        "OperationStatus_UNKNOWN",
+        "Fail",
+        "Success"
+      ],
+      "default": "OperationStatus_UNKNOWN",
+      "title": "- OperationStatus_UNKNOWN: 未知\n - Fail: 失败\n - Success: 成功"
+    }
+  }
+}

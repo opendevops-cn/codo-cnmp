@@ -1,0 +1,1003 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/cluster.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Cluster"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/cluster/create": {
+      "post": {
+        "summary": "管理-云原生管理-集群-导入",
+        "operationId": "Cluster_CreateCluster",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clusterImportClusterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/clusterImportClusterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/api/v1/cluster/delete": {
+      "post": {
+        "summary": "管理-云原生管理-集群-删除",
+        "operationId": "Cluster_DeleteCluster",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clusterDeleteClusterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/clusterDeleteClusterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/api/v1/cluster/detail": {
+      "get": {
+        "summary": "查看-云原生管理-集群-详情",
+        "operationId": "Cluster_GetClusterDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clusterGetClusterDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "集群ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/api/v1/cluster/idip/ping": {
+      "post": {
+        "summary": "查看-云原生管理-集群-IdIP连通性",
+        "operationId": "Cluster_PingIdip",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clusterPingIdipResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/clusterPingIdipRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/api/v1/cluster/kubeconfig/download": {
+      "post": {
+        "summary": "管理-云原生管理-集群-下载kubeConfig",
+        "operationId": "Cluster_DownloadKubeConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clusterDownloadKubeConfigResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/clusterDownloadKubeConfigRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/api/v1/cluster/list": {
+      "get": {
+        "summary": "查看-云原生管理-集群-列表",
+        "operationId": "Cluster_ListCluster",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clusterListClusterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "是否查询所有",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "auth_filter",
+            "description": "是否权限过滤",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/api/v1/cluster/overview": {
+      "get": {
+        "summary": "查看-云原生管理-集群-概览",
+        "operationId": "Cluster_OverviewCluster",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clusterClusterOverviewResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Cluster"
+        ]
+      }
+    },
+    "/api/v1/cluster/update": {
+      "post": {
+        "summary": "管理-云原生管理-集群-编辑",
+        "operationId": "Cluster_UpdateCluster",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/clusterUpdateClusterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/clusterUpdateClusterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Cluster"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "clusterClusterItem": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "description": {
+          "type": "string",
+          "title": "集群描述"
+        },
+        "cluster_state": {
+          "$ref": "#/definitions/clusterClusterState",
+          "title": "集群状态"
+        },
+        "health_state": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/clusterHealthState"
+          },
+          "title": "集群健康状态"
+        },
+        "build_date": {
+          "type": "string",
+          "format": "uint64",
+          "title": "构建日期"
+        },
+        "node_count": {
+          "type": "integer",
+          "format": "int64",
+          "title": "节点数量"
+        },
+        "cpu_usage": {
+          "type": "number",
+          "format": "float",
+          "title": "CPU使用量"
+        },
+        "memory_usage": {
+          "type": "number",
+          "format": "float",
+          "title": "内存使用量"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "集群ID"
+        },
+        "import_type": {
+          "$ref": "#/definitions/clusterImportType",
+          "title": "导入类型"
+        },
+        "server_version": {
+          "type": "string",
+          "title": "版本"
+        },
+        "cpu_total": {
+          "type": "number",
+          "format": "float",
+          "title": "CPU总数"
+        },
+        "memory_total": {
+          "type": "number",
+          "format": "float",
+          "title": "内存总数"
+        },
+        "uid": {
+          "type": "string",
+          "title": "UID"
+        },
+        "is_followed": {
+          "type": "boolean",
+          "title": "是否关注"
+        },
+        "idip": {
+          "type": "string",
+          "title": "idiP地址"
+        },
+        "app_id": {
+          "type": "string",
+          "title": "appId"
+        },
+        "app_secret": {
+          "type": "string",
+          "title": "appSecret"
+        },
+        "ops": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "运维人员"
+        },
+        "connect_type": {
+          "$ref": "#/definitions/clusterConnectType",
+          "title": "连接类型"
+        },
+        "dst_agent_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "dest agent 的id 字段"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/clusterLink"
+          }
+        },
+        "import_detail": {
+          "$ref": "#/definitions/clusterImportDetail",
+          "title": "导入详情"
+        }
+      },
+      "title": "集群信息",
+      "required": [
+        "name",
+        "cluster_state",
+        "id",
+        "import_type",
+        "uid",
+        "is_followed",
+        "connect_type",
+        "import_detail"
+      ]
+    },
+    "clusterClusterOverview": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "集群总数"
+        },
+        "running_total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "运行中总数"
+        },
+        "error_total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "异常总数"
+        },
+        "offline_total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "离线总数"
+        }
+      },
+      "required": [
+        "total",
+        "running_total",
+        "error_total",
+        "offline_total"
+      ]
+    },
+    "clusterClusterOverviewResponse": {
+      "type": "object",
+      "properties": {
+        "overview": {
+          "$ref": "#/definitions/clusterOverView",
+          "title": "资源概览"
+        },
+        "follow": {
+          "$ref": "#/definitions/clusterFollowClusterItem",
+          "title": "我的关注"
+        },
+        "error": {
+          "$ref": "#/definitions/clusterErrorClusterItem",
+          "title": "异常集群"
+        }
+      },
+      "required": [
+        "overview",
+        "follow",
+        "error"
+      ]
+    },
+    "clusterClusterState": {
+      "type": "string",
+      "enum": [
+        "ClusterReady",
+        "ClusterError",
+        "ClusterOffline"
+      ],
+      "default": "ClusterReady",
+      "title": "- ClusterReady: 运行中\n - ClusterError: 异常\n - ClusterOffline: 离线"
+    },
+    "clusterConnectType": {
+      "type": "string",
+      "enum": [
+        "UnSpecifiedConnectType",
+        "Direct",
+        "Mesh"
+      ],
+      "default": "UnSpecifiedConnectType",
+      "title": "- UnSpecifiedConnectType: 未指定\n - Direct: 直连\n - Mesh: 组网"
+    },
+    "clusterCpuOverview": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "number",
+          "format": "float",
+          "title": "CPU总数"
+        },
+        "unallocated_total": {
+          "type": "number",
+          "format": "float",
+          "title": "未分配"
+        },
+        "allocated_total": {
+          "type": "number",
+          "format": "float",
+          "title": "已分配"
+        }
+      },
+      "required": [
+        "total",
+        "unallocated_total",
+        "allocated_total"
+      ]
+    },
+    "clusterDeleteClusterRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "集群ID"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "clusterDeleteClusterResponse": {
+      "type": "object"
+    },
+    "clusterDownloadKubeConfigRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "集群ID"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "clusterDownloadKubeConfigResponse": {
+      "type": "object",
+      "properties": {
+        "kube_config": {
+          "type": "string",
+          "title": "kubeConfig"
+        }
+      },
+      "required": [
+        "kube_config"
+      ]
+    },
+    "clusterErrorClusterItem": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/clusterClusterItem"
+          },
+          "title": "异常集群"
+        }
+      },
+      "required": [
+        "list"
+      ]
+    },
+    "clusterFollowClusterItem": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/clusterClusterItem"
+          },
+          "title": "我的关注"
+        }
+      },
+      "required": [
+        "list"
+      ]
+    },
+    "clusterGetClusterDetailResponse": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "$ref": "#/definitions/clusterClusterItem",
+          "title": "集群信息"
+        }
+      },
+      "required": [
+        "detail"
+      ]
+    },
+    "clusterHealthState": {
+      "type": "string",
+      "enum": [
+        "Healthy",
+        "MemoryUsageHigh",
+        "APIServerUnHealthy",
+        "CpuUsageHigh",
+        "DiskUsageHigh",
+        "NetworkIOHigh",
+        "NodeNotReady",
+        "SchedulerUnhealthy",
+        "ControllerManagerUnhealthy",
+        "EtcdUnhealthy"
+      ],
+      "default": "Healthy",
+      "description": "- Healthy: 健康（所有节点ready、API server可用、scheduler可用、controller manager可用、etcd可用）\n - MemoryUsageHigh: 异常 内存使用量过80%（所有节点）\n - APIServerUnHealthy: 离线 （API server不可用）\n - CpuUsageHigh: 异常 Cpu使用量过80%（所有节点）\n - DiskUsageHigh: 异常 磁盘使用量过80%（所有节点）\n - NetworkIOHigh: 异常 网路IO过高（所有节点）\n - NodeNotReady: 异常 节点状态异常（非ready）\n - SchedulerUnhealthy: 异常 调度器异常（非healthy)\n - ControllerManagerUnhealthy: 异常 控制器管理器异常（非healthy)\n - EtcdUnhealthy: 异常 存储异常（非healthy)",
+      "title": "集群健康检查状态"
+    },
+    "clusterImportClusterRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "description": {
+          "type": "string",
+          "title": "集群描述"
+        },
+        "import_type": {
+          "$ref": "#/definitions/clusterImportType",
+          "title": "导入类型"
+        },
+        "import_detail": {
+          "$ref": "#/definitions/clusterImportDetail",
+          "title": "导入详情"
+        },
+        "idip": {
+          "type": "string",
+          "title": "IDIP地址"
+        },
+        "app_id": {
+          "type": "string",
+          "title": "appId"
+        },
+        "app_secret": {
+          "type": "string"
+        },
+        "ops": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "运维人员"
+        },
+        "connect_type": {
+          "$ref": "#/definitions/clusterConnectType",
+          "title": "连接类型"
+        },
+        "dst_agent_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "dest agent 的id 字段"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/clusterLink"
+          },
+          "title": "links"
+        }
+      },
+      "title": "导入集群请求",
+      "required": [
+        "name",
+        "import_type",
+        "import_detail",
+        "connect_type"
+      ]
+    },
+    "clusterImportClusterResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "集群ID"
+        }
+      },
+      "title": "导入集群响应",
+      "required": [
+        "id"
+      ]
+    },
+    "clusterImportDetail": {
+      "type": "object",
+      "properties": {
+        "kube_config": {
+          "type": "string",
+          "title": "kubeConfig详情"
+        },
+        "token": {
+          "type": "string",
+          "title": "token详情"
+        },
+        "api_server": {
+          "type": "string",
+          "title": "apiServer地址"
+        },
+        "ca_data": {
+          "type": "string",
+          "title": "ca证书数据"
+        },
+        "context": {
+          "type": "string",
+          "title": "context名称"
+        },
+        "agent": {
+          "type": "string",
+          "title": "agent名称"
+        },
+        "agent_image": {
+          "type": "string",
+          "title": "agent镜像"
+        },
+        "agent_proxy": {
+          "type": "string",
+          "title": "agent proxy地址"
+        }
+      },
+      "required": [
+        "kube_config",
+        "api_server"
+      ]
+    },
+    "clusterImportType": {
+      "type": "string",
+      "enum": [
+        "UnSpecified",
+        "Token",
+        "KubeConfig"
+      ],
+      "default": "UnSpecified",
+      "title": "- UnSpecified: 未指定\n - Token: token导入\n - KubeConfig: kubeConfig导入"
+    },
+    "clusterLink": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "链接名称"
+        },
+        "url": {
+          "type": "string",
+          "title": "链接地址"
+        }
+      },
+      "required": [
+        "name",
+        "url"
+      ]
+    },
+    "clusterListClusterResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/clusterClusterItem"
+          },
+          "title": "集群信息列表"
+        }
+      },
+      "title": "查询集群响应",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "clusterMemoryOverview": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "number",
+          "format": "float",
+          "title": "内存总数"
+        },
+        "unallocated_total": {
+          "type": "number",
+          "format": "float",
+          "title": "未分配"
+        },
+        "allocated_total": {
+          "type": "number",
+          "format": "float",
+          "title": "已分配"
+        }
+      },
+      "required": [
+        "total",
+        "unallocated_total",
+        "allocated_total"
+      ]
+    },
+    "clusterNodeOverview": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "节点总数"
+        },
+        "running_total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "运行中总数"
+        },
+        "error_total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "异常总数"
+        }
+      },
+      "required": [
+        "total",
+        "running_total",
+        "error_total"
+      ]
+    },
+    "clusterOverView": {
+      "type": "object",
+      "properties": {
+        "cluster": {
+          "$ref": "#/definitions/clusterClusterOverview",
+          "title": "集群总数"
+        },
+        "node": {
+          "$ref": "#/definitions/clusterNodeOverview",
+          "title": "节点总数"
+        },
+        "cpu": {
+          "$ref": "#/definitions/clusterCpuOverview",
+          "title": "CPU总数"
+        },
+        "memory": {
+          "$ref": "#/definitions/clusterMemoryOverview",
+          "title": "内存总数"
+        }
+      },
+      "required": [
+        "cluster",
+        "node",
+        "cpu",
+        "memory"
+      ]
+    },
+    "clusterPingIdipRequest": {
+      "type": "object",
+      "properties": {
+        "idip": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "idip"
+      ]
+    },
+    "clusterPingIdipResponse": {
+      "type": "object",
+      "properties": {
+        "connected": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "connected"
+      ]
+    },
+    "clusterUpdateClusterRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "集群ID"
+        },
+        "name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "description": {
+          "type": "string",
+          "title": "集群描述"
+        },
+        "idip": {
+          "type": "string",
+          "title": "idip地址"
+        },
+        "app_id": {
+          "type": "string",
+          "title": "appId"
+        },
+        "app_secret": {
+          "type": "string"
+        },
+        "ops": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "运维人员"
+        },
+        "connect_type": {
+          "$ref": "#/definitions/clusterConnectType",
+          "title": "连接类型"
+        },
+        "dst_agent_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "dest agent 的id 字段"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/clusterLink"
+          },
+          "title": "links"
+        },
+        "import_detail": {
+          "$ref": "#/definitions/clusterImportDetail",
+          "title": "importDetail"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "connect_type",
+        "import_detail"
+      ]
+    },
+    "clusterUpdateClusterResponse": {
+      "type": "object"
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    }
+  }
+}

@@ -1,0 +1,489 @@
+syntax = "proto3";
+
+package cluster;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service Cluster {
+  // 管理-云原生管理-集群-导入
+  rpc CreateCluster (ImportClusterRequest) returns (ImportClusterResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cluster/create"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "集群列表";
+      action: "导入集群";
+      metas: [
+        {
+          key: "cluster",
+          extract: ""
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "cluster"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  };
+  // 查看-云原生管理-集群-列表
+  rpc ListCluster (ListClusterRequest) returns (ListClusterResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cluster/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-集群-详情
+  rpc GetClusterDetail (GetClusterDetailRequest) returns (GetClusterDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cluster/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-集群-IdIP连通性
+  rpc PingIdip (PingIdipRequest) returns (PingIdipResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cluster/idip/ping"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-集群-删除
+  rpc DeleteCluster (DeleteClusterRequest) returns (DeleteClusterResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cluster/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "集群列表";
+      action: "删除集群";
+      metas: [
+        {
+          key: "cluster",
+          extract: "id"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "cluster"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-集群-概览
+  rpc OverviewCluster (ClusterOverviewRequest) returns (ClusterOverviewResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cluster/overview"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-集群-编辑
+  rpc UpdateCluster (UpdateClusterRequest) returns (UpdateClusterResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cluster/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "集群列表";
+      action: "编辑集群";
+      metas: [
+        {
+          key: "cluster",
+          extract: "id"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "cluster"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-集群-下载kubeConfig
+  rpc DownloadKubeConfig (DownloadKubeConfigRequest) returns (DownloadKubeConfigResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cluster/kubeconfig/download"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+enum ImportType {
+  // 未指定
+  UnSpecified = 0;
+  // token导入
+  Token = 1;
+  // kubeConfig导入
+  KubeConfig = 2;
+}
+
+message ImportDetail {
+  // kubeConfig详情
+  string kube_config = 1 [json_name = "kube_config", (google.api.field_behavior) = REQUIRED];
+  // token详情
+  string token = 2 [json_name = "token", (google.api.field_behavior) = OPTIONAL];
+  // apiServer地址
+  string api_server = 3 [json_name = "api_server", (google.api.field_behavior) = REQUIRED];
+  // ca证书数据
+  string ca_data = 4 [json_name = "ca_data", (google.api.field_behavior) = OPTIONAL];
+  // context名称
+  string context = 5 [json_name = "context", (google.api.field_behavior) = OPTIONAL];
+  // agent名称
+  string agent = 6 [json_name = "agent", (google.api.field_behavior) = OPTIONAL];
+  // agent镜像
+  string agent_image = 7 [json_name = "agent_image", (google.api.field_behavior) = OPTIONAL];
+  // agent proxy地址
+  string agent_proxy = 8 [json_name = "agent_proxy", (google.api.field_behavior) = OPTIONAL];
+}
+
+enum ConnectType {
+  // 未指定
+  UnSpecifiedConnectType = 0;
+  // 直连
+  Direct = 1;
+  // 组网
+  Mesh = 2;
+}
+
+// 导入集群请求
+message ImportClusterRequest {
+  // 集群名称
+  string name = 1 [json_name = "name", (validate.rules).string.min_len = 1, (validate.rules).string.max_len = 100, (google.api.field_behavior) = REQUIRED];
+  // 集群描述
+  string description = 2 [json_name = "description", (validate.rules).string.max_len = 1000, (google.api.field_behavior) = OPTIONAL];
+  // 导入类型
+  ImportType import_type = 3 [
+    json_name = "import_type",
+    (validate.rules).enum = {defined_only: true},
+    (google.api.field_behavior) = REQUIRED];
+  // 导入详情
+  ImportDetail import_detail = 4 [json_name = "import_detail", (google.api.field_behavior) = REQUIRED];
+  // IDIP地址
+  string idip = 5 [json_name = "idip", (validate.rules).string.max_len = 100, (google.api.field_behavior) = OPTIONAL];
+  // appId
+  string app_id = 6 [json_name = "app_id", (validate.rules).string.max_len = 100, (google.api.field_behavior) = OPTIONAL];
+  string app_secret = 7 [json_name = "app_secret", (validate.rules).string.max_len = 500, (google.api.field_behavior) = OPTIONAL];
+  // 运维人员
+  repeated string ops = 8 [json_name = "ops", (validate.rules).repeated.min_items = 0, (google.api.field_behavior) = OPTIONAL];
+  // 连接类型
+  ConnectType connect_type = 9 [(validate.rules).enum = {defined_only: true}, (google.api.field_behavior) = REQUIRED];
+  // dest agent 的id 字段
+  uint32 dst_agent_id = 10 [json_name = "dst_agent_id", (google.api.field_behavior) = OPTIONAL];
+  // links
+  repeated Link links = 11 [json_name = "links", (google.api.field_behavior) = OPTIONAL];
+}
+
+// 导入集群响应
+message ImportClusterResponse {
+  // 集群ID
+  uint32 id = 1 [json_name = "id", (google.api.field_behavior) = REQUIRED];
+}
+
+// 查询集群请求
+message ListClusterRequest {
+  // 查询关键字
+  string keyword = 1 [json_name = "keyword", (validate.rules).string.max_len = 100, (google.api.field_behavior) = OPTIONAL];
+  // 页码
+  uint32 page = 2 [(google.api.field_behavior) = OPTIONAL];
+  // 页大小
+  uint32 page_size = 3 [(google.api.field_behavior) = OPTIONAL];
+  // 是否查询所有
+  uint32 list_all = 4 [(google.api.field_behavior) = OPTIONAL];
+  // 是否权限过滤
+  optional uint32 auth_filter = 5 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// 查询集群响应
+message ListClusterResponse {
+  // 总数
+  uint32 total = 1 [(google.api.field_behavior) = REQUIRED];
+  // 集群信息列表
+  repeated ClusterItem list = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 集群状态
+enum NodeState {
+  // 运行中
+  NodeReady = 0;
+  // 异常
+  NodeError = 1;
+}
+
+enum ClusterState{
+  // 运行中
+  ClusterReady = 0;
+  // 异常
+  ClusterError = 1;
+  // 离线
+  ClusterOffline = 2;
+}
+
+// 集群健康检查状态
+enum HealthState {
+  // 健康（所有节点ready、API server可用、scheduler可用、controller manager可用、etcd可用）
+  Healthy = 0;
+  // 异常 内存使用量过80%（所有节点）
+  MemoryUsageHigh = 1;
+  // 离线 （API server不可用）
+  APIServerUnHealthy = 2;
+  // 异常 Cpu使用量过80%（所有节点）
+  CpuUsageHigh = 3;
+  // 异常 磁盘使用量过80%（所有节点）
+  DiskUsageHigh = 4;
+  // 异常 网路IO过高（所有节点）
+  NetworkIOHigh = 5;
+  // 异常 节点状态异常（非ready）
+  NodeNotReady = 6;
+  // 异常 调度器异常（非healthy)
+  SchedulerUnhealthy = 7;
+  // 异常 控制器管理器异常（非healthy)
+  ControllerManagerUnhealthy = 8;
+  // 异常 存储异常（非healthy)
+  EtcdUnhealthy = 9;
+}
+
+message Link {
+  // 链接名称
+  string name = 1 [json_name = "name", (validate.rules).string.min_len = 1, (validate.rules).string.max_len = 100, (google.api.field_behavior) = REQUIRED];
+  // 链接地址
+  string url = 2 [json_name = "url", (validate.rules).string.min_len = 1, (validate.rules).string.max_len = 1000, (google.api.field_behavior) = REQUIRED];
+}
+
+// 集群信息
+message ClusterItem {
+  // 集群名称
+  string name = 1 [json_name = "name", (google.api.field_behavior) = REQUIRED];
+  // 集群描述
+  string description = 2 [json_name = "description", (validate.rules).string.max_len = 1000, (google.api.field_behavior) = OPTIONAL];
+  // 集群状态
+  ClusterState cluster_state = 3 [json_name = "cluster_state",
+    (validate.rules).enum = {defined_only: true},
+    (google.api.field_behavior) = REQUIRED];
+  // 集群健康状态
+  repeated HealthState health_state = 4 [json_name = "health_state",
+    //        (validate.rules).enum = {defined_only: true},
+    (validate.rules).repeated = {min_items: 1, max_items: 10},
+    (google.api.field_behavior) = OPTIONAL];
+  // 构建日期
+  uint64 build_date = 5 [json_name = "build_date", (google.api.field_behavior) = OPTIONAL];
+  // 节点数量
+  uint32 node_count = 6 [json_name = "node_count", (google.api.field_behavior) = OPTIONAL];
+  // CPU使用量
+  float cpu_usage = 7 [json_name = "cpu_usage", (google.api.field_behavior) = OPTIONAL];
+  // 内存使用量
+  float memory_usage = 8 [json_name = "memory_usage", (google.api.field_behavior) = OPTIONAL];
+  // 集群ID
+  uint32 id = 9 [json_name = "id", (google.api.field_behavior) = REQUIRED];
+  // 导入类型
+  ImportType import_type = 10 [json_name = "import_type",
+    (validate.rules).enum = {defined_only: true},
+    (google.api.field_behavior) = REQUIRED];
+  // 版本
+  string server_version = 11 [json_name = "server_version", (google.api.field_behavior) = OPTIONAL];
+  // CPU总数
+  float cpu_total = 12 [json_name = "cpu_total", (google.api.field_behavior) = OPTIONAL];
+  // 内存总数
+  float memory_total = 13 [json_name = "memory_total", (google.api.field_behavior) = OPTIONAL];
+  // UID
+  string uid = 14 [json_name = "uid", (google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 15 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+  // idiP地址
+  string idip = 16 [json_name = "idip", (validate.rules).string.max_len = 100, (google.api.field_behavior) = OPTIONAL];
+  // appId
+  string app_id = 17 [json_name = "app_id", (validate.rules).string.max_len = 100, (google.api.field_behavior) = OPTIONAL];
+  // appSecret
+  string app_secret = 18 [json_name = "app_secret", (validate.rules).string.max_len = 500, (google.api.field_behavior) = OPTIONAL];
+  // 运维人员
+  repeated string ops = 19 [json_name = "ops", (validate.rules).repeated.min_items = 0, (google.api.field_behavior) = OPTIONAL];
+  // 连接类型
+  ConnectType connect_type = 20 [(validate.rules).enum = {defined_only: true}, (google.api.field_behavior) = REQUIRED];
+  // dest agent 的id 字段
+  uint32 dst_agent_id = 21 [json_name = "dst_agent_id", (google.api.field_behavior) = OPTIONAL];
+  repeated Link links = 22 [json_name = "links", (google.api.field_behavior) = OPTIONAL];
+  // 导入详情
+  ImportDetail import_detail = 23 [json_name = "import_detail", (google.api.field_behavior) = REQUIRED];
+}
+
+message DeleteClusterRequest {
+  // 集群ID
+  uint32 id = 1 [json_name = "id", (google.api.field_behavior) = REQUIRED];
+}
+
+message DeleteClusterResponse {}
+
+message ClusterOverviewRequest {
+
+}
+
+message ClusterOverview{
+  // 集群总数
+  uint32 total = 1 [(google.api.field_behavior) = REQUIRED];
+  // 运行中总数
+  uint32 running_total = 2 [(google.api.field_behavior) = REQUIRED];
+  // 异常总数
+  uint32 error_total = 3 [(google.api.field_behavior) = REQUIRED];
+  // 离线总数
+  uint32 offline_total = 4 [(google.api.field_behavior) = REQUIRED];
+
+}
+message NodeOverview{
+
+  // 节点总数
+  uint32 total = 1 [(google.api.field_behavior) = REQUIRED];
+  // 运行中总数
+  uint32 running_total = 2 [(google.api.field_behavior) = REQUIRED];
+  // 异常总数
+  uint32 error_total = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message CpuOverview{
+  // CPU总数
+  float total = 1 [(google.api.field_behavior) = REQUIRED];
+  // 未分配
+  float unallocated_total = 2 [(google.api.field_behavior) = REQUIRED];
+  // 已分配
+  float allocated_total = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message MemoryOverview{
+
+  // 内存总数
+  float total = 1 [(google.api.field_behavior) = REQUIRED];
+  // 未分配
+  float unallocated_total = 2 [(google.api.field_behavior) = REQUIRED];
+  // 已分配
+  float allocated_total = 3 [(google.api.field_behavior) = REQUIRED];
+}
+message OverView {
+  // 集群总数
+  ClusterOverview cluster = 1 [json_name = "cluster", (google.api.field_behavior) = REQUIRED];
+  // 节点总数
+  NodeOverview node = 2 [json_name = "node", (google.api.field_behavior) = REQUIRED];
+  // CPU总数
+  CpuOverview cpu = 3 [json_name = "cpu", (google.api.field_behavior) = REQUIRED];
+  // 内存总数
+  MemoryOverview memory = 4 [json_name = "memory", (google.api.field_behavior) = REQUIRED];
+}
+
+message ErrorClusterItem {
+  // 异常集群
+  repeated ClusterItem list = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message FollowClusterItem {
+  // 我的关注
+  repeated ClusterItem list = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ClusterOverviewResponse {
+  // 资源概览
+  OverView overview = 1 [json_name = "overview", (google.api.field_behavior) = REQUIRED];
+  // 我的关注
+  FollowClusterItem follow = 2[json_name = "follow", (google.api.field_behavior) = REQUIRED];
+  // 异常集群
+  ErrorClusterItem error = 3[json_name = "error", (google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateClusterRequest {
+  // 集群ID
+  uint32 id = 1 [json_name = "id", (google.api.field_behavior) = REQUIRED];
+  // 集群名称
+  string name = 2 [json_name = "name", (validate.rules).string.min_len = 1, (validate.rules).string.max_len = 100, (google.api.field_behavior) = REQUIRED];
+  // 集群描述
+  string description = 3 [json_name = "description", (validate.rules).string.max_len = 1000, (google.api.field_behavior) = OPTIONAL];
+  // idip地址
+  string idip = 4 [json_name = "idip", (validate.rules).string.max_len = 100, (google.api.field_behavior) = OPTIONAL];
+  // appId
+  string app_id = 5 [json_name = "app_id", (validate.rules).string.max_len = 100, (google.api.field_behavior) = OPTIONAL];
+  string app_secret = 6 [json_name = "app_secret", (validate.rules).string.max_len = 500, (google.api.field_behavior) = OPTIONAL];
+  // 运维人员
+  repeated string ops = 7 [json_name = "ops", (validate.rules).repeated.min_items = 0, (google.api.field_behavior) = OPTIONAL];
+  // 连接类型
+  ConnectType connect_type = 8 [(validate.rules).enum = {defined_only: true}];
+  // dest agent 的id 字段
+  uint32 dst_agent_id = 9 [json_name = "dst_agent_id", (google.api.field_behavior) = OPTIONAL];
+  // links
+  repeated Link links = 10 [json_name = "links", (google.api.field_behavior) = OPTIONAL];
+  // importDetail
+  ImportDetail import_detail = 11 [json_name = "import_detail", (google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateClusterResponse {}
+
+message PingIdipRequest {
+  string idip = 1 [json_name = "idip", (validate.rules).string.max_len = 100, (google.api.field_behavior) = REQUIRED];
+}
+
+message PingIdipResponse {
+  bool connected = 1 [json_name = "connected", (google.api.field_behavior) = REQUIRED];
+}
+
+message GetClusterDetailRequest {
+  // 集群ID
+  uint32 id = 1 [json_name = "id", (google.api.field_behavior) = REQUIRED];
+}
+
+message GetClusterDetailResponse {
+  // 集群信息
+  ClusterItem detail = 1 [json_name = "detail", (google.api.field_behavior) = REQUIRED];
+}
+
+message DownloadKubeConfigRequest {
+  // 集群ID
+  uint32 id = 1 [json_name = "id", (google.api.field_behavior) = REQUIRED];
+}
+
+message DownloadKubeConfigResponse {
+  // kubeConfig
+  string kube_config = 1 [json_name = "kube_config", (google.api.field_behavior) = REQUIRED];
+}

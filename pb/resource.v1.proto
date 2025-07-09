@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package resource.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service Resource {
+  // 管理-云原生管理-Resource-Yaml创建更新
+  rpc CreateOrUpdateResource  (CreateOrUpdateResourceRequest) returns (CreateOrUpdateResourceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/resource/from_yaml"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "resource";
+      action: "YAML创建更新资源";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: ""
+        },
+        {
+          key: "name",
+          const: ""
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-Resource-DryRun
+  rpc DryRunResource  (CreateOrUpdateResourceRequest) returns (CreateOrUpdateResourceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/resource/dry_run"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "resource";
+      action: "DryRun";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: ""
+        },
+        {
+          key: "name",
+          const: ""
+        }
+      ]
+    };
+  }
+}
+
+
+// 通过yaml创建或者更新资源请求
+message CreateOrUpdateResourceRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 创建resource响应
+message CreateOrUpdateResourceResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+

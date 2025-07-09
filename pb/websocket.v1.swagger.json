@@ -1,0 +1,320 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/websocket.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "WebSocket"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/ws/pod/command": {
+      "get": {
+        "summary": "执行-云原生管理-终端-Pod命令",
+        "operationId": "WebSocket_ExecPodCommand",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/websocketPodCommandResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "operation_type",
+            "description": " - None: None\n - Connect: 建立连接\n - ResizeWindow: 调整窗口大小\n - Command: 执行命令\n - Disconnect: Disconnect\n - Ping: Ping",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "None",
+              "Connect",
+              "ResizeWindow",
+              "Command",
+              "Disconnect",
+              "Ping"
+            ],
+            "default": "None"
+          },
+          {
+            "name": "connect_info.cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "connect_info.namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "connect_info.pod_name",
+            "description": "pod名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "connect_info.container_name",
+            "description": "容器名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "connect_info.shell",
+            "description": "命令类型 [bash, sh, powershell, cmd]",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "command_info.command",
+            "description": "命令",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resize_window_info.rows",
+            "description": "行数",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "resize_window_info.cols",
+            "description": "列数",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "WebSocket"
+        ]
+      }
+    },
+    "/api/v1/ws/pod/log": {
+      "get": {
+        "summary": "查看-云原生管理-终端-Pod日志",
+        "operationId": "WebSocket_TailPodLogs",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/websocketTailPodLogsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "pod_name",
+            "description": "pod名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "container_name",
+            "description": "容器名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tail_lines",
+            "description": "行数",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "WebSocket"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ExecPodCommandRequestCommandInfo": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "type": "string",
+          "title": "命令"
+        }
+      },
+      "required": [
+        "command"
+      ]
+    },
+    "ExecPodCommandRequestConnectInfo": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        },
+        "pod_name": {
+          "type": "string",
+          "title": "pod名称"
+        },
+        "container_name": {
+          "type": "string",
+          "title": "容器名称"
+        },
+        "shell": {
+          "type": "string",
+          "title": "命令类型 [bash, sh, powershell, cmd]"
+        }
+      },
+      "required": [
+        "cluster_name",
+        "namespace",
+        "pod_name",
+        "container_name",
+        "shell"
+      ]
+    },
+    "ExecPodCommandRequestOperationType": {
+      "type": "string",
+      "enum": [
+        "None",
+        "Connect",
+        "ResizeWindow",
+        "Command",
+        "Disconnect",
+        "Ping"
+      ],
+      "default": "None",
+      "description": "- None: None\n - Connect: 建立连接\n - ResizeWindow: 调整窗口大小\n - Command: 执行命令\n - Disconnect: Disconnect\n - Ping: Ping",
+      "title": "操作类型"
+    },
+    "ExecPodCommandRequestResizeWindowInfo": {
+      "type": "object",
+      "properties": {
+        "rows": {
+          "type": "integer",
+          "format": "int64",
+          "title": "行数"
+        },
+        "cols": {
+          "type": "integer",
+          "format": "int64",
+          "title": "列数"
+        }
+      },
+      "required": [
+        "rows",
+        "cols"
+      ]
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "websocketPodCommandResponse": {
+      "type": "object",
+      "properties": {
+        "output": {
+          "type": "string"
+        }
+      },
+      "title": "Pod日志响应",
+      "required": [
+        "output"
+      ]
+    },
+    "websocketTailPodLogsResponse": {
+      "type": "object",
+      "properties": {
+        "log": {
+          "type": "string"
+        }
+      },
+      "title": "Pod日志响应",
+      "required": [
+        "log"
+      ]
+    }
+  }
+}

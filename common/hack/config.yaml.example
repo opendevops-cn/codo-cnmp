@@ -1,0 +1,8 @@
+gfcli:
+  gen:
+    dao:
+    - link: "mysql:root:yourpassword@tcp(127.0.0.1:3306)/codo_cnmp?charset=utf8mb4&parseTime=True&loc=Local"
+      tables:  "cluster,node,role,role_binding,user,user_group,user_user_group_rel,user_follow,audit_log,game_server,proxy_agent"
+      jsonCase: "Snake"
+      importPrefix: "codo-cnmp/internal/model"
+      path: "../../internal/model/"

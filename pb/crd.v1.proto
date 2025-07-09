@@ -1,0 +1,162 @@
+syntax = "proto3";
+
+package crd.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "khttp/audit.proto";
+
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+service CRD {
+  // 查看-云原生管理-CRD-列表
+  rpc ListCRD (ListCRDRequest) returns (ListCRDResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/crd/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-CRD实例-列表
+  rpc ListCRDInstance (ListCRDInstanceRequest) returns (ListCRDInstanceResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/crd/instance/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-CRD-删除
+  rpc DeleteCRD (DeleteCRDRequest) returns (DeleteCRDResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/crd/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "crd";
+      action: "删除crd";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "CRD"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+}
+
+// CRD列表请求
+message ListCRDRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2;
+  // 查询关键字
+  string keyword = 4;
+  // 页码
+  uint32 page = 5;
+  // 页大小
+  uint32 page_size = 6;
+  // 查询全部
+  uint32 list_all = 7 [json_name = "list_all"];
+  // apiGroup
+  string api_group = 8;
+}
+
+// CRD列表项
+message CRDItem {
+  // 名称
+  string name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // apiGroup
+  string api_group = 2[(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // apiVersion
+  string api_version = 3[(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 范围
+  string scope = 4[(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 5[(google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 6[(google.api.field_behavior) = REQUIRED];
+  // kind
+  string kind = 7[(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// CRD列表响应
+message ListCRDResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated CRDItem list = 2;
+}
+
+// CRD实例详情
+message CRDInstanceItem {
+  // 命名空间
+  string namespace = 1;
+  // 名称
+  string name = 2;
+  // yaml
+  string yaml = 3;
+  // 创建时间
+  uint64 create_time = 4;
+  // api版本
+  string api_version = 5;
+}
+
+message ListCRDInstanceRequest {
+  // 集群
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2;
+  // CRD名称
+  string name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 页码
+  uint32 page = 4;
+  // 每页数量
+  uint32 page_size = 5;
+  // 是否查询全部
+  uint32 list_all = 6;
+  // 查询关键字
+  string keyword = 7;
+  // CRD API版本
+  string api_version = 8 [(validate.rules).string.min_len=1, (google.api.field_behavior) = REQUIRED];
+  // CRD API Group
+  string api_group = 9 [(validate.rules).string.min_len=1, (google.api.field_behavior) = REQUIRED];
+}
+
+message ListCRDInstanceResponse {
+  // 总数
+  uint32 total = 1;
+  // 实例列表
+  repeated CRDInstanceItem list = 2;
+}
+
+message  DeleteCRDRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+message DeleteCRDResponse {
+}

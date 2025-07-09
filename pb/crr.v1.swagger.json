@@ -1,0 +1,406 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/crr.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "CRR"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/crr/batch/create": {
+      "post": {
+        "summary": "管理-云原生管理-CRR-批量创建",
+        "operationId": "CRR_BatchCreateCrr",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1BatchCreateCRRResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1BatchCreateCRRRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CRR"
+        ]
+      }
+    },
+    "/api/v1/crr/batch/detail": {
+      "post": {
+        "summary": "查看-云原生管理-CRR-批量查询重启状态",
+        "operationId": "CRR_BatchQueryCRR",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetBatchCRRDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1GetBatchCRRDetailRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CRR"
+        ]
+      }
+    },
+    "/api/v1/crr/create": {
+      "post": {
+        "summary": "管理-云原生管理-CRR-创建",
+        "operationId": "CRR_CreateCrr",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateCRRResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateCRRRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CRR"
+        ]
+      }
+    },
+    "/api/v1/crr/detail": {
+      "get": {
+        "summary": "查看-云原生管理-CRR-详情",
+        "operationId": "CRR_GetCRRDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCRRDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "CRR"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "v1BatchCRRDetail": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "pod_name": {
+          "type": "string"
+        },
+        "total_count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "success_count": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "required": [
+        "name",
+        "pod_name",
+        "total_count",
+        "success_count"
+      ]
+    },
+    "v1BatchCreateCRRRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "container_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1RequestContainerItem"
+          }
+        }
+      },
+      "title": "批量创建CRR请求",
+      "required": [
+        "cluster_name",
+        "namespace",
+        "container_items"
+      ]
+    },
+    "v1BatchCreateCRRResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ResponseContainerItem"
+          }
+        }
+      },
+      "title": "批量创建CRR响应",
+      "required": [
+        "list"
+      ]
+    },
+    "v1CreateCRRRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "pod_name": {
+          "type": "string"
+        },
+        "container_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "创建CRR请求",
+      "required": [
+        "cluster_name",
+        "namespace",
+        "pod_name",
+        "container_names"
+      ]
+    },
+    "v1CreateCRRResponse": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/v1ResponseContainerItem"
+        }
+      },
+      "title": "创建CRR响应",
+      "required": [
+        "item"
+      ]
+    },
+    "v1GetBatchCRRDetailRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "批量查询CRR详情请求",
+      "required": [
+        "cluster_name",
+        "namespace",
+        "names"
+      ]
+    },
+    "v1GetBatchCRRDetailResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1BatchCRRDetail"
+          }
+        }
+      },
+      "title": "批量查询CRR详情响应",
+      "required": [
+        "list"
+      ]
+    },
+    "v1GetCRRDetailResponse": {
+      "type": "object",
+      "properties": {
+        "pod_name": {
+          "type": "string",
+          "title": "pod 名称"
+        },
+        "total_count": {
+          "type": "integer",
+          "format": "int64",
+          "title": "重启容器总数量"
+        },
+        "success_count": {
+          "type": "integer",
+          "format": "int64",
+          "title": "成功重启容器数量"
+        }
+      },
+      "title": "查询CRR详情响应",
+      "required": [
+        "pod_name",
+        "total_count",
+        "success_count"
+      ]
+    },
+    "v1RequestContainerItem": {
+      "type": "object",
+      "properties": {
+        "pod_name": {
+          "type": "string",
+          "title": "pod 名称"
+        },
+        "container_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "容器列表"
+        }
+      },
+      "required": [
+        "pod_name",
+        "container_names"
+      ]
+    },
+    "v1ResponseContainerItem": {
+      "type": "object",
+      "properties": {
+        "pod_name": {
+          "type": "string",
+          "title": "pod 名称"
+        },
+        "name": {
+          "type": "string",
+          "title": "CRRName"
+        }
+      },
+      "required": [
+        "pod_name",
+        "name"
+      ]
+    }
+  }
+}

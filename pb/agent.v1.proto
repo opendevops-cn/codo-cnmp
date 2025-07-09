@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+package agent;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "google/api/field_behavior.proto";
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service Agent {
+  // 查看-云原生管理-Agent-列表
+  rpc ListAgent (ListAgentRequest) returns (ListAgentResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/agent/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-Agent-创建
+  rpc CreateAgent (CreateAgentRequest) returns (CreateAgentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/agent/create"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-Agent-删除
+  rpc DeleteAgent (DeleteAgentRequest) returns (DeleteAgentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/agent/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-Agent-编辑
+  rpc UpdateAgent (UpdateAgentRequest) returns (UpdateAgentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/agent/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+
+}
+
+message ListAgentRequest {
+  // 页码
+  uint32 page = 1;
+  // 每页数量
+  uint32 page_size = 2;
+  // 模糊查询
+  string  keyword = 3;
+  // 查询全部
+  uint32 list_all = 4;
+}
+
+message CreateAgentRequest {
+  // Agent名称
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // agent ID
+  string agent_id = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message CreateAgentResponse {
+  uint32 id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DeleteAgentRequest {
+  uint32 id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DeleteAgentResponse {}
+
+message UpdateAgentRequest {
+  // ID
+  uint32 id = 1 [(google.api.field_behavior) = REQUIRED];
+  // Agent名称
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
+  // agent ID
+  string agent_id = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateAgentResponse {}
+
+message AgentItem {
+  // ID
+  uint32 id = 1 [(google.api.field_behavior) = REQUIRED];
+  // Agent名称
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
+  // agent ID
+  string agent_id = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListAgentResponse {
+  // 组网列表
+  repeated AgentItem list = 1;
+  uint32 total = 2;
+}

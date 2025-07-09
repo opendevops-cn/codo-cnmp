@@ -1,0 +1,537 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/limitrange.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "LimitRange"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/limitrange/create": {
+      "post": {
+        "summary": "管理-云原生管理-LimitRange-创建",
+        "operationId": "LimitRange_CreateLimitRange",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateLimitRangeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateLimitRangeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "LimitRange"
+        ]
+      }
+    },
+    "/api/v1/limitrange/create_or_update": {
+      "post": {
+        "summary": "管理-云原生管理-LimitRange-创建或编辑",
+        "operationId": "LimitRange_CreateOrUpdateLimitRange",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateLimitRangeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateLimitRangeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "LimitRange"
+        ]
+      }
+    },
+    "/api/v1/limitrange/delete": {
+      "post": {
+        "summary": "管理-云原生管理-LimitRange-删除",
+        "operationId": "LimitRange_DeleteLimitRange",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteLimitRangeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DeleteLimitRangeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "LimitRange"
+        ]
+      }
+    },
+    "/api/v1/limitrange/detail": {
+      "get": {
+        "summary": "查看-云原生管理-LimitRange-详情",
+        "operationId": "LimitRange_GetLimitRangeDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LimitRangeDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "LimitRange"
+        ]
+      }
+    },
+    "/api/v1/limitrange/list": {
+      "get": {
+        "summary": "查看-云原生管理-LimitRange-列表",
+        "operationId": "LimitRange_ListLimitRange",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListLimitRangeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "LimitRange"
+        ]
+      }
+    },
+    "/api/v1/limitrange/update": {
+      "post": {
+        "summary": "管理-云原生管理-LimitRange-编辑",
+        "operationId": "LimitRange_UpdateLimitRange",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateLimitRangeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateLimitRangeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "LimitRange"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "limitrangev1LimitRangeItem": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        },
+        "container_limit_range": {
+          "$ref": "#/definitions/v1ContainerLimitRange",
+          "title": "容器资源限制"
+        },
+        "pod_limit_range": {
+          "$ref": "#/definitions/v1PodLimitRange",
+          "title": "pod资源限制"
+        },
+        "persistent_volume_claim_limit_range": {
+          "$ref": "#/definitions/v1PersistentVolumeClaimLimitRange",
+          "title": "存储资源限制"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "yaml"
+        }
+      },
+      "title": "LimitRange Item",
+      "required": [
+        "name",
+        "namespace",
+        "container_limit_range",
+        "pod_limit_range",
+        "persistent_volume_claim_limit_range",
+        "create_time",
+        "yaml"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "v1ContainerLimitRange": {
+      "type": "object",
+      "properties": {
+        "default_cpu": {
+          "type": "string",
+          "title": "默认CPU上限"
+        },
+        "default_mem": {
+          "type": "string",
+          "title": "默认内存上限"
+        },
+        "default_cpu_request": {
+          "type": "string",
+          "title": "默认CPU请求"
+        },
+        "default_mem_request": {
+          "type": "string",
+          "title": "默认内存请求"
+        },
+        "min_cpu": {
+          "type": "string",
+          "title": "最小CPU"
+        },
+        "min_mem": {
+          "type": "string",
+          "title": "最小内存"
+        },
+        "max_cpu": {
+          "type": "string",
+          "title": "最大CPU"
+        },
+        "max_mem": {
+          "type": "string",
+          "title": "最小内存请求"
+        }
+      },
+      "title": "容器资源限制",
+      "required": [
+        "default_cpu",
+        "default_mem",
+        "default_cpu_request",
+        "default_mem_request",
+        "min_cpu",
+        "min_mem",
+        "max_cpu",
+        "max_mem"
+      ]
+    },
+    "v1CreateLimitRangeRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        },
+        "name": {
+          "type": "string",
+          "title": "名称"
+        },
+        "container_limit_range": {
+          "$ref": "#/definitions/v1ContainerLimitRange",
+          "title": "容器资源限制"
+        },
+        "pod_limit_range": {
+          "$ref": "#/definitions/v1PodLimitRange",
+          "title": "pod资源限制"
+        },
+        "persistent_volume_claim_limit_range": {
+          "$ref": "#/definitions/v1PersistentVolumeClaimLimitRange",
+          "title": "存储资源限制"
+        }
+      },
+      "title": "CreateLimitRange请求",
+      "required": [
+        "cluster_name",
+        "namespace",
+        "name",
+        "container_limit_range",
+        "pod_limit_range",
+        "persistent_volume_claim_limit_range"
+      ]
+    },
+    "v1CreateLimitRangeResponse": {
+      "type": "object",
+      "title": "CreateLimitRange响应"
+    },
+    "v1DeleteLimitRangeRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "name": {
+          "type": "string",
+          "title": "名称"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        }
+      },
+      "title": "删除LimitRange请求",
+      "required": [
+        "cluster_name",
+        "name",
+        "namespace"
+      ]
+    },
+    "v1DeleteLimitRangeResponse": {
+      "type": "object",
+      "title": "删除LimitRange响应"
+    },
+    "v1LimitRangeDetailResponse": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "$ref": "#/definitions/limitrangev1LimitRangeItem",
+          "title": "基础信息"
+        }
+      },
+      "title": "查看LimitRange详情响应",
+      "required": [
+        "detail"
+      ]
+    },
+    "v1ListLimitRangeResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/limitrangev1LimitRangeItem"
+          },
+          "title": "列表"
+        }
+      },
+      "title": "LimitRange列表响应",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "v1PersistentVolumeClaimLimitRange": {
+      "type": "object",
+      "properties": {
+        "min_resource_storage_request": {
+          "type": "string",
+          "title": "最小存储请求"
+        },
+        "max_resource_storage_request": {
+          "type": "string",
+          "title": "最大存储请求"
+        }
+      },
+      "title": "存储资源限制",
+      "required": [
+        "min_resource_storage_request",
+        "max_resource_storage_request"
+      ]
+    },
+    "v1PodLimitRange": {
+      "type": "object",
+      "properties": {
+        "max_cpu": {
+          "type": "string"
+        },
+        "max_mem": {
+          "type": "string"
+        }
+      },
+      "title": "pod资源限制",
+      "required": [
+        "max_cpu",
+        "max_mem"
+      ]
+    }
+  }
+}

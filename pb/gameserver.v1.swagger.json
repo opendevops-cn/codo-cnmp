@@ -1,0 +1,610 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/gameserver.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "GameServer"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/gameserver/entity/batch/manage": {
+      "post": {
+        "summary": "管理-云原生管理-游戏进程-批量管理",
+        "operationId": "GameServer_BatchManageGameServerEntity",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1BatchManageGameServerEntityResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1BatchManageGameServerEntityRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GameServer"
+        ]
+      }
+    },
+    "/api/v1/gameserver/entity/manage": {
+      "post": {
+        "summary": "管理-云原生管理-游戏进程-Entity",
+        "operationId": "GameServer_ManageGameServerEntity",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ManageGameServerEntityResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ManageGameServerEntityRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GameServer"
+        ]
+      }
+    },
+    "/api/v1/gameserver/lb/batch/manage": {
+      "post": {
+        "summary": "管理-云原生管理-LB-批量管理",
+        "operationId": "GameServer_BatchManageGameServerLB",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1BatchManageGameServerEntityResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1BatchManageGameServerEntityRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GameServer"
+        ]
+      }
+    },
+    "/api/v1/gameserver/lb/manage": {
+      "post": {
+        "summary": "管理-云原生管理-游戏进程-LB",
+        "operationId": "GameServer_ManageGameServerLB",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ManageGameServerEntityResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ManageGameServerEntityRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GameServer"
+        ]
+      }
+    },
+    "/api/v1/gameserver/list": {
+      "get": {
+        "summary": "查看-云原生管理-游戏进程-列表",
+        "operationId": "GameServer_ListGameServer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListGameServerResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "server_type",
+            "description": "进程类型",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "entity_lock_status",
+            "description": "entity锁定状态\n\n - UNKNOWN_EntityLockStatus: 未知状态\n - ENTITY_UNLOCK: 未锁定\n - ENTITY_LOCKED: 手动锁定",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "UNKNOWN_EntityLockStatus",
+              "ENTITY_UNLOCK",
+              "ENTITY_LOCKED"
+            ],
+            "default": "UNKNOWN_EntityLockStatus"
+          },
+          {
+            "name": "lb_lock_status",
+            "description": "lb 锁定状态\n\n - UNKNOWN_ServerLockStatus: 未知状态\n - LB_UNLOCK: 未锁定\n - LB_LOCKED: 手动锁定\n - LB_HPA_LOCKED: HPA锁定",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "UNKNOWN_ServerLockStatus",
+              "LB_UNLOCK",
+              "LB_LOCKED",
+              "LB_HPA_LOCKED"
+            ],
+            "default": "UNKNOWN_ServerLockStatus"
+          }
+        ],
+        "tags": [
+          "GameServer"
+        ]
+      }
+    },
+    "/api/v1/gameserver/type/list": {
+      "get": {
+        "summary": "查看-云原生管理-游戏进程-进程类型",
+        "operationId": "GameServer_ListGameServerType",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListGameServerTypeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "GameServer"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "v1BatchManageGameServerEntityRequest": {
+      "type": "object",
+      "properties": {
+        "server_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lock": {
+          "type": "boolean",
+          "title": "锁定/解锁 true表示锁定 false表示解锁"
+        },
+        "cluster_name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "server_names",
+        "lock",
+        "cluster_name",
+        "namespace"
+      ]
+    },
+    "v1BatchManageGameServerEntityResponse": {
+      "type": "object"
+    },
+    "v1EntityLockStatus": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN_EntityLockStatus",
+        "ENTITY_UNLOCK",
+        "ENTITY_LOCKED"
+      ],
+      "default": "UNKNOWN_EntityLockStatus",
+      "title": "- UNKNOWN_EntityLockStatus: 未知状态\n - ENTITY_UNLOCK: 未锁定\n - ENTITY_LOCKED: 手动锁定"
+    },
+    "v1GameServerItem": {
+      "type": "object",
+      "properties": {
+        "server_name": {
+          "type": "string",
+          "title": "进程名称"
+        },
+        "pod_name": {
+          "type": "string",
+          "title": "命名空间"
+        },
+        "workload_type": {
+          "type": "string",
+          "title": "工作负载类型"
+        },
+        "workload": {
+          "type": "string",
+          "title": "工作负载名称"
+        },
+        "server_version": {
+          "type": "string",
+          "title": "server version"
+        },
+        "entity_num": {
+          "type": "integer",
+          "format": "int64",
+          "title": "entity num"
+        },
+        "online_num": {
+          "type": "integer",
+          "format": "int64",
+          "title": "online num"
+        },
+        "entity_lock_status": {
+          "$ref": "#/definitions/v1EntityLockStatus",
+          "title": "entity_lock_status"
+        },
+        "lb_lock_status": {
+          "$ref": "#/definitions/v1LBLockStatus",
+          "title": "lb_lock_status"
+        },
+        "code_version_game": {
+          "type": "string",
+          "title": "code_version_game"
+        },
+        "code_version_config": {
+          "type": "string",
+          "title": "code_version_config"
+        },
+        "code_version_script": {
+          "type": "string",
+          "title": "code_version_script"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "进程Id"
+        }
+      },
+      "title": "游戏进程",
+      "required": [
+        "server_name",
+        "pod_name",
+        "workload_type",
+        "workload",
+        "server_version",
+        "entity_num",
+        "online_num",
+        "entity_lock_status",
+        "lb_lock_status",
+        "code_version_game",
+        "code_version_config",
+        "code_version_script",
+        "id"
+      ]
+    },
+    "v1GameServerType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "v1LBLockStatus": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN_ServerLockStatus",
+        "LB_UNLOCK",
+        "LB_LOCKED",
+        "LB_HPA_LOCKED"
+      ],
+      "default": "UNKNOWN_ServerLockStatus",
+      "description": "- UNKNOWN_ServerLockStatus: 未知状态\n - LB_UNLOCK: 未锁定\n - LB_LOCKED: 手动锁定\n - LB_HPA_LOCKED: HPA锁定",
+      "title": "LB锁定状态"
+    },
+    "v1ListGameServerResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GameServerItem"
+          },
+          "title": "列表"
+        }
+      },
+      "title": "进程列表响应",
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "v1ListGameServerTypeResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1GameServerType"
+          }
+        }
+      },
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "v1ManageEntityBody": {
+      "type": "object",
+      "title": "cbb版本锁定响应body"
+    },
+    "v1ManageEntityHead": {
+      "type": "object",
+      "properties": {
+        "errno": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "errmsg": {
+          "type": "string"
+        }
+      },
+      "title": "cbb版本锁定响应head",
+      "required": [
+        "errno",
+        "errmsg"
+      ]
+    },
+    "v1ManageGameServerEntityRequest": {
+      "type": "object",
+      "properties": {
+        "server_name": {
+          "type": "string",
+          "title": "进程名称"
+        },
+        "lock": {
+          "type": "boolean",
+          "title": "锁定/解锁 true表示锁定 false表示解锁"
+        },
+        "cluster_name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        }
+      },
+      "title": "Entity锁定/解锁请求",
+      "required": [
+        "server_name",
+        "lock",
+        "cluster_name",
+        "namespace"
+      ]
+    },
+    "v1ManageGameServerEntityResponse": {
+      "type": "object",
+      "properties": {
+        "head": {
+          "$ref": "#/definitions/v1ManageEntityHead"
+        },
+        "body": {
+          "$ref": "#/definitions/v1ManageEntityBody"
+        }
+      },
+      "title": "Entity锁定/解锁响应",
+      "required": [
+        "head",
+        "body"
+      ]
+    }
+  }
+}

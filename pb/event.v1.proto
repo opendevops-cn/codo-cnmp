@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package common;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service Event {
+  // 查看-云原生管理-Event-列表
+  rpc ListEvent (ListEventRequest) returns (ListEventResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/event/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+// Event列表请求
+message ListEventRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(google.api.field_behavior) = REQUIRED];
+  // controller名称
+  string controller_name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 查询关键字
+  string keyword = 4 [(google.api.field_behavior) = OPTIONAL];
+  // 页码
+  uint32 page = 5 [(google.api.field_behavior) = OPTIONAL];
+  // 页大小
+  uint32 page_size = 6 [(google.api.field_behavior) = OPTIONAL];
+  // 查询全部
+  uint32  list_all = 7 [json_name = "list_all", (google.api.field_behavior) = OPTIONAL];
+  // 控制器类型
+  enum ControllerType {
+    // Deployment
+    Deployment = 0;
+    // StatefulSet
+    StatefulSet = 1;
+    // DaemonSet
+    DaemonSet = 2;
+    // Job
+    Job = 3;
+    // CloneSet
+    CloneSet = 4;
+    // GameServerSet
+    GameServerSet = 5;
+    // Hpa
+    Hpa = 6;
+    // SideCarSet
+    SideCarSet = 7;
+    // Pod
+    Pod = 8;
+    // Service
+    Service = 9;
+    // Ingress
+    Ingress = 10;
+  }
+  ControllerType controller_type = 8 [(validate.rules).enum.defined_only=true, (google.api.field_behavior) = REQUIRED];
+
+}
+
+// Event
+message EventItem {
+  // 首次出现时间
+  optional uint64 first_time_stamp = 1;
+  // 最后出现时间
+  optional uint64 last_time_stamp = 2;
+  // 事件资源类型
+  string involved_object_kind = 3;
+  // 事件等级
+  string type = 4;
+  // 事件内容
+  string reason = 5;
+  // 事件消息
+  string message = 6;
+  // 事件资源名称
+  string involved_object_name = 7;
+  // 事件出现次数
+  uint32 count = 8;
+}
+
+
+// Event列表响应
+message ListEventResponse {
+  // Event列表
+  repeated EventItem list = 1;
+  // 总数
+  uint32 total = 2;
+}

@@ -1,0 +1,1496 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/sidecarset.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "SidecarSet"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/sidecarset/delete": {
+      "post": {
+        "summary": "管理-云原生管理-SideCarSet-删除",
+        "operationId": "SidecarSet_DeleteSidecarSet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteSidecarSetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DeleteSidecarSetRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SidecarSet"
+        ]
+      }
+    },
+    "/api/v1/sidecarset/detail": {
+      "get": {
+        "summary": "查看-云原生管理-SideCarSet-详情",
+        "operationId": "SidecarSet_GetSidecarSet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetSidecarSetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "SidecarSet"
+        ]
+      }
+    },
+    "/api/v1/sidecarset/list": {
+      "get": {
+        "summary": "查看-云原生管理-SideCarSet-列表",
+        "operationId": "SidecarSet_ListSidecarSet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListSidecarSetResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "0: 默认，1: 全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "SidecarSet"
+        ]
+      }
+    },
+    "/api/v1/sidecarset/upgrade_strategy/update": {
+      "post": {
+        "summary": "管理-云原生管理-SideCarSet-更新策略",
+        "operationId": "SidecarSet_UpdateSideCarSetStrategy",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateSideCarSetStrategyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateSideCarSetStrategyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "SidecarSet"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "corev1ResourceRequirements": {
+      "type": "object",
+      "properties": {
+        "limits": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/resourceQuantity"
+          },
+          "title": "Limits describes the maximum amount of compute resources allowed.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/\n+optional"
+        },
+        "requests": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/resourceQuantity"
+          },
+          "title": "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to an implementation-defined value. Requests cannot exceed Limits.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/\n+optional"
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ResourceClaim"
+          },
+          "description": "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\n\nThis is an alpha field and requires enabling the\nDynamicResourceAllocation feature gate.\n\nThis field is immutable. It can only be set for containers.\n\n+listType=map\n+listMapKey=name\n+featureGate=DynamicResourceAllocation\n+optional"
+        }
+      },
+      "title": "资源请求/限制",
+      "required": [
+        "limits",
+        "requests",
+        "claims"
+      ]
+    },
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "intstrIntOrString": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "format": "int64"
+        },
+        "intVal": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "strVal": {
+          "type": "string"
+        }
+      },
+      "description": "+protobuf=true\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:openapi-gen=true",
+      "title": "IntOrString is a type that can hold an int32 or a string.  When used in\nJSON or YAML marshalling and unmarshalling, it produces or consumes the\ninner type.  This allows you to have, for example, a JSON field that can\naccept a name or number.\nTODO: Rename to Int32OrString",
+      "required": [
+        "type",
+        "intVal",
+        "strVal"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "resourceQuantity": {
+      "type": "object",
+      "properties": {
+        "string": {
+          "type": "string"
+        }
+      },
+      "description": "Quantity is a fixed-point representation of a number.\nIt provides convenient marshaling/unmarshaling in JSON and YAML,\nin addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n```\n\u003cquantity\u003e        ::= \u003csignedNumber\u003e\u003csuffix\u003e\n\n\t(Note that \u003csuffix\u003e may be empty, from the \"\" case in \u003cdecimalSI\u003e.)\n\n\u003cdigit\u003e           ::= 0 | 1 | ... | 9\n\u003cdigits\u003e          ::= \u003cdigit\u003e | \u003cdigit\u003e\u003cdigits\u003e\n\u003cnumber\u003e          ::= \u003cdigits\u003e | \u003cdigits\u003e.\u003cdigits\u003e | \u003cdigits\u003e. | .\u003cdigits\u003e\n\u003csign\u003e            ::= \"+\" | \"-\"\n\u003csignedNumber\u003e    ::= \u003cnumber\u003e | \u003csign\u003e\u003cnumber\u003e\n\u003csuffix\u003e          ::= \u003cbinarySI\u003e | \u003cdecimalExponent\u003e | \u003cdecimalSI\u003e\n\u003cbinarySI\u003e        ::= Ki | Mi | Gi | Ti | Pi | Ei\n\n\t(International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n\n\u003cdecimalSI\u003e       ::= m | \"\" | k | M | G | T | P | E\n\n\t(Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n\n\u003cdecimalExponent\u003e ::= \"e\" \u003csignedNumber\u003e | \"E\" \u003csignedNumber\u003e\n```\n\nNo matter which of the three exponent forms is used, no quantity may represent\na number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal\nplaces. Numbers larger or more precise will be capped or rounded up.\n(E.g.: 0.1m will rounded up to 1m.)\nThis may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix\nit had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\".\nThis means that Exponent/suffix will be adjusted up or down (with a\ncorresponding increase or decrease in Mantissa) such that:\n\n- No precision is lost\n- No fractional digits will be emitted\n- The exponent (or suffix) is as large as possible.\n\nThe sign will be omitted unless the number is negative.\n\nExamples:\n\n- 1.5 will be serialized as \"1500m\"\n- 1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a\nfloating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed,\nbut will be re-emitted in their canonical form. (So always use canonical\nform, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without\nwriting some sort of special handling code in the hopes that that will\ncause implementors to also use a fixed point implementation.\n\n+protobuf=true\n+protobuf.embed=string\n+protobuf.options.marshal=false\n+protobuf.options.(gogoproto.goproto_stringer)=false\n+k8s:deepcopy-gen=true\n+k8s:openapi-gen=true",
+      "required": [
+        "string"
+      ]
+    },
+    "v1AppArmorProfile": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "type indicates which kind of AppArmor profile will be applied.\nValid options are:\n  Localhost - a profile pre-loaded on the node.\n  RuntimeDefault - the container runtime's default profile.\n  Unconfined - no AppArmor enforcement.\n+unionDiscriminator"
+        },
+        "localhostProfile": {
+          "type": "string",
+          "title": "localhostProfile indicates a profile loaded on the node that should be used.\nThe profile must be preconfigured on the node to work.\nMust match the loaded name of the profile.\nMust be set if and only if type is \"Localhost\".\n+optional"
+        }
+      },
+      "title": "AppArmorProfile defines a pod or container's AppArmor settings.\n+union",
+      "required": [
+        "type",
+        "localhostProfile"
+      ]
+    },
+    "v1Capabilities": {
+      "type": "object",
+      "properties": {
+        "add": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Added capabilities\n+optional\n+listType=atomic"
+        },
+        "drop": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Removed capabilities\n+optional\n+listType=atomic"
+        }
+      },
+      "description": "Adds and removes POSIX capabilities from running containers.",
+      "required": [
+        "add",
+        "drop"
+      ]
+    },
+    "v1ConfigMapEnvSource": {
+      "type": "object",
+      "properties": {
+        "localObjectReference": {
+          "$ref": "#/definitions/v1LocalObjectReference",
+          "description": "The ConfigMap to select from."
+        },
+        "optional": {
+          "type": "boolean",
+          "title": "Specify whether the ConfigMap must be defined\n+optional"
+        }
+      },
+      "description": "ConfigMapEnvSource selects a ConfigMap to populate the environment\nvariables with.\n\nThe contents of the target ConfigMap's Data field will represent the\nkey-value pairs as environment variables.",
+      "required": [
+        "localObjectReference",
+        "optional"
+      ]
+    },
+    "v1ConfigMapKeySelector": {
+      "type": "object",
+      "properties": {
+        "localObjectReference": {
+          "$ref": "#/definitions/v1LocalObjectReference",
+          "description": "The ConfigMap to select from."
+        },
+        "key": {
+          "type": "string",
+          "description": "The key to select."
+        },
+        "optional": {
+          "type": "boolean",
+          "title": "Specify whether the ConfigMap or its key must be defined\n+optional"
+        }
+      },
+      "title": "Selects a key from a ConfigMap.\n+structType=atomic",
+      "required": [
+        "localObjectReference",
+        "key",
+        "optional"
+      ]
+    },
+    "v1Container": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the container specified as a DNS_LABEL.\nEach container in a pod must have a unique name (DNS_LABEL).\nCannot be updated."
+        },
+        "image": {
+          "type": "string",
+          "title": "Container image name.\nMore info: https://kubernetes.io/docs/concepts/containers/images\nThis field is optional to allow higher level config management to default or override\ncontainer images in workload controllers like Deployments and StatefulSets.\n+optional"
+        },
+        "command": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Entrypoint array. Not executed within a shell.\nThe container image's ENTRYPOINT is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced\nto a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. \"$$(VAR_NAME)\" will\nproduce the string literal \"$(VAR_NAME)\". Escaped references will never be expanded, regardless\nof whether the variable exists or not. Cannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n+optional\n+listType=atomic"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Arguments to the entrypoint.\nThe container image's CMD is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced\nto a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. \"$$(VAR_NAME)\" will\nproduce the string literal \"$(VAR_NAME)\". Escaped references will never be expanded, regardless\nof whether the variable exists or not. Cannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell\n+optional\n+listType=atomic"
+        },
+        "workingDir": {
+          "type": "string",
+          "title": "Container's working directory.\nIf not specified, the container runtime's default will be used, which\nmight be configured in the container image.\nCannot be updated.\n+optional"
+        },
+        "ports": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ContainerPort"
+          },
+          "title": "List of ports to expose from the container. Not specifying a port here\nDOES NOT prevent that port from being exposed. Any port which is\nlistening on the default \"0.0.0.0\" address inside a container will be\naccessible from the network.\nModifying this array with strategic merge patch may corrupt the data.\nFor more information See https://github.com/kubernetes/kubernetes/issues/108255.\nCannot be updated.\n+optional\n+patchMergeKey=containerPort\n+patchStrategy=merge\n+listType=map\n+listMapKey=containerPort\n+listMapKey=protocol"
+        },
+        "envFrom": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1EnvFromSource"
+          },
+          "title": "List of sources to populate environment variables in the container.\nThe keys defined within a source must be a C_IDENTIFIER. All invalid keys\nwill be reported as an event when the container is starting. When a key exists in multiple\nsources, the value associated with the last source will take precedence.\nValues defined by an Env with a duplicate key will take precedence.\nCannot be updated.\n+optional\n+listType=atomic"
+        },
+        "env": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1EnvVar"
+          },
+          "title": "List of environment variables to set in the container.\nCannot be updated.\n+optional\n+patchMergeKey=name\n+patchStrategy=merge\n+listType=map\n+listMapKey=name"
+        },
+        "resources": {
+          "$ref": "#/definitions/corev1ResourceRequirements",
+          "title": "Compute Resources required by this container.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/\n+optional"
+        },
+        "resizePolicy": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ContainerResizePolicy"
+          },
+          "title": "Resources resize policy for the container.\n+featureGate=InPlacePodVerticalScaling\n+optional\n+listType=atomic"
+        },
+        "restartPolicy": {
+          "type": "string",
+          "title": "RestartPolicy defines the restart behavior of individual containers in a pod.\nThis field may only be set for init containers, and the only allowed value is \"Always\".\nFor non-init containers or when this field is not specified,\nthe restart behavior is defined by the Pod's restart policy and the container type.\nSetting the RestartPolicy as \"Always\" for the init container will have the following effect:\nthis init container will be continually restarted on\nexit until all regular containers have terminated. Once all regular\ncontainers have completed, all init containers with restartPolicy \"Always\"\nwill be shut down. This lifecycle differs from normal init containers and\nis often referred to as a \"sidecar\" container. Although this init\ncontainer still starts in the init container sequence, it does not wait\nfor the container to complete before proceeding to the next init\ncontainer. Instead, the next init container starts immediately after this\ninit container is started, or after any startupProbe has successfully\ncompleted.\n+featureGate=SidecarContainers\n+optional"
+        },
+        "volumeMounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1VolumeMount"
+          },
+          "title": "Pod volumes to mount into the container's filesystem.\nCannot be updated.\n+optional\n+patchMergeKey=mountPath\n+patchStrategy=merge\n+listType=map\n+listMapKey=mountPath"
+        },
+        "volumeDevices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1VolumeDevice"
+          },
+          "title": "volumeDevices is the list of block devices to be used by the container.\n+patchMergeKey=devicePath\n+patchStrategy=merge\n+listType=map\n+listMapKey=devicePath\n+optional"
+        },
+        "livenessProbe": {
+          "$ref": "#/definitions/v1Probe",
+          "title": "Periodic probe of container liveness.\nContainer will be restarted if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional"
+        },
+        "readinessProbe": {
+          "$ref": "#/definitions/v1Probe",
+          "title": "Periodic probe of container service readiness.\nContainer will be removed from service endpoints if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional"
+        },
+        "startupProbe": {
+          "$ref": "#/definitions/v1Probe",
+          "title": "StartupProbe indicates that the Pod has successfully initialized.\nIf specified, no other probes are executed until this completes successfully.\nIf this probe fails, the Pod will be restarted, just as if the livenessProbe failed.\nThis can be used to provide different probe parameters at the beginning of a Pod's lifecycle,\nwhen it might take a long time to load data or warm a cache, than during steady-state operation.\nThis cannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional"
+        },
+        "lifecycle": {
+          "$ref": "#/definitions/v1Lifecycle",
+          "title": "Actions that the management system should take in response to container lifecycle events.\nCannot be updated.\n+optional"
+        },
+        "terminationMessagePath": {
+          "type": "string",
+          "title": "Optional: Path at which the file to which the container's termination message\nwill be written is mounted into the container's filesystem.\nMessage written is intended to be brief final status, such as an assertion failure message.\nWill be truncated by the node if greater than 4096 bytes. The total message length across\nall containers will be limited to 12kb.\nDefaults to /dev/termination-log.\nCannot be updated.\n+optional"
+        },
+        "terminationMessagePolicy": {
+          "type": "string",
+          "title": "Indicate how the termination message should be populated. File will use the contents of\nterminationMessagePath to populate the container status message on both success and failure.\nFallbackToLogsOnError will use the last chunk of container log output if the termination\nmessage file is empty and the container exited with an error.\nThe log output is limited to 2048 bytes or 80 lines, whichever is smaller.\nDefaults to File.\nCannot be updated.\n+optional"
+        },
+        "imagePullPolicy": {
+          "type": "string",
+          "title": "Image pull policy.\nOne of Always, Never, IfNotPresent.\nDefaults to Always if :latest tag is specified, or IfNotPresent otherwise.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/containers/images#updating-images\n+optional"
+        },
+        "securityContext": {
+          "$ref": "#/definitions/v1SecurityContext",
+          "title": "SecurityContext defines the security options the container should be run with.\nIf set, the fields of SecurityContext override the equivalent fields of PodSecurityContext.\nMore info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/\n+optional"
+        },
+        "stdin": {
+          "type": "boolean",
+          "title": "Whether this container should allocate a buffer for stdin in the container runtime. If this\nis not set, reads from stdin in the container will always result in EOF.\nDefault is false.\n+optional"
+        },
+        "stdinOnce": {
+          "type": "boolean",
+          "title": "Whether the container runtime should close the stdin channel after it has been opened by\na single attach. When stdin is true the stdin stream will remain open across multiple attach\nsessions. If stdinOnce is set to true, stdin is opened on container start, is empty until the\nfirst client attaches to stdin, and then remains open and accepts data until the client disconnects,\nat which time stdin is closed and remains closed until the container is restarted. If this\nflag is false, a container processes that reads from stdin will never receive an EOF.\nDefault is false\n+optional"
+        },
+        "tty": {
+          "type": "boolean",
+          "title": "Whether this container should allocate a TTY for itself, also requires 'stdin' to be true.\nDefault is false.\n+optional"
+        }
+      },
+      "description": "A single application container that you want to run within a pod.",
+      "required": [
+        "name",
+        "image",
+        "command",
+        "args",
+        "workingDir",
+        "ports",
+        "envFrom",
+        "env",
+        "resources",
+        "resizePolicy",
+        "restartPolicy",
+        "volumeMounts",
+        "volumeDevices",
+        "livenessProbe",
+        "readinessProbe",
+        "startupProbe",
+        "lifecycle",
+        "terminationMessagePath",
+        "terminationMessagePolicy",
+        "imagePullPolicy",
+        "securityContext",
+        "stdin",
+        "stdinOnce",
+        "tty"
+      ]
+    },
+    "v1ContainerPort": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "名称"
+        },
+        "hostPort": {
+          "type": "integer",
+          "format": "int32",
+          "title": "宿主机端口"
+        },
+        "containerPort": {
+          "type": "integer",
+          "format": "int32",
+          "title": "容器端口"
+        },
+        "protocol": {
+          "type": "string",
+          "title": "Protocol for port. Must be UDP, TCP, or SCTP.\n协议"
+        },
+        "hostIP": {
+          "type": "string",
+          "title": "What host IP to bind the external port to.\n+optional"
+        }
+      },
+      "description": "ContainerPort represents a network port in a single container.",
+      "required": [
+        "name",
+        "hostPort",
+        "containerPort",
+        "protocol",
+        "hostIP"
+      ]
+    },
+    "v1ContainerResizePolicy": {
+      "type": "object",
+      "properties": {
+        "resourceName": {
+          "type": "string",
+          "description": "Name of the resource to which this resource resize policy applies.\nSupported values: cpu, memory."
+        },
+        "restartPolicy": {
+          "type": "string",
+          "description": "Restart policy to apply when specified resource is resized.\nIf not specified, it defaults to NotRequired."
+        }
+      },
+      "description": "ContainerResizePolicy represents resource resize policy for the container.",
+      "required": [
+        "resourceName",
+        "restartPolicy"
+      ]
+    },
+    "v1DeleteSidecarSetRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "cluster_name",
+        "name"
+      ]
+    },
+    "v1DeleteSidecarSetResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "success"
+      ]
+    },
+    "v1EnvFromSource": {
+      "type": "object",
+      "properties": {
+        "prefix": {
+          "type": "string",
+          "title": "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.\n+optional"
+        },
+        "configMapRef": {
+          "$ref": "#/definitions/v1ConfigMapEnvSource",
+          "title": "The ConfigMap to select from\n+optional"
+        },
+        "secretRef": {
+          "$ref": "#/definitions/v1SecretEnvSource",
+          "title": "The Secret to select from\n+optional"
+        }
+      },
+      "title": "EnvFromSource represents the source of a set of ConfigMaps",
+      "required": [
+        "prefix",
+        "configMapRef",
+        "secretRef"
+      ]
+    },
+    "v1EnvVar": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the environment variable. Must be a C_IDENTIFIER."
+        },
+        "value": {
+          "type": "string",
+          "title": "Variable references $(VAR_NAME) are expanded\nusing the previously defined environment variables in the container and\nany service environment variables. If a variable cannot be resolved,\nthe reference in the input string will be unchanged. Double $$ are reduced\nto a single $, which allows for escaping the $(VAR_NAME) syntax: i.e.\n\"$$(VAR_NAME)\" will produce the string literal \"$(VAR_NAME)\".\nEscaped references will never be expanded, regardless of whether the variable\nexists or not.\nDefaults to \"\".\n+optional"
+        },
+        "valueFrom": {
+          "$ref": "#/definitions/v1EnvVarSource",
+          "title": "Source for the environment variable's value. Cannot be used if value is not empty.\n+optional"
+        }
+      },
+      "description": "EnvVar represents an environment variable present in a Container.",
+      "required": [
+        "name",
+        "value",
+        "valueFrom"
+      ]
+    },
+    "v1EnvVarSource": {
+      "type": "object",
+      "properties": {
+        "fieldRef": {
+          "$ref": "#/definitions/v1ObjectFieldSelector",
+          "title": "Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['\u003cKEY\u003e']`, `metadata.annotations['\u003cKEY\u003e']`,\nspec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.\n+optional"
+        },
+        "resourceFieldRef": {
+          "$ref": "#/definitions/v1ResourceFieldSelector",
+          "title": "Selects a resource of the container: only resources limits and requests\n(limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.\n+optional"
+        },
+        "configMapKeyRef": {
+          "$ref": "#/definitions/v1ConfigMapKeySelector",
+          "title": "Selects a key of a ConfigMap.\n+optional"
+        },
+        "secretKeyRef": {
+          "$ref": "#/definitions/v1SecretKeySelector",
+          "title": "Selects a key of a secret in the pod's namespace\n+optional"
+        }
+      },
+      "description": "EnvVarSource represents a source for the value of an EnvVar.",
+      "required": [
+        "fieldRef",
+        "resourceFieldRef",
+        "configMapKeyRef",
+        "secretKeyRef"
+      ]
+    },
+    "v1ExecAction": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.\n+optional\n+listType=atomic"
+        }
+      },
+      "description": "ExecAction describes a \"run in container\" action.",
+      "required": [
+        "command"
+      ]
+    },
+    "v1GRPCAction": {
+      "type": "object",
+      "properties": {
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Port number of the gRPC service. Number must be in the range 1 to 65535."
+        },
+        "service": {
+          "type": "string",
+          "description": "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\n\nIf this is not specified, the default behavior is defined by gRPC.\n+optional\n+default=\"\""
+        }
+      },
+      "required": [
+        "port",
+        "service"
+      ]
+    },
+    "v1GetSidecarSetResponse": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "$ref": "#/definitions/v1SidecarSetItem"
+        }
+      },
+      "required": [
+        "detail"
+      ]
+    },
+    "v1HTTPGetAction": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "title": "Path to access on the HTTP server.\n+optional"
+        },
+        "port": {
+          "$ref": "#/definitions/intstrIntOrString",
+          "description": "Name or number of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME."
+        },
+        "host": {
+          "type": "string",
+          "title": "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.\n+optional"
+        },
+        "scheme": {
+          "type": "string",
+          "title": "Scheme to use for connecting to the host.\nDefaults to HTTP.\n+optional"
+        },
+        "httpHeaders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1HTTPHeader"
+          },
+          "title": "Custom headers to set in the request. HTTP allows repeated headers.\n+optional\n+listType=atomic"
+        }
+      },
+      "description": "HTTPGetAction describes an action based on HTTP Get requests.",
+      "required": [
+        "path",
+        "port",
+        "host",
+        "scheme",
+        "httpHeaders"
+      ]
+    },
+    "v1HTTPHeader": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The header field name.\nThis will be canonicalized upon output, so case-variant names will be understood as the same header."
+        },
+        "value": {
+          "type": "string",
+          "title": "The header field value"
+        }
+      },
+      "title": "HTTPHeader describes a custom header to be used in HTTP probes",
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "v1LabelSelector": {
+      "type": "object",
+      "properties": {
+        "matchLabels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels\nmap is equivalent to an element of matchExpressions, whose key field is \"key\", the\noperator is \"In\", and the values array contains only \"value\". The requirements are ANDed.\n+optional"
+        },
+        "matchExpressions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1LabelSelectorRequirement"
+          },
+          "title": "matchExpressions is a list of label selector requirements. The requirements are ANDed.\n+optional\n+listType=atomic"
+        }
+      },
+      "title": "A label selector is a label query over a set of resources. The result of matchLabels and\nmatchExpressions are ANDed. An empty label selector matches all objects. A null\nlabel selector matches no objects.\n+structType=atomic",
+      "required": [
+        "matchLabels",
+        "matchExpressions"
+      ]
+    },
+    "v1LabelSelectorRequirement": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "key is the label key that the selector applies to."
+        },
+        "operator": {
+          "type": "string",
+          "description": "operator represents a key's relationship to a set of values.\nValid operators are In, NotIn, Exists and DoesNotExist."
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "values is an array of string values. If the operator is In or NotIn,\nthe values array must be non-empty. If the operator is Exists or DoesNotExist,\nthe values array must be empty. This array is replaced during a strategic\nmerge patch.\n+optional\n+listType=atomic"
+        }
+      },
+      "description": "A label selector requirement is a selector that contains values, a key, and an operator that\nrelates the key and values.",
+      "required": [
+        "key",
+        "operator",
+        "values"
+      ]
+    },
+    "v1Lifecycle": {
+      "type": "object",
+      "properties": {
+        "postStart": {
+          "$ref": "#/definitions/v1LifecycleHandler",
+          "title": "PostStart is called immediately after a container is created. If the handler fails,\nthe container is terminated and restarted according to its restart policy.\nOther management of the container blocks until the hook completes.\nMore info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks\n+optional"
+        },
+        "preStop": {
+          "$ref": "#/definitions/v1LifecycleHandler",
+          "title": "PreStop is called immediately before a container is terminated due to an\nAPI request or management event such as liveness/startup probe failure,\npreemption, resource contention, etc. The handler is not called if the\ncontainer crashes or exits. The Pod's termination grace period countdown begins before the\nPreStop hook is executed. Regardless of the outcome of the handler, the\ncontainer will eventually terminate within the Pod's termination grace\nperiod (unless delayed by finalizers). Other management of the container blocks until the hook completes\nor until the termination grace period is reached.\nMore info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks\n+optional"
+        }
+      },
+      "description": "Lifecycle describes actions that the management system should take in response to container lifecycle\nevents. For the PostStart and PreStop lifecycle handlers, management of the container blocks\nuntil the action is complete, unless the container process fails, in which case the handler is aborted.",
+      "required": [
+        "postStart",
+        "preStop"
+      ]
+    },
+    "v1LifecycleHandler": {
+      "type": "object",
+      "properties": {
+        "exec": {
+          "$ref": "#/definitions/v1ExecAction",
+          "title": "Exec specifies the action to take.\n+optional"
+        },
+        "httpGet": {
+          "$ref": "#/definitions/v1HTTPGetAction",
+          "title": "HTTPGet specifies the http request to perform.\n+optional"
+        },
+        "tcpSocket": {
+          "$ref": "#/definitions/v1TCPSocketAction",
+          "title": "Deprecated. TCPSocket is NOT supported as a LifecycleHandler and kept\nfor the backward compatibility. There are no validation of this field and\nlifecycle hooks will fail in runtime when tcp handler is specified.\n+optional"
+        },
+        "sleep": {
+          "$ref": "#/definitions/v1SleepAction",
+          "title": "Sleep represents the duration that the container should sleep before being terminated.\n+featureGate=PodLifecycleSleepAction\n+optional"
+        }
+      },
+      "description": "LifecycleHandler defines a specific action that should be taken in a lifecycle\nhook. One and only one of the fields, except TCPSocket must be specified.",
+      "required": [
+        "exec",
+        "httpGet",
+        "tcpSocket",
+        "sleep"
+      ]
+    },
+    "v1ListSidecarSetResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1SidecarSetItem"
+          }
+        }
+      },
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "v1LocalObjectReference": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nTODO: Add other useful fields. apiVersion, kind, uid?\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional\n+default=\"\"\n+kubebuilder:default=\"\"\nTODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896."
+        }
+      },
+      "title": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.\n+structType=atomic",
+      "required": [
+        "name"
+      ]
+    },
+    "v1ObjectFieldSelector": {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "title": "Version of the schema the FieldPath is written in terms of, defaults to \"v1\".\n+optional"
+        },
+        "fieldPath": {
+          "type": "string",
+          "description": "Path of the field to select in the specified API version."
+        }
+      },
+      "title": "ObjectFieldSelector selects an APIVersioned field of an object.\n+structType=atomic",
+      "required": [
+        "apiVersion",
+        "fieldPath"
+      ]
+    },
+    "v1Probe": {
+      "type": "object",
+      "properties": {
+        "handler": {
+          "$ref": "#/definitions/v1ProbeHandler",
+          "title": "The action taken to determine the health of a container"
+        },
+        "initialDelaySeconds": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Number of seconds after the container has started before liveness probes are initiated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional"
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Number of seconds after which the probe times out.\nDefaults to 1 second. Minimum value is 1.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes\n+optional"
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "format": "int32",
+          "title": "How often (in seconds) to perform the probe.\nDefault to 10 seconds. Minimum value is 1.\n+optional"
+        },
+        "successThreshold": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Minimum consecutive successes for the probe to be considered successful after having failed.\nDefaults to 1. Must be 1 for liveness and startup. Minimum value is 1.\n+optional"
+        },
+        "failureThreshold": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Minimum consecutive failures for the probe to be considered failed after having succeeded.\nDefaults to 3. Minimum value is 1.\n+optional"
+        },
+        "terminationGracePeriodSeconds": {
+          "type": "string",
+          "format": "int64",
+          "title": "Optional duration in seconds the pod needs to terminate gracefully upon probe failure.\nThe grace period is the duration in seconds after the processes running in the pod are sent\na termination signal and the time when the processes are forcibly halted with a kill signal.\nSet this value longer than the expected cleanup time for your process.\nIf this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this\nvalue overrides the value provided by the pod spec.\nValue must be non-negative integer. The value zero indicates stop immediately via\nthe kill signal (no opportunity to shut down).\nThis is a beta field and requires enabling ProbeTerminationGracePeriod feature gate.\nMinimum value is 1. spec.terminationGracePeriodSeconds is used if unset.\n+optional"
+        }
+      },
+      "description": "Probe describes a health check to be performed against a container to determine whether it is\nalive or ready to receive traffic.",
+      "required": [
+        "handler",
+        "initialDelaySeconds",
+        "timeoutSeconds",
+        "periodSeconds",
+        "successThreshold",
+        "failureThreshold",
+        "terminationGracePeriodSeconds"
+      ]
+    },
+    "v1ProbeHandler": {
+      "type": "object",
+      "properties": {
+        "exec": {
+          "$ref": "#/definitions/v1ExecAction",
+          "title": "Exec specifies the action to take.\n+optional"
+        },
+        "httpGet": {
+          "$ref": "#/definitions/v1HTTPGetAction",
+          "title": "HTTPGet specifies the http request to perform.\n+optional"
+        },
+        "tcpSocket": {
+          "$ref": "#/definitions/v1TCPSocketAction",
+          "title": "TCPSocket specifies an action involving a TCP port.\n+optional"
+        },
+        "grpc": {
+          "$ref": "#/definitions/v1GRPCAction",
+          "title": "GRPC specifies an action involving a GRPC port.\n+optional"
+        }
+      },
+      "description": "ProbeHandler defines a specific action that should be taken in a probe.\nOne and only one of the fields must be specified.",
+      "required": [
+        "exec",
+        "httpGet",
+        "tcpSocket",
+        "grpc"
+      ]
+    },
+    "v1ResourceClaim": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name must match the name of one entry in pod.spec.resourceClaims of\nthe Pod where this field is used. It makes that resource available\ninside a container."
+        }
+      },
+      "description": "ResourceClaim references one entry in PodSpec.ResourceClaims.",
+      "required": [
+        "name"
+      ]
+    },
+    "v1ResourceFieldSelector": {
+      "type": "object",
+      "properties": {
+        "containerName": {
+          "type": "string",
+          "title": "Container name: required for volumes, optional for env vars\n+optional"
+        },
+        "resource": {
+          "type": "string",
+          "title": "Required: resource to select"
+        },
+        "divisor": {
+          "$ref": "#/definitions/resourceQuantity",
+          "title": "Specifies the output format of the exposed resources, defaults to \"1\"\n+optional"
+        }
+      },
+      "title": "ResourceFieldSelector represents container resources (cpu, memory) and their output format\n+structType=atomic",
+      "required": [
+        "containerName",
+        "resource",
+        "divisor"
+      ]
+    },
+    "v1SELinuxOptions": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string",
+          "title": "User is a SELinux user label that applies to the container.\n+optional"
+        },
+        "role": {
+          "type": "string",
+          "title": "Role is a SELinux role label that applies to the container.\n+optional"
+        },
+        "type": {
+          "type": "string",
+          "title": "Type is a SELinux type label that applies to the container.\n+optional"
+        },
+        "level": {
+          "type": "string",
+          "title": "Level is SELinux level label that applies to the container.\n+optional"
+        }
+      },
+      "title": "SELinuxOptions are the labels to be applied to the container",
+      "required": [
+        "user",
+        "role",
+        "type",
+        "level"
+      ]
+    },
+    "v1SeccompProfile": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Localhost - a profile defined in a file on the node should be used.\nRuntimeDefault - the container runtime default profile should be used.\nUnconfined - no profile should be applied.\n+unionDiscriminator",
+          "title": "type indicates which kind of seccomp profile will be applied.\nValid options are:"
+        },
+        "localhostProfile": {
+          "type": "string",
+          "title": "localhostProfile indicates a profile defined in a file on the node should be used.\nThe profile must be preconfigured on the node to work.\nMust be a descending path, relative to the kubelet's configured seccomp profile location.\nMust be set if type is \"Localhost\". Must NOT be set for any other type.\n+optional"
+        }
+      },
+      "title": "SeccompProfile defines a pod/container's seccomp profile settings.\nOnly one profile source may be set.\n+union",
+      "required": [
+        "type",
+        "localhostProfile"
+      ]
+    },
+    "v1SecretEnvSource": {
+      "type": "object",
+      "properties": {
+        "localObjectReference": {
+          "$ref": "#/definitions/v1LocalObjectReference",
+          "description": "The Secret to select from."
+        },
+        "optional": {
+          "type": "boolean",
+          "title": "Specify whether the Secret must be defined\n+optional"
+        }
+      },
+      "description": "SecretEnvSource selects a Secret to populate the environment\nvariables with.\n\nThe contents of the target Secret's Data field will represent the\nkey-value pairs as environment variables.",
+      "required": [
+        "localObjectReference",
+        "optional"
+      ]
+    },
+    "v1SecretKeySelector": {
+      "type": "object",
+      "properties": {
+        "localObjectReference": {
+          "$ref": "#/definitions/v1LocalObjectReference",
+          "description": "The name of the secret in the pod's namespace to select from."
+        },
+        "key": {
+          "type": "string",
+          "description": "The key of the secret to select from.  Must be a valid secret key."
+        },
+        "optional": {
+          "type": "boolean",
+          "title": "Specify whether the Secret or its key must be defined\n+optional"
+        }
+      },
+      "title": "SecretKeySelector selects a key of a Secret.\n+structType=atomic",
+      "required": [
+        "localObjectReference",
+        "key",
+        "optional"
+      ]
+    },
+    "v1SecurityContext": {
+      "type": "object",
+      "properties": {
+        "capabilities": {
+          "$ref": "#/definitions/v1Capabilities",
+          "title": "The capabilities to add/drop when running containers.\nDefaults to the default set of capabilities granted by the container runtime.\nNote that this field cannot be set when spec.os.name is windows.\n+optional"
+        },
+        "privileged": {
+          "type": "boolean",
+          "title": "Run container in privileged mode.\nProcesses in privileged containers are essentially equivalent to root on the host.\nDefaults to false.\nNote that this field cannot be set when spec.os.name is windows.\n+optional"
+        },
+        "seLinuxOptions": {
+          "$ref": "#/definitions/v1SELinuxOptions",
+          "title": "The SELinux context to be applied to the container.\nIf unspecified, the container runtime will allocate a random SELinux context for each\ncontainer.  May also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\nNote that this field cannot be set when spec.os.name is windows.\n+optional"
+        },
+        "windowsOptions": {
+          "$ref": "#/definitions/v1WindowsSecurityContextOptions",
+          "title": "The Windows specific settings applied to all containers.\nIf unspecified, the options from the PodSecurityContext will be used.\nIf set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.\nNote that this field cannot be set when spec.os.name is linux.\n+optional"
+        },
+        "runAsUser": {
+          "type": "string",
+          "format": "int64",
+          "title": "The UID to run the entrypoint of the container process.\nDefaults to user specified in image metadata if unspecified.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\nNote that this field cannot be set when spec.os.name is windows.\n+optional"
+        },
+        "runAsGroup": {
+          "type": "string",
+          "format": "int64",
+          "title": "The GID to run the entrypoint of the container process.\nUses runtime default if unset.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\nNote that this field cannot be set when spec.os.name is windows.\n+optional"
+        },
+        "runAsNonRoot": {
+          "type": "boolean",
+          "title": "Indicates that the container must run as a non-root user.\nIf true, the Kubelet will validate the image at runtime to ensure that it\ndoes not run as UID 0 (root) and fail to start the container if it does.\nIf unset or false, no such validation will be performed.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional"
+        },
+        "readOnlyRootFilesystem": {
+          "type": "boolean",
+          "title": "Whether this container has a read-only root filesystem.\nDefault is false.\nNote that this field cannot be set when spec.os.name is windows.\n+optional"
+        },
+        "allowPrivilegeEscalation": {
+          "type": "boolean",
+          "title": "AllowPrivilegeEscalation controls whether a process can gain more\nprivileges than its parent process. This bool directly controls if\nthe no_new_privs flag will be set on the container process.\nAllowPrivilegeEscalation is true always when the container is:\n1) run as Privileged\n2) has CAP_SYS_ADMIN\nNote that this field cannot be set when spec.os.name is windows.\n+optional"
+        },
+        "procMount": {
+          "type": "string",
+          "title": "procMount denotes the type of proc mount to use for the containers.\nThe default is DefaultProcMount which uses the container runtime defaults for\nreadonly paths and masked paths.\nThis requires the ProcMountType feature flag to be enabled.\nNote that this field cannot be set when spec.os.name is windows.\n+optional"
+        },
+        "seccompProfile": {
+          "$ref": "#/definitions/v1SeccompProfile",
+          "title": "The seccomp options to use by this container. If seccomp options are\nprovided at both the pod \u0026 container level, the container options\noverride the pod options.\nNote that this field cannot be set when spec.os.name is windows.\n+optional"
+        },
+        "appArmorProfile": {
+          "$ref": "#/definitions/v1AppArmorProfile",
+          "title": "appArmorProfile is the AppArmor options to use by this container. If set, this profile\noverrides the pod's appArmorProfile.\nNote that this field cannot be set when spec.os.name is windows.\n+optional"
+        }
+      },
+      "description": "SecurityContext holds security configuration that will be applied to a container.\nSome fields are present in both SecurityContext and PodSecurityContext.  When both\nare set, the values in SecurityContext take precedence.",
+      "required": [
+        "capabilities",
+        "privileged",
+        "seLinuxOptions",
+        "windowsOptions",
+        "runAsUser",
+        "runAsGroup",
+        "runAsNonRoot",
+        "readOnlyRootFilesystem",
+        "allowPrivilegeEscalation",
+        "procMount",
+        "seccompProfile",
+        "appArmorProfile"
+      ]
+    },
+    "v1SideCarSetStatus": {
+      "type": "object",
+      "properties": {
+        "matched_pods": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ready_pods": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "updated_pods": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "updated_ready_pods": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "required": [
+        "matched_pods",
+        "ready_pods",
+        "updated_pods",
+        "updated_ready_pods"
+      ]
+    },
+    "v1SidecarSetItem": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ready_pods": {
+          "type": "integer",
+          "format": "int64",
+          "title": "已就绪"
+        },
+        "matched_pods": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "updated_pods": {
+          "type": "integer",
+          "format": "int64",
+          "title": "已更新"
+        },
+        "updated_ready_pods": {
+          "type": "integer",
+          "format": "int64",
+          "title": "已更新可用"
+        },
+        "containers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Container"
+          },
+          "title": "容器"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "yaml"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "标签"
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "注解"
+        },
+        "selector": {
+          "$ref": "#/definitions/v1LabelSelector",
+          "title": "选择器"
+        },
+        "is_followed": {
+          "type": "boolean",
+          "title": "是否关注"
+        },
+        "status": {
+          "$ref": "#/definitions/v1SideCarSetStatus"
+        },
+        "update_strategy": {
+          "$ref": "#/definitions/v1UpdateSideCarSetStrategyRequest",
+          "title": "更新策略"
+        }
+      },
+      "required": [
+        "name",
+        "ready_pods",
+        "matched_pods",
+        "updated_pods",
+        "updated_ready_pods",
+        "containers",
+        "create_time",
+        "yaml",
+        "labels",
+        "annotations",
+        "selector",
+        "is_followed",
+        "status",
+        "update_strategy"
+      ]
+    },
+    "v1SleepAction": {
+      "type": "object",
+      "properties": {
+        "seconds": {
+          "type": "string",
+          "format": "int64",
+          "description": "Seconds is the number of seconds to sleep."
+        }
+      },
+      "description": "SleepAction describes a \"sleep\" action.",
+      "required": [
+        "seconds"
+      ]
+    },
+    "v1TCPSocketAction": {
+      "type": "object",
+      "properties": {
+        "port": {
+          "$ref": "#/definitions/intstrIntOrString",
+          "description": "Number or name of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME."
+        },
+        "host": {
+          "type": "string",
+          "title": "Optional: Host name to connect to, defaults to the pod IP.\n+optional"
+        }
+      },
+      "title": "TCPSocketAction describes an action based on opening a socket",
+      "required": [
+        "port",
+        "host"
+      ]
+    },
+    "v1UpdateSideCarSetStrategyRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "name": {
+          "type": "string",
+          "title": "名称"
+        },
+        "update_strategy_type": {
+          "$ref": "#/definitions/v1UpdateSideCarSetStrategyRequestUpdateStrategyType"
+        },
+        "partition": {
+          "type": "string"
+        },
+        "max_unavailable": {
+          "type": "string",
+          "title": "最大不可用副本数"
+        },
+        "pause": {
+          "type": "boolean",
+          "title": "暂停更新"
+        }
+      },
+      "required": [
+        "cluster_name",
+        "name",
+        "update_strategy_type",
+        "partition",
+        "max_unavailable",
+        "pause"
+      ]
+    },
+    "v1UpdateSideCarSetStrategyRequestUpdateStrategyType": {
+      "type": "string",
+      "enum": [
+        "RollingUpdate",
+        "NotUpdate"
+      ],
+      "default": "RollingUpdate",
+      "description": "- RollingUpdate: 滚动更新\n - NotUpdate: 不更新",
+      "title": "更新方式"
+    },
+    "v1UpdateSideCarSetStrategyResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "success"
+      ]
+    },
+    "v1VolumeDevice": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "name must match the name of a persistentVolumeClaim in the pod"
+        },
+        "devicePath": {
+          "type": "string",
+          "description": "devicePath is the path inside of the container that the device will be mapped to."
+        }
+      },
+      "description": "volumeDevice describes a mapping of a raw block device within a container.",
+      "required": [
+        "name",
+        "devicePath"
+      ]
+    },
+    "v1VolumeMount": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "This must match the Name of a Volume."
+        },
+        "readOnly": {
+          "type": "boolean",
+          "title": "Mounted read-only if true, read-write otherwise (false or unspecified).\nDefaults to false.\n+optional"
+        },
+        "recursiveReadOnly": {
+          "type": "string",
+          "description": "RecursiveReadOnly specifies whether read-only mounts should be handled\nrecursively.\n\nIf ReadOnly is false, this field has no meaning and must be unspecified.\n\nIf ReadOnly is true, and this field is set to Disabled, the mount is not made\nrecursively read-only.  If this field is set to IfPossible, the mount is made\nrecursively read-only, if it is supported by the container runtime.  If this\nfield is set to Enabled, the mount is made recursively read-only if it is\nsupported by the container runtime, otherwise the pod will not be started and\nan error will be generated to indicate the reason.\n\nIf this field is set to IfPossible or Enabled, MountPropagation must be set to\nNone (or be unspecified, which defaults to None).\n\nIf this field is not specified, it is treated as an equivalent of Disabled.\n\n+featureGate=RecursiveReadOnlyMounts\n+optional"
+        },
+        "mountPath": {
+          "type": "string",
+          "description": "Path within the container at which the volume should be mounted.  Must\nnot contain ':'."
+        },
+        "subPath": {
+          "type": "string",
+          "title": "Path within the volume from which the container's volume should be mounted.\nDefaults to \"\" (volume's root).\n+optional"
+        },
+        "mountPropagation": {
+          "type": "string",
+          "title": "mountPropagation determines how mounts are propagated from the host\nto container and the other way around.\nWhen not set, MountPropagationNone is used.\nThis field is beta in 1.10.\nWhen RecursiveReadOnly is set to IfPossible or to Enabled, MountPropagation must be None or unspecified\n(which defaults to None).\n+optional"
+        },
+        "subPathExpr": {
+          "type": "string",
+          "title": "Expanded path within the volume from which the container's volume should be mounted.\nBehaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment.\nDefaults to \"\" (volume's root).\nSubPathExpr and SubPath are mutually exclusive.\n+optional"
+        }
+      },
+      "description": "VolumeMount describes a mounting of a Volume within a container.",
+      "required": [
+        "name",
+        "readOnly",
+        "recursiveReadOnly",
+        "mountPath",
+        "subPath",
+        "mountPropagation",
+        "subPathExpr"
+      ]
+    },
+    "v1WindowsSecurityContextOptions": {
+      "type": "object",
+      "properties": {
+        "gmsaCredentialSpecName": {
+          "type": "string",
+          "title": "GMSACredentialSpecName is the name of the GMSA credential spec to use.\n+optional"
+        },
+        "gmsaCredentialSpec": {
+          "type": "string",
+          "title": "GMSACredentialSpec is where the GMSA admission webhook\n(https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the\nGMSA credential spec named by the GMSACredentialSpecName field.\n+optional"
+        },
+        "runAsUserName": {
+          "type": "string",
+          "title": "The UserName in Windows to run the entrypoint of the container process.\nDefaults to the user specified in image metadata if unspecified.\nMay also be set in PodSecurityContext. If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\n+optional"
+        },
+        "hostProcess": {
+          "type": "boolean",
+          "title": "HostProcess determines if a container should be run as a 'Host Process' container.\nAll of a Pod's containers must have the same effective HostProcess value\n(it is not allowed to have a mix of HostProcess containers and non-HostProcess containers).\nIn addition, if HostProcess is true then HostNetwork must also be set to true.\n+optional"
+        }
+      },
+      "description": "WindowsSecurityContextOptions contain Windows-specific options and credentials.",
+      "required": [
+        "gmsaCredentialSpecName",
+        "gmsaCredentialSpec",
+        "runAsUserName",
+        "hostProcess"
+      ]
+    }
+  }
+}

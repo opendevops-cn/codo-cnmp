@@ -1,0 +1,626 @@
+syntax = "proto3";
+
+package cloneset;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "k8s/core/v1/generated.proto";
+import "k8s/io/apimachinery/pkg/apis/generated.proto";
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service CloneSet {
+  // 查看-云原生管理-CloneSet-列表
+  rpc ListCloneSet (ListCloneSetRequest) returns (ListCloneSetResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cloneset/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-CloneSet-yaml创建更新
+  rpc CreateOrUpdateCloneSetByYaml (CreateOrUpdateCloneSetByYamlRequest) returns (CreateOrUpdateCloneSetByYamlResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cloneset/create_or_update_by_yaml"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "cloneSet";
+      action: "yaml创建更新";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "cloneset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-CloneSet-删除
+  rpc DeleteCloneSet (DeleteCloneSetRequest) returns (DeleteCloneSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cloneset/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "cloneSet";
+      action: "删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "cloneset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-CloneSet-重启
+  rpc RestartCloneSet (RestartCloneSetRequest) returns (RestartCloneSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cloneset/restart"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "cloneSet";
+      action: "重启";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "cloneset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-CloneSet-伸缩
+  rpc ScaleCloneSet (ScaleCloneSetRequest) returns (ScaleCloneSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cloneset/scale"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "cloneSet";
+      action: "伸缩";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "cloneset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-CloneSet-详情
+  rpc GetCloneSetDetail (CloneSetDetailRequest) returns (CloneSetDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cloneset/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-CloneSet-回滚
+  rpc RollbackCloneSet (RollbackCloneSetRequest) returns (RollbackCloneSetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cloneset/rollback"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "cloneSet";
+      action: "回滚";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "cloneset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-CloneSet-删除pod
+  rpc DeleteCloneSetPods (DeleteCloneSetPodRequest) returns (DeleteCloneSetPodResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cloneset/pod/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "cloneSet";
+      action: "删除pod";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "cloneset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-CloneSet-流式扩容
+  rpc UpdateScaleStrategy (UpdateScaleStrategyRequest) returns (UpdateScaleStrategyResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cloneset/scale_stream"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "cloneSet";
+      action: "流式扩容";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "cloneset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-CloneSet-升级策略
+  rpc UpdateUpgradeStrategy (UpdateUpgradeStrategyRequest) returns (UpdateUpgradeStrategyResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cloneset/upgrade_strategy/update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "cloneSet";
+      action: "编辑升级策略";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "cloneset"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-CloneSet-历史版本
+  rpc ListCloneSetControllerRevision (ListCloneSetReversionRequest) returns (ListCloneSetReversionResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cloneset/controller_reversion/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+}
+
+
+// CloneSet列表请求
+message ListCloneSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2;
+  // 查询关键字
+  string keyword = 4;
+  // 页码
+  uint32 page = 5;
+  // 页大小
+  uint32 page_size = 6;
+  // 查询全部
+  uint32  list_all = 7 [json_name = "list_all"];
+}
+
+
+message CloneSetCondition {
+  // Type of CloneSet condition.
+  string type = 1;
+
+  // Status of the condition, one of True, False, Unknown.
+  string status = 2;
+
+  // The last time this condition was updated.
+  // 豪秒级时间戳
+  uint64 lastUpdateTime = 6;
+
+  // Last time the condition transitioned from one status to another.
+  // 豪秒级时间戳
+  uint64 lastTransitionTime = 7;
+
+  // The reason for the condition's last transition.
+  string reason = 4;
+
+  // A human readable message indicating details about the transition.
+  string message = 5;
+}
+
+// CloneSetStatus is the most recently observed status of the CloneSet.
+message CloneSetStatus {
+  uint32 observedGeneration = 1;
+  // 副本数量
+  uint32 replicas = 2 [(google.api.field_behavior) = REQUIRED];
+  // 已更新副本数量
+  uint32 updatedReplicas = 3 [(google.api.field_behavior) = REQUIRED];
+  // 已就绪副本数量
+  uint32 readyReplicas = 7 [(google.api.field_behavior) = REQUIRED];
+  // 可用副本数量
+  uint32 availableReplicas = 4 [(google.api.field_behavior) = REQUIRED];
+  // 不可用副本数量
+  uint32 unavailableReplicas = 5;
+  uint32 collisionCount = 8;
+}
+
+
+message CloneSetUpdateStrategy {
+  // 升级策略
+  enum UpdateStrategy {
+    // 优先原地升级
+    InPlaceIfPossible = 0;
+    // 仅原地升级
+    InPlaceOnly = 1;
+    // 重建升级
+    Recreate = 2;
+  }
+  UpdateStrategy update_strategy_type = 4 [(validate.rules).enum.defined_only = true, (google.api.field_behavior) = REQUIRED];
+  // 优雅升级等待秒数
+  uint32 gracePeriodSeconds = 5 ;
+  // 最大超出副本数
+  string max_surge = 6 ;
+  // 最大不可用副本数
+  string max_unavailable = 7;
+}
+
+// CloneSet列表项
+message CloneSetItem {
+  // 名称
+  string name = 1  [(google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2  [(google.api.field_behavior) = REQUIRED];
+  // 容器
+  repeated k8s.io.api.core.v1.Container containers = 3  [(google.api.field_behavior) = REQUIRED];
+  // 状态
+  CloneSetStatus status = 4  [(google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 5 [json_name = "create_time", (google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 6  [(google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 7  [(google.api.field_behavior) = REQUIRED];
+  // 注解
+  map<string, string> annotations = 8  [(google.api.field_behavior) = REQUIRED];
+  // 副本数量
+  uint32 replicas = 9  [(google.api.field_behavior) = REQUIRED];
+  // 更新策略
+  CloneSetUpdateStrategy update_strategy = 10  [(google.api.field_behavior) = REQUIRED];
+  // 选择器
+  k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector = 11  [(google.api.field_behavior) = REQUIRED];
+  // 健康检查
+  repeated CloneSetCondition conditions = 12  [(google.api.field_behavior) = REQUIRED];
+  // 期望副本数量
+  uint32 spec_replicas = 13 [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 14 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+  // 流式扩容
+  ScaleStrategyItem scale_strategy = 15 [json_name = "scale_strategy", (google.api.field_behavior) = REQUIRED];
+}
+
+// CloneSet列表响应
+message ListCloneSetResponse {
+  // 总数
+  int32 total = 1;
+  // 列表
+  repeated CloneSetItem list = 2;
+}
+
+// 创建CloneSet请求
+message CreateOrUpdateCloneSetByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 创建CloneSet响应
+message CreateOrUpdateCloneSetByYamlResponse {}
+
+// 更新CloneSet请求
+message UpdateCloneSetByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // YAML
+  string yaml = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 更新CloneSet响应
+message UpdateCloneSetByYamlResponse {}
+
+// 删除CloneSet请求
+message DeleteCloneSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 删除CloneSet响应
+message DeleteCloneSetResponse {}
+
+// 重启CloneSet请求
+message RestartCloneSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 重启CloneSet响应
+message RestartCloneSetResponse {}
+
+// 伸缩CloneSet请求
+message ScaleCloneSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 副本数量
+  uint32 replicas = 4 [(validate.rules).uint32.gte = 0, (google.api.field_behavior) = REQUIRED];
+}
+
+
+// 伸缩CloneSet响应
+message ScaleCloneSetResponse {}
+
+
+
+
+// 查看CloneSet详情请求
+message CloneSetDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+
+// 查看CloneSet详情响应
+message CloneSetDetailResponse {
+  // 基础信息
+  CloneSetItem detail = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 回滚CloneSet请求
+message RollbackCloneSetRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 版本号
+  string version = 4 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 回滚CloneSet响应
+message RollbackCloneSetResponse {}
+
+// 删除CloneSet指定的pod请求
+message DeleteCloneSetPodRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // pod名称
+  repeated string pod_names = 4 [(google.api.field_behavior) = REQUIRED];
+  // 删除策略
+  enum DeletePolicy {
+    // 删除pod不重建
+    DELETE_ONLY = 0;
+    // 删除pod重建
+    DELETE_AND_RECREATE = 1;
+  }
+  DeletePolicy delete_policy = 5 [(validate.rules).enum.defined_only = true, (google.api.field_behavior) = REQUIRED];
+}
+
+// 删除CloneSet指定的pod响应
+message DeleteCloneSetPodResponse {}
+
+// 流式扩容CloneSet请求
+message UpdateScaleStrategyRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 最小ready时间
+  uint32 minReadySeconds = 4 [(validate.rules).uint32.gte = 1, (google.api.field_behavior) = REQUIRED];
+  // 最大不可用副本数
+  string MaxUnavailable = 5 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+// 流式扩容CloneSet响应
+message UpdateScaleStrategyResponse {}
+
+// 流式扩容
+message ScaleStrategyItem {
+  string minReadySeconds = 1;
+  // 最大不可用副本数
+  string MaxUnavailable = 2;
+}
+
+// 修改升级策略请求
+message UpdateUpgradeStrategyRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 升级策略
+  enum UpgradeStrategy {
+    // 优先原地升级
+    InPlaceIfPossible = 0;
+    // 仅原地升级
+    InPlaceOnly = 1;
+    // 重建升级
+    Recreate = 2;
+  }
+  UpgradeStrategy update_strategy_type = 4 [(validate.rules).enum.defined_only = true, (google.api.field_behavior) = REQUIRED];
+  // 优雅升级等待秒数
+  uint32 gracePeriodSeconds = 5 ;
+  // 最大超出副本数
+  string max_surge = 6 ;
+  // 最大不可用副本数
+  string max_unavailable = 7;
+}
+
+// 修改升级策略响应
+message UpdateUpgradeStrategyResponse {}
+
+// 查看CloneSet历史版本请求
+message ListCloneSetReversionRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 名称
+  string name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+message CloneSetControllerReversionItem {
+  // 名称
+  string name = 1  [(google.api.field_behavior) = REQUIRED];
+  // 镜像
+  repeated string images = 2  [(google.api.field_behavior) = REQUIRED];
+  // 版本
+  string version = 3  [(google.api.field_behavior) = REQUIRED];
+  // 版本详情
+  string yaml = 4  [(google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 5 [json_name = "create_time", (google.api.field_behavior) = REQUIRED];
+  // 是否当前版本
+  bool is_current = 6  [(google.api.field_behavior) = REQUIRED];
+}
+
+// 查看CloneSet历史版本响应
+message ListCloneSetReversionResponse {
+  // 列表
+  repeated CloneSetControllerReversionItem list = 1;
+  // 总数
+  uint32 total = 2;
+}

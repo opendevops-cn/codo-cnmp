@@ -1,0 +1,315 @@
+syntax = "proto3";
+
+package gameserver.v1;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service GameServer {
+  // 查看-云原生管理-游戏进程-列表
+  rpc ListGameServer (ListGameServerRequest) returns (ListGameServerResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/gameserver/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-游戏进程-进程类型
+  rpc ListGameServerType (ListGameServerTypeRequest) returns (ListGameServerTypeResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/gameserver/type/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-游戏进程-Entity
+  rpc ManageGameServerEntity (ManageGameServerEntityRequest) returns (ManageGameServerEntityResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserver/entity/manage"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "进程列表";
+      action: "管理Entity";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "进程"
+        },
+        {
+          key: "name",
+          extract: "server_name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-游戏进程-LB
+  rpc ManageGameServerLB (ManageGameServerEntityRequest) returns (ManageGameServerEntityResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserver/lb/manage"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "进程列表";
+      action: "管理LB";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "进程"
+        },
+        {
+          key: "name",
+          extract: "server_name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-游戏进程-批量管理
+  rpc BatchManageGameServerEntity (BatchManageGameServerEntityRequest) returns (BatchManageGameServerEntityResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserver/entity/batch/manage"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "进程列表";
+      action: "批量管理Entity";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "进程"
+        },
+        {
+          key: "name",
+          extract: "server_name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-LB-批量管理
+  rpc BatchManageGameServerLB (BatchManageGameServerEntityRequest) returns (BatchManageGameServerEntityResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/gameserver/lb/batch/manage"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "进程列表";
+      action: "批量管理LB";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "进程"
+        },
+        {
+          key: "name",
+          extract: "server_name"
+        }
+      ]
+    };
+  }
+
+}
+
+
+// 游戏进程列表请求
+message ListGameServerRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 查询关键字
+  string keyword = 4;
+  // 页码
+  uint32 page = 5;
+  // 页大小
+  uint32 page_size = 6;
+  // 查询全部
+  uint32  list_all = 7 [json_name = "list_all"];
+  // 进程类型
+  string server_type = 8;
+  // entity锁定状态
+  EntityLockStatus entity_lock_status = 9 ;
+  // lb 锁定状态
+  LBLockStatus lb_lock_status = 10;
+}
+
+// LB锁定状态
+enum LBLockStatus {
+  // 未知状态
+  UNKNOWN_ServerLockStatus = 0;
+  // 未锁定
+  LB_UNLOCK = 1;
+  // 手动锁定
+  LB_LOCKED = 2;
+  // HPA锁定
+  LB_HPA_LOCKED = 3;
+}
+
+enum EntityLockStatus {
+  // 未知状态
+  UNKNOWN_EntityLockStatus = 0;
+  // 未锁定
+  ENTITY_UNLOCK = 1;
+  // 手动锁定
+  ENTITY_LOCKED = 2;
+}
+
+// 游戏进程
+message GameServerItem {
+  // 进程名称
+  string server_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string pod_name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 工作负载类型
+  string workload_type = 3;
+  // 工作负载名称
+  string workload = 4;
+  // server version
+  string server_version = 5 [(google.api.field_behavior) = REQUIRED];
+  // entity num
+  uint32 entity_num = 6 [(google.api.field_behavior) = REQUIRED];
+  // online num
+  uint32 online_num = 7 [(google.api.field_behavior) = REQUIRED];
+  // entity_lock_status
+  EntityLockStatus entity_lock_status = 8 [(google.api.field_behavior) = REQUIRED];
+  // lb_lock_status
+  LBLockStatus lb_lock_status = 9 [(google.api.field_behavior) = REQUIRED];
+  // code_version_game
+  string code_version_game = 10 [(google.api.field_behavior) = REQUIRED];
+  // code_version_config
+  string code_version_config = 11 [(google.api.field_behavior) = REQUIRED];
+  // code_version_script
+  string code_version_script = 12 [(google.api.field_behavior) = REQUIRED];
+  // 进程Id
+  uint32 id = 13 [(google.api.field_behavior) = REQUIRED];
+}
+
+
+// 进程列表响应
+message ListGameServerResponse {
+  // 总数
+  uint32 total = 1 [(google.api.field_behavior) = REQUIRED];
+  // 列表
+  repeated GameServerItem list = 2[(google.api.field_behavior) = REQUIRED];
+}
+
+// 进程类型列表
+message ListGameServerTypeRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2;
+  // 查询关键字
+  string keyword = 4;
+  // 页码
+  uint32 page = 5;
+  // 页大小
+  uint32 page_size = 6;
+  // 查询全部
+  uint32  list_all = 7 [json_name = "list_all"];
+}
+
+
+message GameServerType {
+  string name = 1;
+}
+
+message ListGameServerTypeResponse{
+  uint32 total = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated GameServerType list = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+
+// Entity锁定/解锁请求
+message ManageGameServerEntityRequest{
+  // 进程名称
+  string server_name = 1 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1];
+  // 锁定/解锁 true表示锁定 false表示解锁
+  bool lock = 2 [(google.api.field_behavior) = REQUIRED];
+  string cluster_name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string namespace = 4 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// cbb版本锁定响应head
+message ManageEntityHead {
+  uint32 errno = 1 [(google.api.field_behavior) = REQUIRED];
+  string errmsg = 2 [(google.api.field_behavior) = REQUIRED];
+
+}
+
+// cbb版本锁定响应body
+message ManageEntityBody{}
+
+
+// Entity锁定/解锁响应
+message ManageGameServerEntityResponse{
+  ManageEntityHead head = 1;
+  ManageEntityBody body = 2;
+}
+
+
+
+message BatchManageGameServerEntityRequest{
+  repeated string  server_names = 1 [(validate.rules).repeated.min_items = 1, (google.api.field_behavior) = REQUIRED];
+  // 锁定/解锁 true表示锁定 false表示解锁
+  bool lock = 2 [(google.api.field_behavior) = REQUIRED];
+  string cluster_name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  string namespace = 4 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+message BatchManageGameServerEntityResponse{}
+
+

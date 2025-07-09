@@ -1,0 +1,637 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/role.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "RoleService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/role/binding/list": {
+      "get": {
+        "summary": "查看-云原生管理-角色绑定-列表",
+        "operationId": "RoleService_ListRoleBinding",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/roleListRoleBindingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "role_id",
+            "description": "关键字",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "description": "分页",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "每页数量",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "是否全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/api/v1/role/binding/update": {
+      "post": {
+        "summary": "管理-云原生管理-角色绑定-编辑",
+        "operationId": "RoleService_UpdateRoleBinding",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/roleUpdateRoleBindingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/roleUpdateRoleBindingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/api/v1/role/create": {
+      "post": {
+        "summary": "管理-云原生管理-角色-新增",
+        "operationId": "RoleService_CreateRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/roleCreateRoleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/roleCreateRoleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/api/v1/role/delete": {
+      "post": {
+        "summary": "管理-云原生管理-角色-删除",
+        "operationId": "RoleService_DeleteRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/roleDeleteRoleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/roleDeleteRoleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/api/v1/role/detail": {
+      "get": {
+        "summary": "查看-云原生管理-角色-详情",
+        "operationId": "RoleService_GetRoleDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/roleGetRoleDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "role_id",
+            "description": "角色ID",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/api/v1/role/list": {
+      "get": {
+        "summary": "查看-云原生管理-角色-列表",
+        "operationId": "RoleService_ListRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/roleListRoleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "keyword",
+            "description": "关键字",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "分页",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "每页数量",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "是否全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/api/v1/role/update": {
+      "post": {
+        "summary": "管理-云原生管理-角色-编辑",
+        "operationId": "RoleService_UpdateRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/roleUpdateRoleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/roleUpdateRoleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "roleCreateRoleRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "角色名称"
+        },
+        "role_type": {
+          "$ref": "#/definitions/roleRoleType",
+          "title": "角色类型"
+        },
+        "description": {
+          "type": "string",
+          "title": "角色备注"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "角色Yaml"
+        }
+      },
+      "title": "新增角色请求",
+      "required": [
+        "name",
+        "role_type",
+        "description",
+        "yaml"
+      ]
+    },
+    "roleCreateRoleResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "title": "是否成功"
+        }
+      },
+      "title": "新增角色响应",
+      "required": [
+        "success"
+      ]
+    },
+    "roleDeleteRoleRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "角色ID"
+        }
+      },
+      "title": "删除角色请求",
+      "required": [
+        "id"
+      ]
+    },
+    "roleDeleteRoleResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "title": "是否成功"
+        }
+      },
+      "title": "删除角色响应",
+      "required": [
+        "success"
+      ]
+    },
+    "roleGetRoleDetailResponse": {
+      "type": "object",
+      "properties": {
+        "detail": {
+          "$ref": "#/definitions/roleRoleItem"
+        }
+      },
+      "title": "角色详情响应",
+      "required": [
+        "detail"
+      ]
+    },
+    "roleListRoleBindingResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/roleRoleBindingItem"
+          },
+          "title": "角色绑定列表"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        }
+      },
+      "title": "角色绑定列表响应",
+      "required": [
+        "list",
+        "total"
+      ]
+    },
+    "roleListRoleResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/roleRoleItem"
+          },
+          "title": "角色列表"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        }
+      },
+      "title": "角色列表响应",
+      "required": [
+        "list",
+        "total"
+      ]
+    },
+    "roleRoleBindingItem": {
+      "type": "object",
+      "properties": {
+        "role_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "角色ID"
+        },
+        "user_group_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "用户组ID"
+        },
+        "cluster_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "cluster_id"
+        },
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        }
+      },
+      "title": "角色绑定",
+      "required": [
+        "role_id",
+        "user_group_id",
+        "cluster_id",
+        "namespace"
+      ]
+    },
+    "roleRoleItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "角色ID"
+        },
+        "name": {
+          "type": "string",
+          "title": "角色名称"
+        },
+        "role_type": {
+          "$ref": "#/definitions/roleRoleType",
+          "title": "角色类型"
+        },
+        "description": {
+          "type": "string",
+          "title": "角色描述"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "update_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "更新时间"
+        },
+        "is_default": {
+          "type": "boolean",
+          "title": "是否默认"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "角色Yaml"
+        },
+        "update_by": {
+          "type": "string",
+          "title": "更新人"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "role_type",
+        "yaml"
+      ]
+    },
+    "roleRoleType": {
+      "type": "string",
+      "enum": [
+        "CLUSTER",
+        "NAMESPACE"
+      ],
+      "default": "CLUSTER",
+      "description": "- CLUSTER: 集群角色\n - NAMESPACE: 普通角色",
+      "title": "角色类型"
+    },
+    "roleUpdateRoleBindingRequest": {
+      "type": "object",
+      "properties": {
+        "role_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "角色ID"
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/roleRoleBindingItem"
+          },
+          "title": "bindings"
+        }
+      },
+      "title": "编辑角色绑定请求",
+      "required": [
+        "role_id",
+        "bindings"
+      ]
+    },
+    "roleUpdateRoleBindingResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "title": "是否成功"
+        }
+      },
+      "title": "编辑角色绑定响应",
+      "required": [
+        "success"
+      ]
+    },
+    "roleUpdateRoleRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "角色ID"
+        },
+        "name": {
+          "type": "string",
+          "title": "角色名称"
+        },
+        "role_type": {
+          "$ref": "#/definitions/roleRoleType",
+          "title": "角色类型"
+        },
+        "description": {
+          "type": "string",
+          "title": "角色备注"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "角色Yaml"
+        }
+      },
+      "title": "编辑角色请求",
+      "required": [
+        "id",
+        "name",
+        "role_type",
+        "description",
+        "yaml"
+      ]
+    },
+    "roleUpdateRoleResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "title": "是否成功"
+        }
+      },
+      "title": "编辑角色响应",
+      "required": [
+        "success"
+      ]
+    }
+  }
+}

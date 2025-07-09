@@ -1,0 +1,839 @@
+syntax = "proto3";
+
+package pod;
+
+import "google/api/annotations.proto";
+import "khttp/middleware.proto";
+import "khttp/audit.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+import "k8s/core/v1/generated.proto";
+import "k8s/io/apimachinery/pkg/apis/generated.proto";
+import "k8s/io/apimachinery/pkg/apis/metrics/v1beta1/generated.proto";
+
+
+option go_package = "codo-cnmp/pb;pb";
+
+
+service Pod {
+  // 查看-云原生管理-Pod-列表
+  rpc ListPod (ListPodRequest) returns (ListPodResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/pod/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-命名空间-Pod列表
+  rpc ListPodByNamespace (ListPodByNamespaceRequest) returns (ListPodByNamespaceResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/namespace/pod/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-命名空间-Pod详情
+  rpc GetNamespacePodDetail (GetNamespacePodDetailRequest) returns (GetNamespacePodDetailResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/namespace/pod/detail"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 管理-云原生管理-Pod-删除
+  rpc DeletePod (DeletePodRequest) returns (DeletePodResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/pod/delete"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "pod";
+      action: "删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "pod"
+        },
+        {
+          key: "name",
+          extract: "pod_name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-Pod-批量重启
+  rpc BatchDeletePod (BatchDeletePodsRequest) returns (BatchDeletePodsResponse) {
+    option (google.api.http) = {
+        post: "/api/v1/pod/batch/delete"
+        body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "pod";
+      action: "批量删除";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "pod"
+        },
+        {
+          key: "name",
+          extract: "pod_names"
+        }
+      ]
+    };
+  }
+  // 查看-云原生管理-Pod-CPU指标
+  rpc GetPodCpuMetrics (GetPodMetricsRequest) returns (SidecarMetricResultList) {
+    option (google.api.http) = {
+      get: "/api/v1/pod/metrics/cpu"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-Pod-内存指标
+  rpc GetPodMemoryMetrics (GetPodMetricsRequest) returns (SidecarMetricResultList) {
+    option (google.api.http) = {
+      get: "/api/v1/pod/metrics/memory"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-Pod-容器指标
+  rpc GetPodContainerMetrics (GetPodContainerMetricsRequest) returns (GetPodContainerMetricsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/pod/container/metrics"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-控制器-Pod列表
+  rpc ListControllerPod (ListControllerPodRequest) returns (ListControllerPodResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/controller/pod/list"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+  }
+  // 查看-云原生管理-Pod-下载日志
+  rpc DownloadPodLogs (DownloadPodLogsRequest) returns (DownloadPodLogsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/pod/logs/download"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "pod";
+      action: "下载日志";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "pod"
+        },
+        {
+          key: "name",
+          extract: "pod_name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-Pod-Yaml创建更新
+  rpc CreateOrUpdatePodByYaml (CreateOrUpdatePodByYamlRequest) returns (CreateOrUpdatePodByYamlResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/pod/create_or_update"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "pod";
+      action: "Yaml创建更新";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          const: ""
+        },
+        {
+          key: "kind",
+          const: "node"
+        },
+        {
+          key: "name",
+          extract: "name"
+        }
+      ]
+    };
+  }
+  // 管理-云原生管理-Pod-驱逐
+  rpc EvictPod (EvictPodRequest) returns (EvictPodResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/pod/evict"
+      body: "*"
+    };
+    option (github.ccheers.pggh.khttp.middleware) = {
+      names: []
+    };
+    option (github.ccheers.pggh.khttp.audit) = {
+      module: "pod";
+      action: "驱逐";
+      metas: [
+        {
+          key: "cluster",
+          extract: "cluster_name"
+        },
+        {
+          key: "namespace",
+          extract: "namespace"
+        },
+        {
+          key: "kind",
+          const: "pod"
+        },
+        {
+          key: "name",
+          extract: "pod_name"
+        }
+      ]
+    };
+  }
+}
+
+// Pod列表请求
+message ListPodRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 节点名称
+  string node_name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(google.api.field_behavior) = OPTIONAL];
+  // 查询关键字
+  string keyword = 4[(google.api.field_behavior) = OPTIONAL];
+  // 页码
+  uint32 page = 5[(google.api.field_behavior) = OPTIONAL];
+  // 页大小
+  uint32 page_size = 6[(google.api.field_behavior) = OPTIONAL];
+  // 查询全部
+  uint32  list_all = 7 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message PodResourceUsage {
+  // cpu请求
+  uint32 cpu_request = 1 [(google.api.field_behavior) = REQUIRED];
+  // cpu限制
+  uint32 cpu_limit = 2 [(google.api.field_behavior) = REQUIRED];
+  // 内存请求
+  uint32 memory_request = 3 [(google.api.field_behavior) = REQUIRED];
+  // 内存限制
+  uint32 memory_limit = 4 [(google.api.field_behavior) = REQUIRED];
+  // 临时存储请求
+  uint32 ephemeral_storage_request = 5 [(google.api.field_behavior) = REQUIRED];
+  // 临时存储限制
+  uint32 ephemeral_storage_limit = 6[(google.api.field_behavior) = REQUIRED];
+  // 总cpu请求
+  uint32 total_cpu_request = 7[(google.api.field_behavior) = REQUIRED];
+  // 总cpu限制
+  uint32 total_cpu_limit = 8 [(google.api.field_behavior) = REQUIRED];
+  // 总内存请求
+  uint32 total_memory_request = 9 [(google.api.field_behavior) = REQUIRED];
+  // 总内存限制
+  uint32 total_memory_limit = 10 [(google.api.field_behavior) = REQUIRED];
+  // 总临时存储请求
+  uint32 total_ephemeral_storage_request = 11 [(google.api.field_behavior) = REQUIRED];
+  // 总临时存储限制
+  uint32 total_ephemeral_storage_limit = 12 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Pod列表项
+message PodItem {
+  // pod名称
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(google.api.field_behavior) = REQUIRED];
+  // 镜像
+  repeated k8s.io.api.core.v1.Container containers = 3 [(google.api.field_behavior) = REQUIRED];
+  // 状态
+  string status = 4 [(google.api.field_behavior) = REQUIRED];
+  // 重启次数
+  uint32 restart_count = 5 [(google.api.field_behavior) = REQUIRED];
+  // 运行时间
+  uint64 create_time = 6 [(google.api.field_behavior) = REQUIRED];
+  // 工作负载
+  string workload = 7 [(google.api.field_behavior) = OPTIONAL];
+  // ready数量
+  uint32 ready_count = 8 [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 9 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+  // 资源使用情况
+  PodResourceUsage resource_usage = 10 [json_name = "resource_usage", (google.api.field_behavior) = REQUIRED];
+}
+
+// 控制器Pod列表请求
+message ListControllerPodRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 控制器名称[Deployment/StatefulSet/DaemonSet/Job/CloneSet/GameServerSet名称]
+  string controller_name = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 3 [(google.api.field_behavior) = OPTIONAL];
+  // 页码
+  uint32 page = 4 [(google.api.field_behavior) = OPTIONAL];
+  // 页大小
+  uint32 page_size = 5 [(google.api.field_behavior) = OPTIONAL];
+  // 查询全部
+  uint32 list_all = 6 [(google.api.field_behavior) = OPTIONAL];
+  // 控制器类型
+  enum ControllerType {
+    // Deployment
+    Deployment = 0;
+    // StatefulSet
+    StatefulSet = 1;
+    // DaemonSet
+    DaemonSet = 2;
+    // Job
+    Job = 3;
+    // CloneSet
+    CloneSet = 4;
+    // GameServerSet
+    GameServerSet = 5;
+    // Hpa
+    Hpa = 6;
+    // SideCarSet
+    SideCarSet = 7;
+    // Pod
+    Pod = 8;
+    // Service
+    Service = 9;
+  }
+  ControllerType controller_type = 7 [(validate.rules).enum.defined_only=true, (google.api.field_behavior) = REQUIRED];
+}
+
+// 控制器Pod详情响应
+message ListControllerPodResponse {
+  // 总数
+  uint32 total = 1;
+  // 控制器Pod列表
+  repeated ControllerPodItem list = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 控制器Pod列表项
+message ControllerPodItem {
+  // pod名称
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // 状态
+  string status = 2 [(google.api.field_behavior) = REQUIRED];
+  // PodIP[实例IP]
+  string pod_ip = 3 [(google.api.field_behavior) = REQUIRED];
+  // NodeIP[节点IP]
+  string node_ip = 4 [(google.api.field_behavior) = REQUIRED];
+  // 创建时间[豪秒级时间戳]
+  uint64 create_time = 5 [(google.api.field_behavior) = REQUIRED];
+  // pod调度状态
+  repeated PodCondition pod_conditions = 6 [(google.api.field_behavior) = REQUIRED];
+  // 容器信息
+  repeated PodContainerDetail containers = 7 [(google.api.field_behavior) = REQUIRED];
+  // node名称
+  string node_name = 8 [(google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 9 [(google.api.field_behavior) = REQUIRED];
+  // 是否ready
+  bool isReady = 10 [(google.api.field_behavior) = REQUIRED];
+  // 工作负载名称
+  string workload = 11 [(google.api.field_behavior) = OPTIONAL];
+  // 工作负载类型
+  string workload_type = 12 [(google.api.field_behavior) = OPTIONAL];
+  // namespace
+  string namespace = 13[(google.api.field_behavior) = REQUIRED];
+}
+
+// podConditions
+message PodCondition {
+  string type = 1 [(google.api.field_behavior) = REQUIRED];
+
+  string status = 2 [(google.api.field_behavior) = REQUIRED];
+
+  uint64 lastProbeTime = 3 [(google.api.field_behavior) = REQUIRED];
+
+  uint64 lastTransitionTime = 4 [(google.api.field_behavior) = REQUIRED];
+
+  optional string reason = 5 [(google.api.field_behavior) = REQUIRED];
+
+  optional string message = 6 [(google.api.field_behavior) = REQUIRED];
+}
+
+
+// 控制器Pod详情
+//message ControllerPodDetail {
+//  // pod名称
+//  string name = 1 [(google.api.field_behavior) = REQUIRED];
+//  // 状态
+//  string status = 2 [(google.api.field_behavior) = REQUIRED];
+//  // PodIP[实例IP]
+//  string pod_ip = 3 [(google.api.field_behavior) = REQUIRED];
+//  // NodeIP[节点IP]
+//  string node_ip = 4 [(google.api.field_behavior) = REQUIRED];
+//  // 调度信息
+//  repeated k8s.io.api.core.v1.PodCondition conditions = 5 [(google.api.field_behavior) = REQUIRED];
+//}
+
+// ContainerVolumeMount
+message ContainerVolumeMount {
+  // 挂载content
+  string content = 1 [(google.api.field_behavior) = REQUIRED];
+  // 只读
+  bool read_only = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ResourceRequirements {
+  map<string, string> limits = 1;
+  map<string, string> requests = 2;
+}
+
+message ContainerState {
+  // 等待状态容器的详细信息
+  ContainerStateWaiting waiting = 1;
+
+  // 运行状态容器的详细信息
+  ContainerStateRunning running = 2;
+
+  // 已终止容器的详细信息
+  ContainerStateTerminated terminated = 3;
+}
+
+// ContainerStateRunning 表示容器的运行状态
+message ContainerStateRunning {
+  // 容器最后一次（重新）启动的时间
+  uint64 startedAt = 1;
+}
+
+// ContainerStateTerminated 表示容器的终止状态
+message ContainerStateTerminated {
+  // 容器最后终止时的退出状态码
+  uint32 exitCode = 1;
+
+  // 容器最后终止时的信号
+  uint32 signal = 2;
+
+  // 容器最后终止的（简要）原因
+  string reason = 3;
+
+  // 关于容器最后终止的消息
+  string message = 4;
+
+  // 容器上一次执行的开始时间
+  uint64 startedAt = 5;
+
+  // 容器最后终止的时间
+  uint64 finishedAt = 6;
+
+  // 格式为 '<type>://<container_id>' 的容器 ID
+  string containerID = 7;
+}
+
+// ContainerStateWaiting 表示容器的等待状态
+message ContainerStateWaiting {
+  // 容器尚未运行的（简要）原因
+  string reason = 1;
+
+  // 关于容器为什么尚未运行的消息
+  string message = 2;
+}
+
+message ContainerStatus {
+  // 容器名称
+  string name = 1;
+
+  // 容器状态
+  ContainerState state = 2 [(google.api.field_behavior) = OPTIONAL];
+
+  // lastState 保存容器的最后终止状态，用于帮助调试容器崩溃和重启。
+  // 当容器仍在运行且 RestartCount 为 0 时，此字段不会被填充。
+  // +optional
+  ContainerState lastState = 3 [(google.api.field_behavior) = OPTIONAL];
+
+  // ready 指定容器当前是否通过其就绪检查。
+  // 该值会随着就绪探针的持续执行而变化。如果未指定就绪探针，
+  // 一旦容器完全启动（参见 Started 字段），此字段默认为 true。
+  //
+  // 此值通常用于确定容器是否已准备好接受流量。
+  bool ready = 4;
+
+  // restartCount 记录容器被重启的次数。
+  // Kubelet 会努力始终递增该值，但在某些情况下，由于节点重启可能会丢失状态，
+  // 此时该值可能会重置为 0。该值永远不会为负数。
+  uint32 restartCount = 5;
+
+  // image 是容器正在运行的容器镜像的名称。
+  // 容器镜像可能与 PodSpec 中使用的镜像不匹配，
+  // 因为它可能已被运行时解析。
+  // 更多信息：https://kubernetes.io/docs/concepts/containers/images
+  string image = 6;
+
+  // imageID 是容器镜像的镜像 ID。镜像 ID 可能与
+  // PodSpec 中使用的镜像 ID 不匹配，因为它可能已被运行时解析。
+  string imageID = 7;
+
+  // containerID 是格式为 '<type>://<container_id>' 的容器 ID。
+  // 其中 type 是容器运行时标识符，从 CRI API 的 Version 调用返回
+  // （例如 "containerd"）。
+  string containerID = 8;
+
+  // started 表示容器是否已完成其 postStart 生命周期钩子
+  // 并通过了其启动探针。
+  // 初始化为 false，在启动探针被认为成功后变为 true。
+  // 当容器重启或 kubelet 暂时丢失状态时重置为 false。
+  // 在这两种情况下，启动探针都会重新运行。
+  // 当没有定义启动探针且容器正在运行并已通过 postStart 生命周期钩子时，
+  // 始终为 true。null 值必须与 false 相同对待。
+  optional bool started = 9;
+
+  // resources 表示在容器启动后或成功调整大小后，
+  // 已成功在运行容器上实施的计算资源请求和限制。
+  // +featureGate=InPlacePodVerticalScaling
+  ResourceRequirements resources = 11 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// PodContainer详情
+message PodContainerDetail {
+  // 容器名称
+  string container_name = 1 [(google.api.field_behavior) = REQUIRED];
+  // 容器ID
+  string container_id = 2 [(google.api.field_behavior) = REQUIRED];
+  // 镜像
+  string image = 3 [(google.api.field_behavior) = REQUIRED];
+  // 镜像拉取策略
+  string image_pull_policy = 4 [(google.api.field_behavior) = REQUIRED];
+  // 重启次数
+  uint32 restart_count = 5 [(google.api.field_behavior) = REQUIRED];
+  // 资源请求/限制
+  ResourceRequirements resources = 6 [(google.api.field_behavior) = OPTIONAL];
+  // 环境变量
+  repeated k8s.io.api.core.v1.EnvVar env = 7 [(google.api.field_behavior) = OPTIONAL];
+  // 端口
+  repeated k8s.io.api.core.v1.ContainerPort ports = 8 [(google.api.field_behavior) = OPTIONAL];
+  // 挂载
+  repeated ContainerVolumeMount volume_mounts = 9 [(google.api.field_behavior) = OPTIONAL];
+  // 容器资源使用量
+  ContainerUsage usage = 10 [(google.api.field_behavior) = REQUIRED];
+  // 容器状态
+  ContainerStatus status = 11 [(google.api.field_behavior) = OPTIONAL];
+  // 存活探针
+  string liveness_probe = 12 [(google.api.field_behavior) = OPTIONAL];
+  // 就绪探针
+  string readiness_probe = 13 [(google.api.field_behavior) = OPTIONAL];
+  // 启动探针
+  string startup_probe = 14 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// 容器资源使用量
+message ContainerUsage{
+  // CPU使用量
+  uint32 cpu = 1;
+  // CPU单位
+  string cpu_unit = 2;
+  // 内存使用量
+  uint32 memory = 3;
+  // 内存单位
+  string memory_unit = 4;
+}
+
+// Pod列表响应
+message ListPodResponse {
+  // 总数
+  int32 total = 1;
+  // 列表
+  repeated PodItem list = 2;
+}
+
+
+// Pod Cpu 指标请求
+message GetPodMetricsRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2[(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // pod名称
+  string pod_name = 3 [(google.api.field_behavior) = OPTIONAL];
+  // 时间戳
+  int64 time = 4 [(validate.rules).int64.gt = 0, (google.api.field_behavior) = REQUIRED];
+}
+
+// DataPoint
+message DataPoint {
+  // 时间戳
+  int64 x = 1;
+  // 使用量
+  int64 y = 2;
+}
+
+// MetricPoint
+message  MetricPoint {
+  // 时间戳
+  int64  timestamp = 1;
+  // 值 [CPU: 毫核, Memory: bytes]
+  uint64  value = 2;
+}
+
+// SidecarMetric
+message SidecarMetric {
+  // DataPoints is a list of X, Y int64 data points, sorted by X.
+  repeated DataPoint dataPoints = 1;
+  // MetricPoints is a list of value, timestamp metrics used for sparklines on a pod list page.
+  repeated MetricPoint metricPoints = 2;
+  // MetricName is the name of metric stored in this struct.
+  string metricName = 3;
+  // Label stores information about identity of resources (UIDS) described by this metric.
+  repeated string uids = 4;
+}
+
+// SidecarMetricResultList
+message SidecarMetricResultList {
+  repeated SidecarMetric items = 1;
+}
+
+// PodContainer 指标请求
+message GetPodContainerMetricsRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2[(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // pod名称
+  string pod_name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 容器名称
+  string container_name = 4[(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// PodContainer 指标响应
+message GetPodContainerMetricsResponse {
+  // 指标
+  k8s.io.metrics.pkg.apis.metrics.v1beta1.PodMetrics metrics = 1;
+}
+
+// Pod删除请求
+message DeletePodRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // pod名称
+  string pod_name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// Pod删除响应
+message DeletePodResponse {
+  // 删除结果
+  bool result = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Pod日志下载请求
+message DownloadPodLogsRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // pod名称
+  string pod_name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 容器名称
+  string container_name = 4 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 开始时间 [秒级时间戳]
+  int64 start_time = 5 [(validate.rules).int64.gt = 0, (google.api.field_behavior) = REQUIRED];
+}
+
+// Pod日志下载响应
+message DownloadPodLogsResponse {
+  // 日志内容[B64编码]
+  string data = 1;
+}
+
+
+message PodHealth {
+  // Type of deployment condition.
+  string type = 1;
+
+  // Status of the condition, one of True, False, Unknown.
+  string status = 2;
+
+  // The last time this condition was updated.
+  // 豪秒级时间戳
+  optional uint64 lastProbeTime = 6;
+
+  // Last time the condition transitioned from one status to another.
+  // 豪秒级时间戳
+  uint64 lastTransitionTime = 7;
+
+  // The reason for the condition's last transition.
+  string reason = 4;
+
+  // A human readable message indicating details about the transition.
+  string message = 5;
+}
+
+// Pod列表项
+message NamespacePodItem {
+  // pod名称
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(google.api.field_behavior) = REQUIRED];
+  // 镜像
+  repeated k8s.io.api.core.v1.Container containers = 3 [(google.api.field_behavior) = REQUIRED];
+  // 状态
+  string status = 4 [(google.api.field_behavior) = REQUIRED];
+  // 重启次数
+  uint32 restart_count = 5 [(google.api.field_behavior) = REQUIRED];
+  // 创建时间
+  uint64 create_time = 6 [(google.api.field_behavior) = REQUIRED];
+  // 工作负载
+  string workload = 7 [(google.api.field_behavior) = REQUIRED];
+  // ready数量
+  uint32 ready_count = 8 [(google.api.field_behavior) = REQUIRED];
+  // node节点IP
+  string node_ip = 9 [(google.api.field_behavior) = REQUIRED];
+  // 实例IP
+  string pod_ip = 10 [(google.api.field_behavior) = REQUIRED];
+  // 标签
+  map<string, string> labels = 11 [(google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 12 [(google.api.field_behavior) = REQUIRED];
+  // pod容器数量
+  uint32 container_count = 13 [(google.api.field_behavior) = REQUIRED];
+  // 是否关注
+  bool is_followed = 14 [json_name = "is_follow", (google.api.field_behavior) = REQUIRED];
+  // 状态原因
+  string reason = 15 [(google.api.field_behavior) = OPTIONAL];
+  // 注解
+  map<string, string> annotations = 16 [(google.api.field_behavior) = OPTIONAL];
+  // 选择器
+  k8s.io.apimachinery.pkg.apis.meta.v1.LabelSelector selector  = 17 [(google.api.field_behavior) = REQUIRED];
+  // 健康检查
+  repeated PodHealth conditions = 18  [(google.api.field_behavior) = REQUIRED];
+}
+
+// Pod列表请求
+message ListPodByNamespaceRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 查询关键字
+  string keyword = 3 [(google.api.field_behavior) = OPTIONAL];
+  // 页码
+  uint32 page = 4 [(google.api.field_behavior) = OPTIONAL];
+  // 页大小
+  uint32 page_size = 5 [(google.api.field_behavior) = OPTIONAL];
+  // 查询全部
+  uint32 list_all = 6 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Pod列表响应
+message ListPodByNamespaceResponse {
+  // 总数
+  uint32 total = 1;
+  // 列表
+  repeated NamespacePodItem list = 2;
+}
+
+// Pod详情请求
+message GetNamespacePodDetailRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // pod名称
+  string name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// Pod详情响应
+message GetNamespacePodDetailResponse {
+  // 详情
+  NamespacePodItem detail = 1;
+}
+
+// 通过yaml创建或者更新pod请求
+message CreateOrUpdatePodByYamlRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // yaml
+  string yaml = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 通过yaml创建或者更新pod响应
+message CreateOrUpdatePodByYamlResponse {
+  // 结果
+  bool success = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// 批量删除pod请求
+message BatchDeletePodsRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // pod名称列表
+  repeated string pod_names = 3 [(validate.rules).repeated.min_items = 1, (google.api.field_behavior) = REQUIRED];
+}
+
+// 批量删除pod响应
+message BatchDeletePodsResponse {}
+
+// pod驱逐请求
+message EvictPodRequest {
+  // 集群名称
+  string cluster_name = 1 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 命名空间
+  string namespace = 2 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // pod名称
+  string pod_name = 3 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 节点名称
+  string node_name = 4 [(validate.rules).string.min_len = 1, (google.api.field_behavior) = REQUIRED];
+  // 强制驱逐
+  bool force = 5 [(google.api.field_behavior) = REQUIRED];
+  // gracePeriodSeconds
+  uint32 grace_period_seconds = 6 [(google.api.field_behavior) = REQUIRED];
+}
+
+// pod驱逐响应
+message EvictPodResponse {
+  // 结果
+  bool success = 1 [(google.api.field_behavior) = REQUIRED];
+}

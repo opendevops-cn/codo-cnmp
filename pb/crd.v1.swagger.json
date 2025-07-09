@@ -1,0 +1,403 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "pb/crd.v1.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "CRD"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/crd/delete": {
+      "post": {
+        "summary": "管理-云原生管理-CRD-删除",
+        "operationId": "CRD_DeleteCRD",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteCRDResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1DeleteCRDRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CRD"
+        ]
+      }
+    },
+    "/api/v1/crd/instance/list": {
+      "get": {
+        "summary": "查看-云原生管理-CRD实例-列表",
+        "operationId": "CRD_ListCRDInstance",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCRDInstanceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "CRD名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "每页数量",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "是否查询全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "api_version",
+            "description": "CRD API版本",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "api_group",
+            "description": "CRD API Group",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "CRD"
+        ]
+      }
+    },
+    "/api/v1/crd/list": {
+      "get": {
+        "summary": "查看-云原生管理-CRD-列表",
+        "operationId": "CRD_ListCRD",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCRDResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_name",
+            "description": "集群名称",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "namespace",
+            "description": "命名空间",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "description": "查询关键字",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "页大小",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "list_all",
+            "description": "查询全部",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "api_group",
+            "description": "apiGroup",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "CRD"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "details"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {},
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "v1CRDInstanceItem": {
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "title": "命名空间"
+        },
+        "name": {
+          "type": "string",
+          "title": "名称"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "yaml"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "api_version": {
+          "type": "string",
+          "title": "api版本"
+        }
+      },
+      "title": "CRD实例详情",
+      "required": [
+        "namespace",
+        "name",
+        "yaml",
+        "create_time",
+        "api_version"
+      ]
+    },
+    "v1CRDItem": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "名称"
+        },
+        "api_group": {
+          "type": "string",
+          "title": "apiGroup"
+        },
+        "api_version": {
+          "type": "string",
+          "title": "apiVersion"
+        },
+        "scope": {
+          "type": "string",
+          "title": "范围"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "uint64",
+          "title": "创建时间"
+        },
+        "yaml": {
+          "type": "string",
+          "title": "yaml"
+        },
+        "kind": {
+          "type": "string",
+          "title": "kind"
+        }
+      },
+      "title": "CRD列表项",
+      "required": [
+        "name",
+        "api_group",
+        "api_version",
+        "scope",
+        "create_time",
+        "yaml",
+        "kind"
+      ]
+    },
+    "v1DeleteCRDRequest": {
+      "type": "object",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "title": "集群名称"
+        },
+        "name": {
+          "type": "string",
+          "title": "名称"
+        }
+      },
+      "required": [
+        "cluster_name",
+        "name"
+      ]
+    },
+    "v1DeleteCRDResponse": {
+      "type": "object"
+    },
+    "v1ListCRDInstanceResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CRDInstanceItem"
+          },
+          "title": "实例列表"
+        }
+      },
+      "required": [
+        "total",
+        "list"
+      ]
+    },
+    "v1ListCRDResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1CRDItem"
+          },
+          "title": "列表"
+        }
+      },
+      "title": "CRD列表响应",
+      "required": [
+        "total",
+        "list"
+      ]
+    }
+  }
+}
